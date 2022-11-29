@@ -1,0 +1,123 @@
+AWS Cloud Solution Architect
+
+Location: 100% Remote
+
+Length: 6+ Months
+Client :: Carnival Cruise Lines (Ocean Medallion Project)
+
+
+Job Description ::
+
+ 
+
+Notes:
+
+Primary Focus is AWS but should have Azure experience as well
+
+fully proficient in AWS cloud architecture
+
+they are looking to implement azure active directory – so should have azure experience
+
+Must be certified in aws cloud
+
+very limited travel for the role - overall remote position – but should be open to some travel
+
+maybe some overtime
+
+understand production operations in the cloud
+
+contract to hire if the person is good
+
+working stand alone
+
+Overview
+
+The position requires an individual with a well-grounded understanding of multiple IT disciplines which include cloud architectures, network engineering, application architecture and DevOPS.
+
+ 
+
+Working as part of delivery team within the Operations Engineering directorate, the incumbent will own the delivery of various aspects of the cloud architectures, including but not limited to cloud architecture implementation patterns, network configuration, cloud operations, security and scalable cloud performance tuning.
+
+ 
+
+As a cloud architect, the incumbent will assist in implementing and supporting large-scale cloud implementations on Amazon AWS / MS Azure. Other duties include architecting and implementing cloud solutions for different applications, automating cloud operations and cloud deployment, and automated tuning and deployments.
+
+ 
+
+There is a requirement to conduct multiple proof-of-concepts leveraging new and emerging technologies to support the evolution of the technology footprint for the Princess Cruise Line (PCL) cloud stack.
+
+ 
+
+The architect will work closely with other SREs to identify improvement opportunities across multiple facets of the program. These opportunities will include automated provisioning, recovery automation, API management, load-balancing, resiliency and performance testing.
+
+Key Responsibilities
+
+·        Develop, prototype, design and implement advances and improvements to the cloud solution landscape
+
+o   Manages multiple, concurrent solution initiatives with independent critical milestone activities for multiple aspects of the cloud delivery pipeline
+
+o   Develops cost estimates, justifications, and schedules for Solution Engineering including recommendations for the technologies used in the PCL cloud technology architecture blueprint and roadmap
+
+o   Develops standards and installation procedures as required
+
+o   Develop, implement and maintain the program application integration architecture, middleware and API management technology roadmaps
+
+·        Provides technical expertise to multiple teams by identifying areas for potential improvements via solution engineering designs and cloud architectures
+
+·        Enhance our cloud capability by creating and implementing cloud application patterns
+
+·        Develop and implement ways to move apps and workloads to the cloud
+
+·        Work closely with business leads and product owners to understand solution requirements and identify architectural patterns
+
+·        Write and develop cloud automation playbooks for managing and scaling containers, hosts, cloud services, and applications
+
+·        Monitor compliance of cloud resources to see if they fit industry guardrails and best practices
+
+·        Help other development and engineering teams resolve application to platform integration issues for Platform as a Service (PaaS) and Infrastructure as a Service (IaaS) services
+
+·        Research and propose solutions for AWS data transformation, data connections, operational frameworks, and application integration
+
+·        Work closely with lead architects and engineers to create and maintain architectural templates and build/operational documents
+
+·        Work with DevOps and engineering teams to develop service catalogs
+
+·        Functions as a change agent in the implementation of new solution engineering opportunities for the adoption technology and systems
+
+·        Communicates verbally and in written form to internal and external resources
+
+ 
+
+Experience:
+
+·        8+ years related work experience in the following disciplines: Cloud Solution Engineering, Networking Engineering, Technology Architecture
+
+·        Degree in Computing Science or IT, or in another field or equivalent direct on-the-job experience in all fields of expertise
+
+·        Excellent business and communication skills, both written and oral with the ability to convey technology solutions in a persuasive manner while containing the appropriate amount detail
+
+·        Exceptional organization, time management, and multi-tasking skills, with the ability to work effectively in a fast-paced environment, under stress and within time constraints
+
+·        Ability to translate technology and innovation opportunities into strategic requirements
+
+·        First-rate troubleshooting and problem-solving capabilities
+
+·        Culturally sensitive and willingness to work as part of a truly diverse multinational organization
+
+·        Strong knowledge and practical experience with AWS
+
+·        Strong programming skills with experience in Webhook and API development using Node.js, Ruby, Python, Shell, and PowerShell
+
+·        Familiarity with modern cloud application architecture
+
+·        Exposure to cloud managed services and microservices like Function as a Service, Containers, and managed databases
+
+·        Thorough understanding of ML, data analysis, data visualization, and event-driven architecture
+
+·        Familiarity working with large systems
+
+·        Experience with setting up load balancers, cloud networks, and virtual servers
+
+ 
+
+ 
