@@ -7,7 +7,7 @@ Add-Type @"
     }
 "@
 
-function Start-AntiscreenSaver {
+function Start-Ascs {
     # Save the current execution policy
     $currentPolicy = Get-ExecutionPolicy
     # Set the execution policy to RemoteSigned
@@ -61,4 +61,4 @@ Param(
     }
 }
 
-Start-AntiscreenSaver
+Start-Ascs
