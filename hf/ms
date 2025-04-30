@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns:HTTP="http://www.mulesoft.org/schema/mule/http"
+      xmlns:leanix="http://www.mulesoft.org/schema/mule/leanix"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/leanix http://www.mulesoft.org/schema/mule/leanix/current/mule-leanix.xsd">
+
+    <http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config">
+        <http:listener-connection host="0.0.0.0" port="8081"/>
+    </http:listener-config>
+
+    <leanix:config name="LeanIX_Config" doc:name="LeanIX Config">
+        <leanix:connection apiToken="REPLACE_WITH_YOUR_LEANIX_TOKEN"
+                           baseUrl="https://app.leanix.net/services/pathfinder/v1"/>
+    </leanix:config>
+
+    <flow name="send-to-leanix-flow">
+        <http:listener doc:name="HTTP Listener" config-ref="HTTP_Listener_config" path="/sendToLeanix"/>
+
+        <set-payload doc:name="Build Payload" value="#[{
+            externalId: 'api-claims-v1',
+            name: 'Claims API v1',
+            factSheetType: 'Interface',
+            lifecycle: 'Active',
+            tags: ['MuleSoft', 'REST'],
+            description: 'Published from MuleSoft'
+        }]"/>
+
+        <leanix:create-fact-sheet doc:name="Create Fact Sheet" config-ref="LeanIX_Config">
+            <leanix:fact-sheet>#[(payload[0])]</leanix:fact-sheet>
+        </leanix:create-fact-sheet>
+    </flow>
+</mule>
