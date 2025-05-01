@@ -10,3 +10,17 @@
     <leanix:fact-sheet>#[(payload)]</leanix:fact-sheet>
   </leanix:create-fact-sheet>
 </flow>
+
+
+
+<leanix:create-fact-sheet config-ref="LeanIX_Config" doc:name="Create Fact Sheet">
+  <leanix:fact-sheet>#[
+    {
+      externalId: "api-claims-v1",
+      name: "Claims API v1",
+      factSheetType: "Interface",
+      lifecycle: "Active",
+      tags: ["MuleSoft", "REST"]
+    }
+  ]</leanix:fact-sheet>
+</leanix:create-fact-sheet>
