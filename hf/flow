@@ -1,0 +1,12 @@
+<flow name="send-api-to-leanix">
+  <http:listener config-ref="HTTP_Listener_config" path="/pushAPI" />
+  <set-payload value="#[{
+    externalId: 'api-policy-v1',
+    name: 'Policy API v1',
+    factSheetType: 'Interface',
+    lifecycle: 'Active'
+  }]" />
+  <leanix:create-fact-sheet config-ref="LeanIX_Config">
+    <leanix:fact-sheet>#[(payload)]</leanix:fact-sheet>
+  </leanix:create-fact-sheet>
+</flow>
