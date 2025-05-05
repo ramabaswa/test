@@ -1,0 +1,17 @@
+API Owner – Business/IT owner of the API.
+
+Integration Architect – Designs integration solutions and patterns.
+
+Platform Team – Maintains iPaaS (e.g., MuleSoft) and API gateways.
+
+Security Team – Ensures security and compliance.
+
+Enterprise Architecture (EA) – Ensures alignment to enterprise strategy.
+
+Application Team – Uses/consumes APIs, owns systems.
+
+Product Owner – Prioritizes API development work.
+
+Compliance/Legal – Ensures regulations and legal concerns.
+
+DevOps/Infra – CI/CD, monitoring, logging, and hosting.
