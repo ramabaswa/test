@@ -1,0 +1,75 @@
+Feature: API Inventory Management in LeanIX
+Description:
+As an enterprise architect or integration lead, I want to send MuleSoft API data into LeanIX and manage it through Fact Sheets, so I can maintain a real-time, governed view of my API inventory across the enterprise.
+
+✅ User Story 1: View API Fact Sheet in LeanIX
+Story:
+As a user, I want to view API metadata sent from MuleSoft as a Fact Sheet in LeanIX, so I can verify that the integration was successful.
+
+Acceptance Criteria:
+
+ Given an API is pushed from MuleSoft, then a corresponding Fact Sheet of type "Interface" is created in LeanIX.
+
+ Fact Sheet contains key fields such as Name, External ID, and Description.
+
+ If a Fact Sheet with the same External ID exists, it is updated, not duplicated.
+
+✅ User Story 2: Link APIs to Applications
+Story:
+As a user, I want to link API Fact Sheets to Application Fact Sheets, so I can visualize which systems use or expose which APIs.
+
+Acceptance Criteria:
+
+ User can manually or automatically link APIs to their consumer or provider Applications.
+
+ Application Fact Sheet reflects the relationship in the "Interfaces Provided" or "Interfaces Consumed" section.
+
+ User can see the relationship in LeanIX reports.
+
+✅ User Story 3: Visualize API Landscape in LeanIX Reports
+Story:
+As a user, I want to view my APIs in LeanIX circle maps and landscape views, so I can assess my API ecosystem at a glance.
+
+Acceptance Criteria:
+
+ The Interface Circle Map displays the pushed APIs grouped by technology, status, or domain.
+
+ The Application Landscape shows linked APIs under each relevant application.
+
+ Filtering and tagging options reflect API metadata (e.g., "MuleSoft", "REST").
+
+✅ User Story 4: Validate API Metadata Consistency
+Story:
+As a governance user, I want to ensure that all API Fact Sheets in LeanIX follow a consistent metadata structure, so the inventory is clean and usable.
+
+Acceptance Criteria:
+
+ All API Fact Sheets contain required fields like Lifecycle, Technical Fit, and Tags.
+
+ External ID from MuleSoft is stored and mapped properly.
+
+ Incomplete or invalid data is flagged for review.
+
+✅ User Story 5: Configure API Review Lifecycle
+Story:
+As a product owner, I want to set review cycles and lifecycles on API Fact Sheets, so APIs are regularly evaluated for technical and business fit.
+
+Acceptance Criteria:
+
+ User can assign Review Dates and Owners to API Fact Sheets.
+
+ User can assign Lifecycles (e.g., Design, Production, Deprecated).
+
+ System sends notifications when a review is due.
+
+✅ User Story 6: Automate Subscriptions for API Owners
+Story:
+As an admin, I want to auto-assign subscriptions to the API Fact Sheets based on metadata, so the right people are responsible for updates.
+
+Acceptance Criteria:
+
+ Users with specific roles (e.g., API Owner, Business Owner) are assigned based on tags or source data.
+
+ Subscriptions are reflected in the Fact Sheet UI.
+
+ Notifications are sent to subscribed users when changes are made.
