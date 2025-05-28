@@ -1,0 +1,133 @@
+To implement OpenAPI extension overrides for Spectral rules in a GitHub Action using Super-Linter, follow these steps:
+
+✅ Step 1: Use Custom Spectral Rules
+Super-Linter supports Spectral, but to allow per-file overrides via OpenAPI extensions (like x-spectral-ignore), you'll need to:
+
+Use a custom Spectral ruleset.
+
+Patch Spectral's processing logic (if needed) to support your custom extensions.
+
+✅ Step 2: Create Custom Spectral Ruleset
+Create a file like .spectral-rules.yaml in your repo root:
+
+yaml
+Copy
+Edit
+extends: ["spectral:oas"]
+
+rules:
+  operation-operationId-unique:
+    description: "OperationId must be unique"
+    recommended: true
+    severity: error
+    given: "$.paths[*][*]"
+    then:
+      field: operationId
+      function: unique
+Later, you'll modify this ruleset to support ignoring rules based on an extension like x-spectral-ignore.
+
+✅ Step 3: Modify Spectral to Support x-spectral-ignore
+Spectral doesn’t natively support x-spectral-ignore, so you’ll need a wrapper script or Spectral plugin to skip rules if the node has an x-spectral-ignore field.
+
+Use a wrapper script like lint-api.js (Node.js):
+
+js
+Copy
+Edit
+const { Spectral } = require('@stoplight/spectral-core');
+const { oas } = require('@stoplight/spectral-rulesets');
+const { loadRuleset } = require('@stoplight/spectral-ruleset-loader');
+const fs = require('fs');
+const path = require('path');
+const Parsers = require('@stoplight/spectral-parsers');
+
+const spectral = new Spectral();
+
+async function main(filePath) {
+  const document = Parsers.parseYaml(fs.readFileSync(filePath, 'utf8'));
+
+  // Load custom rules
+  const ruleset = await loadRuleset(path.resolve('.spectral-rules.yaml'));
+  spectral.setRuleset(ruleset);
+
+  // Run lint
+  let results = await spectral.run(document, { source: filePath });
+
+  // Filter out rules overridden by `x-spectral-ignore`
+  const filtered = results.filter(r => {
+    const node = r.path.reduce((obj, key) => obj?.[key], document);
+    const ignore = node?.['x-spectral-ignore'];
+    return !(ignore && ignore.includes(r.code));
+  });
+
+  console.log(JSON.stringify(filtered, null, 2));
+  if (filtered.some(r => r.severity > 0)) process.exit(1);
+}
+main(process.argv[2]);
+Install dependencies in package.json:
+
+json
+Copy
+Edit
+{
+  "dependencies": {
+    "@stoplight/spectral-core": "^6.0.0",
+    "@stoplight/spectral-parsers": "^6.0.0",
+    "@stoplight/spectral-ruleset-loader": "^6.0.0"
+  }
+}
+✅ Step 4: Update .github/workflows/lint.yml
+Use this in your GitHub Actions:
+
+yaml
+Copy
+Edit
+name: Super Linter with Spectral Overrides
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Spectral with overrides
+        run: node lint-api.js openapi.yaml
+
+      - name: Run Super-Linter (excluding OpenAPI if Spectral handled it)
+        uses: github/super-linter@v6
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_OPENAPI: false
+          DEFAULT_BRANCH: main
+✅ Step 5: Annotate Your OpenAPI Files
+In your OpenAPI file (openapi.yaml), add:
+
+yaml
+Copy
+Edit
+paths:
+  /legacy-endpoint:
+    get:
+      operationId: duplicateId
+      x-spectral-ignore:
+        - operation-operationId-unique
+✅ Result
+This setup allows:
+
+Full use of GitHub Super-Linter.
+
+Custom rule exceptions using x-spectral-ignore.
+
+Auditability within your OpenAPI YAML.
