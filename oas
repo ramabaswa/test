@@ -1,0 +1,270 @@
+1. Executive Summary
+
+This document outlines a comprehensive and deeply technical direction to migrate legacy MuleSoft APIs built using RAML to OpenAPI Specification (OAS) 3.0. The migration architecture emphasizes automated conversion, modular flows, CI/CD enablement, and testing strategies such as Consumer Driven Contract Testing (CDCT) using Pact, functional testing using Karate, and test plan management with qTest.
+
+2. Objectives
+
+Establish OpenAPI 3.0 as the standard for all API definitions
+
+Provide modular automation pipelines for RAML-to-OAS transformation
+
+Enable CDCT using Pact, to allow service providers to release independently
+
+Integrate Karate for advanced API functional and regression testing
+
+Manage test plans, traceability, and execution reporting using qTest
+
+3. Scope
+
+Partial automation of RAML-to-OAS conversion
+
+Cloud-hosted conversion pipeline using AWS Lambda
+
+Integration with GitHub-based API repositories
+
+Refactor API implementations using APIKit compatible with OAS 3.0
+
+Build contract testing with Pact and functional validation using Karate
+
+Seamlessly manage test lifecycle with qTest
+
+4. Migration Architecture Overview
+
+Architecture Pillars:
+
+Source Repositories: GitHub (RAML & OAS)
+
+Conversion Layer: AWS Lambda + RamlToOpenApiConverter (NuGet)
+
+API Implementation: MuleSoft APIKit (OAS-compatible)
+
+Test Strategies: Pact (contract), Karate (functional), qTest (traceability)
+
+Developer Experience: Spec linters, CI/CD, semantic versioning
+
+5. Detailed Migration Steps
+
+Step 1: API Inventory and Categorization
+
+Catalog all RAML APIs from GitHub repositories
+
+Tag metadata: domain, consumer count, owning team, change cadence
+
+Define migration waves prioritizing high-use and core data APIs
+
+Step 2: RAML-to-OAS Conversion Using Lambda
+
+Flow Diagram:
+
++-------------------+        +--------------+         +----------------------------+
+| GitHub (RAML API) | ---->  | Webhook Event| ----->  | AWS Lambda Conversion Job |
++-------------------+        +--------------+         +----------------------------+
+                                                         |
+                                                         v
+                                     +------------------------------------------+
+                                     | Store converted OAS in GitHub branch     |
+                                     +------------------------------------------+
+
+Technical Details:
+
+NuGet package: RamlToOpenApiConverter
+
+Lambda function runs Python or .NET core handler
+
+Output conforms to OAS 3.0 with tags, descriptions, securitySchemes
+
+Additional script validates result via Spectral Linter
+
+Step 3: MuleSoft Refactor with APIKit for OAS
+
+Flow Diagram:
+
++----------------------------+        +---------------------------+
+| GitHub (OAS Spec Branch)  | -----> | MuleSoft Anypoint Studio  |
++----------------------------+        +---------------------------+
+                                                |
+                                                v
+                               +-----------------------------------------+
+                               | Use APIKit OAS router to auto-generate |
+                               | flow scaffolds                          |
+                               +-----------------------------------------+
+                                                |
+                                                v
+                                     +--------------------------+
+                                     | Deploy to Sandbox Env     |
+                                     +--------------------------+
+
+Implementation Details:
+
+APIKit generates scaffold using oas-router
+
+Backward compatibility built into flows
+
+Supports versioning headers or path-based routing
+
+Step 4: Consumer Driven Contract Testing with Pact
+
+Flow Diagram:
+
++----------------------+         +----------------------+
+| Consumer Pact Tests  | ----->  | Pact Broker          |
+| (defined in DSL)     |         | (versioned contracts) |
++----------------------+         +----------------------+
+                                          |
+                                          v
++--------------------------+     +----------------------------+
+| MuleSoft CI Pipeline     | <-- | Provider Verification Tool |
++--------------------------+     +----------------------------+
+
+Implementation Notes:
+
+Pact contracts are versioned and fetched dynamically from Pact Broker
+
+Provider verification runs during CI
+
+Broken contracts fail early and point to affected interactions
+
+Sample Pact Contract (Consumer DSL)
+
+{
+  "consumer": { "name": "AppX" },
+  "provider": { "name": "CustomerService" },
+  "interactions": [
+    {
+      "description": "Get user by ID",
+      "request": {
+        "method": "GET",
+        "path": "/users/42"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "id": 42,
+          "name": "Alice"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
+
+Step 5: Functional and Regression Testing with Karate
+
+Flow Diagram:
+
++--------------------+    +--------------------+    +-------------------------+
+| Karate Feature     | -> | Karate CLI / Maven | -> | JUnit XML Reports       |
+| Scripts (BDD Gherkin)|  +--------------------+    +-------------------------+
+                                                             |
+                                                             v
+                                                 +-------------------------+
+                                                 | Upload to qTest         |
+                                                 +-------------------------+
+
+Example Karate Test:
+
+Feature: Retrieve Customer Info
+
+  Scenario: Get customer 123
+    Given url 'https://api.mydomain.com/customers/123'
+    When method GET
+    Then status 200
+    And match response contains { id: 123, name: 'Alice' }
+
+Step 7: qTest Integration for Reporting and Traceability
+
+qTest Integration Flow:
+
++-------------------------+      +-------------------+
+| Test Automation Output | ---> | qTest API Adapter |
++-------------------------+      +-------------------+
+                                       |
+                                       v
+                          +-----------------------------+
+                          | Test Run + Result Dashboard |
+                          +-----------------------------+
+
+CI pipeline invokes script: upload-results-to-qtest.sh
+
+Maps JUnit test cases to qTest Test Runs
+
+Enables traceability from API Spec → Test → Release
+
+6. Governance and Versioning
+
+Use Semantic Versioning (e.g., v1.2.0) per API
+
+Validate specs using Spectral (naming, status codes, tags)
+
+Contracts are immutable once verified
+
+Update changelogs and API portals with each deployment
+
+7. Toolchain Summary
+
+Tool
+
+Purpose
+
+Integration Notes
+
+AWS Lambda
+
+Serverless RAML to OAS transformer
+
+Triggered via GitHub webhook, NuGet conversion tool
+
+GitHub
+
+Source of truth for specs
+
+Uses main + oas-converted branches
+
+APIKit
+
+MuleSoft OAS-based flow engine
+
+Auto-generates routes from OAS
+
+Pact
+
+Consumer Driven Contract Testing
+
+DSLs by consumer, verified in MuleSoft CI
+
+Karate
+
+API regression/BDD testing
+
+Test suites run post-deployment
+
+qTest
+
+Test management/reporting
+
+Collects automation output for traceability
+
+8. Risks and Mitigation
+
+Risk
+
+Mitigation Strategy
+
+RAML-to-OAS fidelity issues
+
+Manual QA, enforced linter, fallback to RAML
+
+Pact contract failures post-release
+
+Pre-release CI validation gates
+
+CI/CD complexity
+
+Use GitHub Actions templates with reusable jobs
+
+9. Conclusion
+
+By combining automated conversion, APIKit refactoring, and robust testing/governance strategies, this blueprint supports a scalable transition from RAML to OAS. Teams can release APIs independently, with confidence in backward compatibility and full test traceability.
+
