@@ -1,3 +1,22 @@
+Here’s the updated list of **MCP (Model Context Protocol) E2E Architecture steps**, replacing the example query with **“Check weather and book meeting”**:
+
+1. **Connect to MCP Server endpoint** and read all the available tools.
+2. **User enters the query** (e.g., “Check weather and book meeting”) in the chat application.
+3. **Send query to MCP Client** over HTTP endpoint `/process`.
+4. **MCP Client** creates a prompt with the user query and available tools. Sends this prompt to the **LLM model** to select the best tools based on the query intent.
+5. **Call Ollama API endpoint** with the prompt.
+6. **LLM Model (e.g., OLLAMA)** responds with the best selected tools based on the query intent (e.g., Weather API and Calendar API).
+7. **MCP Client calls the selected tools**.
+8. **MCP Server** responds with the tool call outputs (e.g., weather data and meeting confirmation).
+9. **MCP Client sends the prompt** (with tool call outputs and user query) to the **NLU model (e.g., OLLAMA)** to generate a natural language response.
+10. **NLU model responds** with the generated response (e.g., “The weather is sunny today, and your meeting has been scheduled for 2 PM.”).
+
+
+
+
+
+
+
 1. User prompt ingestion (MCP Host → Gateway)
 The user provides a natural language prompt through an MCP client such as Claude Desktop, Cursor, or LangGraph. The host interprets the request and prepares to query the MCP Gateway for available actions.
 2. Context propagation and tool discovery (Host → Gateway)
