@@ -1,0 +1,20 @@
+1. User prompt ingestion (MCP Host → Gateway)
+The user provides a natural language prompt through an MCP client such as Claude Desktop, Cursor, or LangGraph. The host interprets the request and prepares to query the MCP Gateway for available actions.
+2. Context propagation and tool discovery (Host → Gateway)
+The MCP Host sends contextual metadata (session, user, org, etc.) to the Gateway, which exposes a tool catalog containing all discoverable tools, prompts, and resources from connected enterprise systems.
+3. Reasoning and tool selection (LLM Provider + Host)
+The host, assisted by the LLM provider (OpenAI, Anthropic, or Bedrock), reasons over the user’s intent and the discovered tool metadata to select the most relevant tool or prompt for execution.
+4. Tool invocation request (Host → Gateway)
+The MCP Host sends an invocation request to the Gateway using a secure channel (JWT or Basic Auth). This request adheres to the MCP JSON-RPC schema specifying the target tool, arguments, and context.
+5. Tool definition retrieval (Gateway → MCP Server)
+The Gateway acts as a reverse proxy to the registered MCP Servers (e.g., ServiceNow, Salesforce) and fetches the tool schema, method definition, and operational metadata required to execute the request.
+6. Tool registration and lifecycle sync (MCP Server → Gateway)
+Each MCP Server registers its available tools, resources, and prompts with the Gateway. The Gateway maintains this server catalog to enable runtime discovery, routing, and observability for enterprise APIs.
+7. Tool execution and response (Server → Gateway)
+The MCP Server executes the requested operation—such as creating an incident or retrieving CRM data—and sends back a structured JSON response. The Gateway validates and forwards this to the Host.
+8. Context update and reasoning continuation (Gateway → Host)
+The Host integrates the returned tool output into its running context, enriching the reasoning state for the ongoing conversation or workflow.
+9. LLM synthesis and final output generation (LLM Provider + Host)
+Using the enriched context, the underlying LLM (from OpenAI, Anthropic, Bedrock, etc.) synthesizes a final natural-language response or follow-up action plan for the user.
+10. Response delivery to user (Host → User)
+The MCP Host presents the final response back to the user, closing the interaction loop. Observability metrics, latency, and tool-usage data are logged by the Gateway for monitoring and governance.
