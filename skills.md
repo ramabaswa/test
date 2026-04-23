@@ -24,3 +24,33 @@ Rule Trigger: Rules are active continuously. Every input and output is filtered 
 Autonomy: Without skills, an agent is just a chatbot that can only talk. Skills allow it to act.
 
 Safety and Reliability: Without rules, an agent might hallucinate facts, violate privacy, or perform dangerous actions. Rules ensure the agent remains a helpful, predictable tool rather than an unpredictable script.
+
+
+
+##1. What is a "Skill" in the JFrog Ecosystem?
+In this context, a skill is a reusable, file-based unit of knowledge or capability compatible with protocols like ClawHub or NVIDIA OpenShell.
+
+A "generalist" agent might know how to talk.
+
+A "specialized" skill allows that agent to search specific company databases, run security scans, or manage cloud infrastructure using your company’s internal best practices.
+
+2. The JFrog Agent Skills Registry
+Launched in collaboration with NVIDIA, the Agent Skills Registry acts as a secure "System of Record" for these capabilities. It focuses on three main pillars:
+
+A. Governance & Trust Layer
+
+Just as a malicious software library can break an app, a "rogue skill" can cause an AI agent to perform harmful actions (like deleting a database or leaking code). JFrog scans these skills for:
+
+Malicious Prompts: Detecting "prompt injection" or hidden harmful instructions.
+
+Vulnerability Scanning: Checking if the skill’s underlying code or dependencies have security holes.
+
+Compliance: Ensuring the skill doesn't violate company privacy or data handling rules.
+
+B. Centralized Management
+
+Previously, skills for tools like Claude Code or Cursor were often locked inside those specific apps. The JFrog Registry allows a company to have one central library where any agent (regardless of the brand) can "check out" a verified skill.
+
+C. Provenance & Attestation
+
+JFrog generates a digital "receipt" (an in-toto compliant attestation) for every skill. This proves the skill was scanned and verified by your security team before an AI agent was allowed to use it in a production environment.
