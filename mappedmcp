@@ -1,0 +1,91 @@
+🧭 Capability → Feature → TOOL Mapping
+Capability	Feature	TOOL
+API Security	Input Validation, Output Encoding	Application Layer / Veracode
+	API Rate Limiting	TrueFoundry (Gateway), AWS API Gateway
+Server Authentication & Authorization	Access Control, OAuth	Azure Identity (internal), Okta (external)
+	Credential Management	CyberArk, Conjur
+	External Service Authentication	Azure Identity, Okta
+	Least Privilege	Azure Identity, AWS IAM
+	API Key Rotation	CyberArk, Conjur
+	Service Identity Authentication	AWS IAM, SPIFFE (via ROSA/K8s)
+Background Persistence Control	Lifecycle, Cleanup, Health Checks	ROSA (Kubernetes), AWS Platform
+	Background Monitoring	CrowdStrike (EDR/XDR), BlinkOps
+Deployment & Runtime Security	Isolation Environment	ROSA Containers, AWS
+	Container Security	CrowdStrike, Wiz
+	Secure Boot	AWS Platform
+	Environment Variable Security	CyberArk, Conjur
+	Resource Limits	ROSA (Kubernetes)
+Code & Data Integrity	Integrity Verification	GitHub Pipeline (SBOM, SAST)
+	Remote Validation	Veracode
+	Code Hardening	Veracode
+Supply Chain Security	Dependency Mgmt, SBOM	GitHub Pipeline
+	Package Integrity, Source Verification	GitHub + Veracode
+	Secure Build	GitHub Pipeline
+Monitoring & Logging	Anomaly Detection	CrowdStrike, Noma.security
+	Logging, Alerts	AWS CloudWatch, BlinkOps
+	Centralized Logging	AWS / SIEM (BlinkOps integration)
+	Log Integrity, Audit	AWS + Compliance tools
+Invocation Environment Isolation	MCP Instance Isolation	TrueFoundry, ROSA
+	Resource Access Control	AWS IAM, Azure Identity
+	Tool Permission Separation	TrueFoundry
+Platform Compatibility & Security	System Isolation	AWS + ROSA
+	Risk Assessment	Wiz
+Data Security & Privacy	Data Encryption	AWS KMS
+	Data Isolation	AWS
+	Data Access Control	Azure Identity, AWS IAM
+	Sensitive Data Identification	Netskope, Noma.security
+Agent-Resources Security	Resource Access Control	AWS IAM
+	Resource Limits	ROSA
+	Sensitive Resource Labeling	Netskope
+Agent-Tools Security	Secure Coding	Veracode
+	Tool Isolation	TrueFoundry
+	Tool Permission Control	TrueFoundry
+	Data Validation	App Layer + Veracode
+	Third-party Response Security	Noma.security
+	Namespace Isolation	ROSA
+User Interaction Security	UI Security	Application Layer
+	Sensitive Action Confirmation	Application Layer
+	Transparency	Product / UI
+AI Control & Monitoring	Operation Logging	TrueFoundry
+	Anomaly Detection	Noma.security, CrowdStrike
+	Tool Invocation Limits	TrueFoundry
+Local Storage Security	Credential Storage	CyberArk
+	Data Isolation	AWS
+Application Security	Integrity	Veracode
+	Update Verification	GitHub Pipeline
+	Sandbox	ROSA
+Client Authentication & Authorization	Mandatory Auth	Azure Identity, Okta
+	OAuth	Okta, Azure Identity
+	State Param (CSRF)	App Layer
+MCP Tools & Servers Mgmt	Tool Verification	TrueFoundry, Noma.security
+	Secure Updates	GitHub
+	Malicious MCP Detection	Noma.security
+	Registry / Directory	TrueFoundry
+	Conflict Mgmt	TrueFoundry
+Prompt Security	Prompt Injection Defense	Noma.security
+	Malicious Instruction Detection	Noma.security
+	System Prompt Protection	TrueFoundry
+	Sensitive Filtering	Netskope, Noma.security
+	Context Isolation	TrueFoundry
+Logging & Auditing	Client Logging	AWS
+	Security Events	CrowdStrike
+	Alerts	BlinkOps
+Server Verification & Communication	TLS / Certs	AWS, Azure
+	Secure Protocols	AWS
+Permission Token Mgmt	Scope Limitation	Azure Identity, Okta
+Auto-approve Control	Risk-based Approval	TrueFoundry, Noma.security
+Sampling Security	Context Control	TrueFoundry
+	Sensitive Filtering	Netskope
+	Validation	Noma.security
+LLM Secure Execution	Secure Invocation	TrueFoundry
+	Prompt Protection	Noma.security
+Multi-modal Security	Content Filtering	Noma.security
+Scenario (Multi-MCP)	MCP Environment Security	TrueFoundry
+	Cross-MCP Control	TrueFoundry
+Compliance	Key Protection	CyberArk
+	Data Privacy	Netskope
+	Verification Controls	Azure Identity + AWS
+Assessments	Infra Security Assessment	Wiz
+	Data Security Assessment	Netskope
+	AI Security Assessment	Noma.security
+
