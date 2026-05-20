@@ -1,0 +1,6 @@
+Search first — Smart Folders and all projects are checked for an existing recipe or connection. Workato's Smart Folders dynamically display all accessible assets by status, making it easy to spot what already exists. Workato-https://docs.workato.com/en/recipes/projects-faqs.html
+Clone before creating — if a similar recipe exists, clone and adapt it rather than starting from scratch.
+Reuse connections — connections can be shared across multiple projects to reuse established integrations and avoid duplicating setup efforts. A Salesforce connection in one project doesn't need to be rebuilt for another. Workato-https://docs.workato.com/en/recipes/projects-faqs.html
+Coordinate on ownership — if another team is already building in a project, your team escalates before proceeding.
+Tag every new asset — tags let teams categorize assets like recipes, connections, and data tables for better organization and filtering across projects. This is what makes future searches succeed. Workato-https://docs.workato.com/projects.html
+Shared connections go in root — connections that are shared between different projects should be placed in the root or Home folder so they can be exported and accessed regardless of the source folder. Workato-https://docs.workato.com/recipe-development-lifecycle/rdlc-guide-planning.html
