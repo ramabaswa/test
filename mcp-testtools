@@ -1,0 +1,36 @@
+The testing architecture for **Model Context Protocol (MCP)** servers is a multi-layered system designed to validate deterministic protocol compliance alongside the non-deterministic reasoning of AI agents. A robust testing architecture consists of three primary layers: the **Environment Layer**, the **Test Harness**, and the **Evaluation Engine**.
+
+### 1. The Functional Testing Pyramid
+Effective testing follows a hierarchical structure to ensure reliability at every level of integration:
+*   **Unit Testing:** Focuses on individual `@mcp.tool()` functions in isolation, mocking external dependencies like databases to verify core business logic without network or LLM overhead.
+*   **Integration & Subprocess Testing:** Verifies the interaction between the MCP server and its environment, catching bugs in **JSON-RPC 2.0 framing** and transport negotiation (STDIO or SSE).
+*   **Contract & Compliance Testing:** Ensures the server adheres strictly to the formal MCP specification for **capability negotiation** and schema validation.
+*   **Trajectory Evaluation (E2E):** The most advanced layer, measuring the success of the entire agentic loop by evaluating if the agent selects the correct sequence of tools to achieve a goal.
+
+### 2. Environment Layer (Isolation & State)
+Testing must occur in a controlled environment to ensure reproducibility and security:
+*   **Containerized Servers:** Each MCP server should run in an **isolated container** (e.g., Docker) with a sandboxed filesystem and **allow-listed network egress** to mirror secure production deployments.
+*   **State Management:** For consistent benchmarking, the architecture must support **state resets** (e.g., flushing and re-seeding a Redis instance) before each test run to eliminate data drift.
+*   **Transport Simulators:** The architecture must handle multiple transport methods, including **STDIO** for ultra-low latency local process communication and **SSE over HTTP** for remote cloud-scale testing.
+
+### 3. Test Harness & Automation
+This layer manages the execution of tests and the discovery of capabilities:
+*   **Automated Tool Discovery:** A component (like in **MCP-Jest**) that automatically enumerates server capabilities—tools, resources, and prompts—to generate test cases dynamically.
+*   **In-Memory vs. Subprocess:** 
+    *   **In-Memory:** Used for fast, deterministic unit tests where the server and client communicate directly in the same process.
+    *   **Subprocess:** Used for special cases (like STDIO transport) that require complete process isolation for accurate simulation.
+*   **Task Generation:** Frameworks like **MCPEval** can automate the generation of evaluation tasks, providing a single-command pipeline from task creation to analysis.
+
+### 4. Evaluation & Security Engine
+This layer assesses the quality of interactions and protects against vulnerabilities:
+*   **Claims-Based Rubric:** Rather than checking for a single "correct" text answer, the engine uses **atomic, verifiable factual claims** derived from tool outputs.
+*   **Judge Model:** An LLM (e.g., Gemini 2.5 Pro) acts as an objective judge to verify if the final response satisfies the required claims.
+*   **Security Scanning:** A layer (such as **StackOne Defender**) that scans tool responses before they enter the agent's context window to detect and block **indirect prompt injections**.
+*   **Chaos Engineering:** Simulating infrastructure failures (e.g., database timeouts) to verify that the server enters a degraded mode rather than crashing.
+
+### 5. Performance Benchmarking (KPIs)
+Production-ready servers are validated against specific performance targets:
+*   **Throughput:** Target **> 1,000 requests/second** per instance.
+*   **Latency:** **P95 < 100ms** for simple operations and **P99 < 500ms** for complex ones.
+*   **Error Rate:** Must be maintained at **< 0.1%**.
+*   **Resource Efficiency:** Monitoring memory footprints, with targets of **< 50MB** for native (Rust/Go) and **< 400MB** for JVM-based implementations.
