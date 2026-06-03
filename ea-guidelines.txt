@@ -1,0 +1,288 @@
+1. Executive Summary
+The Model Context Protocol (MCP) has rapidly become the de facto standard enabling communication
+across AI-driven services and multi-agent orchestration frameworks. Its proliferation into production
+environments — spanning finance, legal, healthcare, and software development — has materially outpaced
+the maturation of its security model. The National Security Agency's May 2026 Cybersecurity Information
+Sheet delivers the most authoritative government-level assessment of MCP's threat surface to date. This
+briefing synthesises those findings for Enterprise Architecture decision-making.
+Five Critical Takeaways for Enterprise Leadership:
+• Security is not protocol-enforced. MCP explicitly states it cannot enforce security principles at the
+protocol level. Every protection must be implemented by the deploying organisation — there is no
+secure-by-default baseline.
+• Attack surface is already being exploited. Published CVEs, proof-of-concept labs, and peer-reviewed
+research confirm that MCP vulnerabilities are not theoretical. Arbitrary Code Execution, session hijacking,
+and prompt injection are confirmed attack vectors.
+• The trust inversion model is fundamentally novel. Unlike traditional client-server interaction, MCP often
+instructs servers to query and execute actions on behalf of clients, reversing conventional security
+assumptions and creating poorly understood attack paths.
+• Third-party and open-source MCP servers carry outsized risk. Many reference implementations are
+archived or no longer maintained, yet remain in active deployment. Blanket permission grants (e.g.,
+GitHub MCP full repository access) create unacceptable blast radius.
+• Organisations must adopt deliberate, layered controls now. The NSA recommends ten distinct control
+domains. EA should treat MCP deployments with the same rigour applied to privileged-access
+workstations and data-loss-prevention tooling.
+EA Risk Verdict
+MCP should be treated as a HIGH-RISK integration layer until controls described in Section 6 are
+verified in place. Unrestricted production deployment of third-party MCP servers is not advisable without
+formal security review, tool-level sandboxing, and SIEM integration.
+2. Introduction & Protocol Context
+What Is MCP?
+Originally open-sourced by Anthropic in November 2024, MCP is an application-level protocol providing a
+structured messaging pattern and transport format for AI-enabled systems. It passes structured messages —
+typically containing a role, message content, and an optional tool or context reference — between components in
+a multi-step agentic workflow.
+MCP's ecosystem includes clients, servers, proxy layers, hosts, and individual tool plugins. Commercial
+deployments include AutoGen Studio, Harvey AI, Agentverse, and Microsoft Copilot. Its architectural appeal lies in
+enabling complex, multi-tool orchestration through a single normalised interface.
+The Trust Inversion Problem
+
+Critically, MCP reverses the familiar client-server interaction model. Rather than clients requesting data from
+servers, MCP servers frequently query and execute actions on behalf of connected clients. This inversion creates
+attack paths with no established precedent in conventional cybersecurity frameworks.
+The MCP architectural flow operates as:
+• User Interface — Primary human entry point; collects input, displays results.
+• LLM Layer — Interprets user intent; formulates structured execution requests.
+• MCP Client Library — Middleware translating LLM requests into MCP protocol messages.
+• MCP Server — Orchestrator matching requests to registered tools and capabilities.
+• Individual Tools (A, B, C) — Execute discrete tasks; return results up the chain.
+3. Security Concern Analysis
+The NSA identifies eight primary security concern domains. These are not isolated interface vulnerabilities but
+systemic design deficiencies requiring lifecycle-wide remediation.
+3.1 Access Control Deficiencies
+Session-to-identity association is not defined by the MCP protocol and is left entirely to implementer discretion.
+The practical consequences are severe:
+• No mandatory authentication: Many implementations omit authentication entirely. Clients, servers, proxies, and
+hosts may access or process data with zero access control.
+• No RBAC support at instantiation: MCP cannot exchange Role-Based Access Control permissions when
+sessions are established, making it impossible to verify access boundaries between tasks or services.
+• Unverified task propagation: Multiple MCP servers can be exposed to context freely shared by the MCP client,
+enabling tasks to pass between components without validation of origin, scope, or intent.
+• Data leakage pathways: The absence of CRUD-level permission differentiation creates ambiguous and
+untraceable data access across the agent ecosystem.
+3.2 Insecure Context & Data Serialisation
+MCP transmits structured objects — context, configuration, and payloads — through serialisation mechanisms
+that intentionally lack strict schema enforcement. Implementers define their own validation, producing wildly
+inconsistent security postures.
+• Serialised content including comments or prompts may embed executable code or model calls, creating injection
+vectors analogous to OWASP A08:2017 (Insecure Deserialisation).
+• Permissive deserialisation without strong isolation between code and data text is particularly dangerous when
+natural language is parsed alongside structured content.
+• The novel implication: unlike traditional serialisation attacks, MCP payloads may contain natural language
+instructions that manipulate LLM behaviour during parsing — a vector not covered by existing CWE/OWASP
+mappings.
+3.3 Poor Approval Workflows
+While MCP documentation recommends user consent mechanisms, it explicitly states these cannot be enforced
+at the protocol level. Observed weaknesses include:
+
+• Some implementations do not codify approval workflows at all, enabling automated action without informed user
+consent.
+• Capability creep without re-consent: A change in capability or data access for an already-trusted MCP server
+often proceeds without notification or approval. A previously benign, approved service can later access sensitive
+resources on demand with no review triggered.
+• This concern is compounded in agentic systems performing continuous background improvement cycles, where
+capability drift is structurally difficult to detect.
+3.4 Token & Session Security
+MCP implementations frequently rely on OAuth-style bearer tokens or session IDs. Critical gaps in the
+specification create exploitable windows:
+• Authorization is optional: Not every MCP implementation uses it. The core specification does not mandate
+token lifecycle management.
+• No protocol-level token lifecycle: Refresh, revocation, and reuse control are absent from the specification.
+Expiration and rotation are best-practice recommendations only.
+• Replay vulnerability: Without idempotency enforcement at the MCP level — left to underlying JSON-RPC —
+message replay and session reuse attacks are viable.
+• Session hijacking consequences: A malicious actor can impersonate a legitimate client, inject malicious
+prompts, or interact with MCP servers without detection.
+3.5 Misconfiguration & Implementation Risk
+The availability of open-source MCP frameworks enables rapid deployment without corresponding security
+understanding:
+• A simple weather-data MCP server deployed without restrictions can be trivially repurposed to access sensitive
+user or asset information.
+• Shared model interface and message structures across tasks — combined with absent task or data isolation —
+create inadvertent cross-task data exposure.
+• MCP provides no native mechanism to isolate services for privacy or security purposes.
+3.6 Inconsistent Behaviours
+Implementation variance across MCP deployments introduces non-deterministic and exploitable gaps. Context
+interpretation differs between agents based on historical session state, timing, and probabilistic LLM outputs. A
+malicious actor can exploit this by preconditioning an agent to interpret future inputs in a specific, unsafe manner
+— a technique outside the scope of traditional information security practices.
+3.7 Audit Logging Gaps
+The MCP specification provides only basic logging guidance, leaving comprehensive audit requirements to
+implementers. Many deployments omit logging entirely or capture only minimal operational metadata. Effective
+logs must:
+• Capture a traceable sequence of actions across sessions.
+• Include source information from HTTP headers where available.
+• Provide native detection for protocol anomalies: repeated or malformed requests, authorisation failures, RBAC
+violations.
+• Support multi-tenant incident response and forensic accountability.
+
+3.8 Denial of Service & Fatigue-Based Techniques
+MCP's agentic architecture is susceptible to prompt storms, malformed inputs, and recursive task requests that
+induce denial-of-service conditions. Adversaries may exploit 'lethargy' — exhausting server resources through
+legitimate but computationally excessive tasks. These attacks are difficult to distinguish from valid high-load
+conditions and can cascade across chained agent pipelines.
+
+4. Real-World Exploitation Case Studies
+The following cases are drawn directly from published security research and disclosed vulnerabilities. They
+demonstrate that MCP risks are operational, not merely theoretical.
+[HIGH] Case 1: Tool Parameter Injection in Open MCP Agents
+• Open-source MCP agents exposed sensitive server data after unsanitised tool parameters, passed via
+malformed MCP messages, were executed through simple tools.
+• Root cause: absence of contextual validation and logging.
+• Impact: malicious actors used legitimate interfaces to run arbitrary commands — a CWE-77/78 class
+vulnerability.
+[CRITICAL] Case 2: Tool Invocation Path Confusion (Naming Collisions)
+• MCP orchestrators automatically resolving tool names from public registries were tricked into loading
+actor-controlled code via naming collisions or configuration manipulation.
+• MCP clients lacked unique tool identifier requirements or strict resolution policies.
+• Impact: malicious data or responses from external servers overrode legitimate functionality and hijacked
+execution flows.
+[HIGH] Case 3: GitHub MCP — Unrestricted Repository Access
+• The GitHub MCP server grants blanket read/write access across all repositories (public and private)
+rather than scoped, per-repository permissions.
+• Malicious or compromised tools could read sensitive private repository content and publish it to public
+repositories without user awareness.
+• Impact: confidential IP, credentials, and proprietary code exposed at scale.
+[HIGH] Case 4: WhatsApp MCP — Malicious Server Coercion
+• A malicious MCP server introduced into a WhatsApp-enabled agentic system coerced the MCP client to
+expose message data without user notice.
+• Attack vector: the malicious server's tool descriptions manipulated client behaviour; it advertised a benign
+instruction at installation and switched to malicious instruction after second usage (a delayed-activation
+technique).
+• Impact: demonstrates that trust established at installation is insufficient for ongoing session security.
+[CRITICAL] Case 5: Poisoned Output for Downstream Automation
+• MCP agent outputs were crafted so downstream agents interpreted passive content as executable
+prompts, enabling prompt injection and data exfiltration.
+• Hidden instructions embedded in tool metadata, semantic manipulation, and cascading prompt injections
+propagated through multi-agent pipelines.
+• Impact: control-flow hijacking across entire MCP agent chains; classified as systemic rather than isolated
+by researchers.
+[CRITICAL] Case 6: CVE-2025-49596 — Remote Code Execution in MCP Inspector
+• A vulnerability in MCP Inspector (used for testing MCP servers in development) accepted unverified
+inputs, allowing crafted messages to trigger remote code execution.
+• Fixed in version 0.14.1. Illustrates how development toolchain security hygiene directly impacts
+production risk posture.
+• Impact: underscores that security lapses in AI toolchains resurface well-known vulnerability classes under
+new names.
+5. Consolidated Risk Register
+sections are: Risk Area| Severity| Key Impact| Priority Action
+Access Control| CRITICAL| Unauthenticated access to data and agent context; no RBAC enforcement between tasks| Mandate authentication + RBAC at every MCP boundary; block unauthenticated servers.
+Serialisation / Injection | CRITICAL | Executable code embedded in serialised payloads; LLM manipulation during parsing. | Enforce strict schema validation; isolate code from data in deserialisation paths.
+Tool Invocation Confusion | CRITICAL | Malicious code loaded via naming collisions; execution flow hijacked. | Require unique tool identifiers; restrict dynamic tool discovery; pin tool sources.
+Downstream Output | Poisoning | CRITICAL | Prompt injection cascades across agent pipelines; data exfiltration and control-flow hijack. | Treat all tool outputs as untrusted input; implement output filtering before pipeline hand-off.
+Token / Session Security | HIGH | Session replay, hijacking, and unauthorised reuse of valid tokens. | Enforce token expiry, rotation, and revocation; implement replay protection with timestamps.
+Approval Workflow Gaps | HIGH | Capability creep without re-consent; previously approved services silently gain new access. | Implement re-authorisation triggers on capability changes; log and alert on scope changes.
+Misconfiguration | HIGH | Overly permissive servers repurposed for sensitive data; cross-task data exposure. | Apply code review standards; isolate services by data classification zone; use local MCP instances for sensitive data.
+Audit Logging Absence | HIGH |Forensic blind spots; incident response severely hampered. | Integrate MCP telemetry into SIEM; log all tool invocations with parameters and identities.
+Inconsistent Behaviour |MEDIUM | Non-deterministic agent responses exploitable through context preconditioning. | Define deterministic context policies; test agent responses to adversarial context histories.
+Denial of Service | MEDIUM | Resource exhaustion via prompt storms or recursive task requests. | Implement rate limiting, request size caps, and task timeout controls.
+
+CRITICAL = immediate remediation required; HIGH = remediate within current quarter; MEDIUM = schedule within roadmap.
+
+6. Recommendations for Enterprise Adoption
+The NSA outlines ten control domains for secure MCP adoption. The following maps each recommendation to
+actionable EA guidance, categorised by implementation effort.
+R1. Choose Supported MCP Projects [IMMEDIATE]
+• Audit all deployed MCP servers against the MCP GitHub archived server list; decommission or replace
+unsupported implementations.
+• Apply the most stringent code review profile to all MCP server integrations — treat them as privileged
+third-party dependencies.
+• Prefer locally deployed and internally registered MCP servers over public cloud-hosted implementations
+for sensitive workflows.
+• Leverage the MCP Registry service to enrol and manage approved internal servers.
+R2. Design for Explicit Trust Boundaries [IMMEDIATE]
+• Define and document trust zones for all MCP components: agents, plugins, models, and end users must
+reside in segregated trust tiers.
+• Data from user-facing plugins must never be blindly accepted by privileged backend models without
+explicit validation.
+• Align tools and models with data classification zones: public tools for public data; explicit controls for
+sensitive/regulated data.
+• Deploy filtering outbound proxies (Squid, tinyproxy) or enterprise DLP solutions for all MCP connections
+to external entities.
+• Prefer local MCP server instances when processing private or regulated data.
+R3. Enforce Strict Parameter Validation [IMMEDIATE]
+• Validate every tool invocation and model execution request against well-defined schemas, expected value
+ranges, and intended execution context.
+• Check for malformed inputs, missing fields, and excessive payload sizes — all are viable DoS or injection
+vectors.
+• Block or restrict parameter forwarding when the data source is ambiguous or potentially user-supplied.
+• Extend validation beyond syntactic checking to contextual validation: understand the execution
+environment, not just the input structure.
+R4. Constrain and Sandbox Tool Execution [SHORT-TERM]
+• Treat every MCP-triggered tool execution as a potentially high-risk action regardless of source.
+• Apply OS-level security frameworks: AppContainers (Windows), seccomp, AppArmor, or SELinux to
+isolate each tool's execution context.
+• Sandbox tools to prevent lateral movement or privilege escalation following compromise.
+• Enforce least privilege for all MCP agent processes: explicitly deny access to file systems, model files,
+and internal networks not required for the task.
+R5. Sign and Verify MCP Messages [SHORT-TERM]
+• Extend MCP messages with cryptographic signatures in the JSON payload using readily available
+modern cryptographic libraries.
+• Implement time-bound signatures for session protection on sensitive workflows.
+• Include expiration timestamps and replay-protection metadata in all MCP messages.
+• Apply OWASP ASVS V7 Session Management recommendations; cryptographically bind requests to time
+and context.
+R6. Filter and Monitor Output Pipelines [SHORT-TERM]
+• Treat all tool and model outputs as untrusted input to the next pipeline stage — apply scrutiny before
+processing or display.
+• Filtering must include: content length checks, disallowed keyword scanning, rate limiting, and
+application-specific policy enforcement.
+• Implement detection of indirect prompt injection and toolchain pivot attempts in LLM-generated text.
+• In multi-component pipelines, log and inspect each tool's output before passing to the next component.
+• Use MCP-aware security proxies with caution due to their current immaturity — do not rely on them as
+primary controls.
+R7. Instrument for Logging and Detection [SHORT-TERM]
+• Log all tool and model invocations including exact parameters, identities, and (where feasible)
+cryptographic hashes of outputs.
+• Integrate MCP telemetry into existing SIEM, threat detection pipelines, and compliance dashboards.
+• Develop detection signatures for suspicious patterns: unexpected tool invocations, anomalous message
+flows, authorisation failures.
+• Ensure logs capture HTTP header source information and protocol anomalies natively.
+R8. Implement Approval Workflow Controls [SHORT-TERM]
+• Require affirmative user consent for all initial MCP server connections and tool access grants.
+• Trigger re-authorisation workflows automatically when an MCP server's capabilities or data access scope
+changes.
+• Implement monitoring to detect silent capability changes in connected MCP servers.
+• Do not allow trusted status established at installation to persist indefinitely without periodic review.
+R9. Track and Patch MCP Vulnerabilities [ONGOING]
+• Establish a formal process for monitoring MCP-related CVEs, vendor advisories, and open-source issue
+trackers.
+• Subscribe to relevant security feeds; integrate threat intelligence on MCP frameworks into the security
+operations workflow.
+• Maintain a clear inventory of all deployed MCP agents and tools with versioning, patch history, and known
+security concerns.
+• Define SLAs for patching: CRITICAL vulnerabilities within 24–72 hours; HIGH within two weeks.
+R10. Scan for Open or Vulnerable MCP Servers [ONGOING]
+• Conduct regular network scans to identify unauthorised or insecure MCP servers before exploitation.
+• Scan for: unauthenticated servers, servers with known flaws, unauthorised deployments, and services
+with unregulated internet connectivity.
+• Use available tooling: MCP Scanner, Ramparts, CyberMCP, Proximity.
+• Note that MCP servers may dynamically change ports — use differential scanning reports to detect new
+or modified services.
+• Provide scan results to network administrators and security teams for policy enforcement and anomaly
+investigation.
+
+7. Conclusions & Strategic Guidance
+Strategic Assessment
+MCP represents a genuinely promising architectural foundation for agentic AI orchestration. However, the NSA's
+assessment is unambiguous: its current security posture is uneven, highly dependent on implementation
+discipline rather than protocol guarantees, and already actively exploited in real-world deployments. The analogy
+to early web protocols is apt — and instructive. HTTP was deployed pervasively before TLS was standard; the
+resulting security debt took decades to resolve. Enterprise architecture leadership should not repeat that pattern
+with MCP.
+EA Strategic Guidance
+• Classify MCP as a privileged integration tier. All MCP deployments — internal and third-party — should be
+subject to the same governance applied to privileged access management systems.
+• Establish an MCP server registry immediately. Inventory all currently deployed MCP agents, tools, and
+servers. No unregistered MCP server should be permitted in production environments.
+• Gate new MCP deployments behind security review. Particularly for agentic workflows touching regulated data
+(health records, financial data, national security information), a formal security review is mandatory before
+production approval.
+• Invest in logging infrastructure now. The absence of audit logging is the single greatest impediment to incident
+response in MCP environments. SIEM integration for MCP telemetry should be treated as a prerequisite, not an
+enhancement.
+• Monitor the evolving specification. The MCP specification is actively evolving. EA should track specification
+changes and reassess security posture as the protocol matures. Parallel work from OASIS COSAI and Docker's
+security analyses provides additional context.
+• Engage security researchers proactively. The velocity of new MCP vulnerability disclosures (CVE-2025-49596,
+GitHub MCP, WhatsApp MCP) suggests the threat landscape is accelerating. Participation in relevant threat
+intelligence communities is advisable.
