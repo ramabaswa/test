@@ -1,0 +1,1139 @@
+================================================================================
+ENTERPRISE ARCHITECTURE SECURITY FRAMEWORK
+Secure Model Context Protocol (MCP) Authorization
+Implementation Requirements for Developer Guidelines
+
+Classification: Internal — Developer & Security Auditor Reference
+Version: 1.0
+Framework Basis: Spatio-Temporal MCP Threat Taxonomy (OpenReview, 2025)
+Applicable Standards: OAuth 2.1, RFC 6749/6750, STRIDE, MAESTRO, NIST SP 800-53
+================================================================================
+
+TABLE OF CONTENTS
+
+  1.  Purpose and Scope
+  2.  Normative Definitions
+  3.  MCP Architecture Reference Model
+  4.  Lifecycle-Phase Security Requirements
+  5.  Discovery Mechanism Security Requirements
+  6.  Authorization Framework Requirements
+  7.  Transport and Communication Security
+  8.  Identity and Trust Management
+  9.  Supply Chain and Code Integrity Controls
+ 10.  Execution Environment Controls
+ 11.  Credential and Data Protection
+ 12.  Workflow and Configuration Governance
+ 13.  Multi-Agent and Orchestration Security
+ 14.  Threat Mapping Reference (STRIDE × MAESTRO)
+ 15.  Verification Checks and Audit Evidence
+ 16.  Compliance Checklist
+
+================================================================================
+SECTION 1 — PURPOSE AND SCOPE
+================================================================================
+
+1.1  Purpose
+
+This document establishes mandatory security implementation requirements for
+enterprise deployments of the Model Context Protocol (MCP). It is addressed
+to lead developers, platform architects, and security auditors responsible
+for designing, implementing, deploying, and reviewing MCP-based agentic AI
+systems.
+
+MCP is an open standard that enables large language models (LLMs) to
+interact with external tools, data sources, and computational services
+through a JSON-RPC 2.0 message interface. Its extensibility and support for
+multi-agent orchestration expose a broad and complex attack surface that
+must be governed by explicit, verifiable security controls.
+
+This framework adopts a dual-axis approach: all controls are localized to
+both the MCP architectural component where enforcement must occur and the
+lifecycle phase at which the control must be active. This localization
+enables component-scoped evidence production, phase-gated enforcement, and
+deterministic audit outcomes.
+
+1.2  Scope
+
+This framework applies to all MCP deployments within the enterprise boundary,
+including:
+
+  - MCP Host runtimes (agent orchestrators and LLM execution environments)
+  - MCP Client protocol-layer components
+  - MCP Server instances (local, remote, cloud-hosted)
+  - Tool, Resource, and Prompt sub-systems exposed by MCP servers
+  - Authorization servers issuing and validating MCP access tokens
+  - Transport channels (stdio, Streamable HTTP, HTTPS)
+  - Third-party and community-sourced MCP server integrations
+
+1.3  Compliance Obligation
+
+Requirements stated as MUST, MUST NOT, SHALL, or SHALL NOT are mandatory.
+Requirements stated as SHOULD or RECOMMENDED are strongly advised and require
+documented justification when not implemented. SHOULD NOT and NOT RECOMMENDED
+carry equivalent advisory weight.
+
+Failure to implement mandatory controls constitutes a compliance gap that
+must be recorded in the project risk register and escalated to the
+Information Security function prior to production deployment.
+
+================================================================================
+SECTION 2 — NORMATIVE DEFINITIONS
+================================================================================
+
+  Access Token         An OAuth 2.1 bearer credential encoding issuer,
+                       audience, authorized scope, and expiry, transmitted
+                       in the Authorization: Bearer <token> HTTP header.
+
+  Authorization Server A service that authenticates principals and issues
+                       scoped, time-limited access tokens to MCP clients.
+
+  Capability Discovery The MCP lifecycle phase in which a client queries a
+                       server for its registered tools, resources, and
+                       prompts via tools/list, resources/list, and
+                       prompts/list JSON-RPC calls.
+
+  Confused Deputy      An attack in which a higher-privileged component is
+                       coerced into executing actions on behalf of a
+                       lower-privileged principal, enabling silent privilege
+                       escalation.
+
+  Context Drift        Temporal divergence between an agent's working context
+                       and the actual state of the underlying systems,
+                       causing downstream tools to act on outdated or
+                       contradictory information.
+
+  MAESTRO              Modeling Adversarial Events for Systematic Threat
+                       Representation and Organization; a threat-modeling
+                       framework purpose-built for agentic AI systems.
+
+  MCP Client           A protocol-level component instantiated by the host to
+                       communicate with a specific MCP server over a
+                       dedicated one-to-one connection.
+
+  MCP Host             The runtime that coordinates MCP clients, manages
+                       server links, and provides the environment for model
+                       reasoning and planning.
+
+  MCP Server           A service that exposes callable tools, accessible
+                       resources, and reusable prompts through a JSON-RPC
+                       interface.
+
+  mTLS                 Mutual Transport Layer Security; a protocol mode
+                       requiring both client and server to present valid
+                       certificates before any data exchange occurs.
+
+  Rug Pull             An attack in which a tool that passes initial
+                       inspection is subsequently replaced with a malicious
+                       variant through silent server-side redefinition.
+
+  Shadow MCP Server    An unauthorized MCP server deployed inside
+                       organizational infrastructure without central oversight
+                       or governance review.
+
+  STRIDE               A threat-modeling mnemonic covering Spoofing,
+                       Tampering, Repudiation, Information Disclosure,
+                       Denial of Service, and Elevation of Privilege.
+
+  Tool Poisoning       Embedding hidden instructions in MCP tool metadata
+                       (descriptions, manifests, docstrings) that the LLM
+                       interprets as authoritative directives rather than
+                       neutral documentation.
+
+  Typosquatting        Registration of a server or package name that differs
+                       from a legitimate name by a small, easily overlooked
+                       variation (e.g., hyphen substitution, character
+                       transposition) to attract misrouted invocations.
+
+================================================================================
+SECTION 3 — MCP ARCHITECTURE REFERENCE MODEL
+================================================================================
+
+3.1  Component Hierarchy
+
+MCP follows a layered client-host-server architecture. The following
+component hierarchy governs all security control assignments in this
+framework:
+
+  Layer 1 — Host
+    The host encapsulates one or more MCP clients, manages model reasoning,
+    and orchestrates cross-server workflows. It is the primary enforcement
+    point for user consent, policy evaluation, and session governance.
+
+  Layer 2 — MCP Client
+    Each client maintains a dedicated connection to a single MCP server. It
+    is responsible for protocol-level communication, session management, and
+    capability enumeration. It MUST NOT share state or credentials across
+    multiple server connections.
+
+  Layer 3 — Transport (Communication Layer)
+    JSON-RPC 2.0 messages traverse either stdio (local process communication)
+    or Streamable HTTP over HTTPS (remote deployments). The transport layer
+    is the mandatory enforcement point for channel security, encryption, and
+    mutual authentication.
+
+  Layer 4 — MCP Server
+    Servers expose three sub-systems:
+      Tools      — executable operations (database queries, file actions,
+                   API calls)
+      Resources  — structured data endpoints (files, databases, streams)
+      Prompts    — reusable interaction templates encoding reasoning
+                   patterns or output structures
+
+  Layer 5 — Authorization Infrastructure
+    An external authorization server issues OAuth 2.1 access tokens. MCP
+    servers enforce tool and resource access using those tokens. This layer
+    is the enforcement point for scope definition, token issuance, and
+    token validation.
+
+3.2  Security Control Assignment Rule
+
+Every security control in this framework MUST be assigned to at least one
+component layer AND at least one lifecycle phase (see Section 4). Controls
+without both assignments MUST NOT be considered enforceable for audit
+purposes.
+
+================================================================================
+SECTION 4 — LIFECYCLE-PHASE SECURITY REQUIREMENTS
+================================================================================
+
+4.1  Phase Overview
+
+MCP deployments progress through seven sequential phases. Each phase carries
+distinct security obligations and exposes a distinct attack surface.
+
+  Phase 1  Pre-MCP                — Model preparation, dataset alignment,
+                                    access policy definition
+  Phase 2  Creation & Registration — Server instantiation, tool manifest
+                                    registration, trust anchor configuration
+  Phase 3  Connection & Initialization — Protocol handshake, capability
+                                    negotiation, OAuth flow execution
+  Phase 4  Discovery              — Dynamic capability enumeration via
+                                    tools/list, resources/list, prompts/list
+  Phase 5  Invocation & Execution — Active JSON-RPC tool and resource calls
+  Phase 6  Update & Maintenance   — Manifest updates, credential rotation,
+                                    vulnerability patching
+  Phase 7  Shutdown & Deregistration — Session termination, token
+                                    invalidation, tool deregistration
+
+4.2  Phase-Gated Controls
+
+4.2.1  Pre-MCP Phase
+
+  REQ-PM-01  Tool schema definitions MUST be completed and reviewed before
+             any live MCP connection is established. Schema definitions
+             constitute access policy artifacts and MUST be version-
+             controlled.
+
+  REQ-PM-02  Models deployed as MCP host runtimes MUST undergo alignment
+             reviews confirming that tool invocation behavior conforms to
+             the principle of least privilege. Evidence: alignment review
+             record stored in the project security register.
+
+  REQ-PM-03  Pre-training and fine-tuning data provenance MUST be documented
+             to enable detection of pre-MCP data poisoning or backdoored
+             model behaviors that could propagate through all downstream
+             MCP workflows.
+
+4.2.2  Creation & Registration Phase
+
+  REQ-CR-01  Every MCP server MUST be registered with a unique, canonical
+             name verified against a centrally managed namespace registry.
+             Typosquatting detection (character-level similarity checks)
+             MUST be applied during registration. Duplicate or near-
+             duplicate names MUST be rejected.
+
+  REQ-CR-02  Tool manifests, resource URIs, and prompt templates MUST be
+             cryptographically signed by the registering party. Unsigned
+             manifests MUST NOT be accepted by the registry.
+
+  REQ-CR-03  Trust anchors (certificate pinning or public-key registration)
+             MUST be configured at registration time so that future clients
+             can verify server authenticity before establishing sessions.
+
+  REQ-CR-04  Default tool permission scopes MUST be defined at the narrowest
+             viable level at registration time. Broad or wildcard scopes
+             MUST NOT be the default; they require documented business
+             justification and security review approval.
+
+  REQ-CR-05  No MCP server MUST be deployed or registered without passing a
+             supply chain integrity gate (see Section 9).
+
+4.2.3  Connection & Initialization Phase
+
+  REQ-CI-01  All HTTP-based MCP transports MUST be served exclusively over
+             HTTPS. Unencrypted HTTP MUST NOT be permitted for any MCP
+             endpoint, including internal or developer environments.
+
+  REQ-CI-02  Where the deployment risk profile is classified as HIGH or
+             CRITICAL, mutual TLS (mTLS) MUST be required so that both
+             client and server authenticate before any data is exchanged.
+
+  REQ-CI-03  The OAuth 2.1 authorization flow MUST be completed before any
+             tool or resource access is permitted. Access tokens MUST
+             encode the intended resource audience, authorized scope, and
+             a bounded expiry time.
+
+  REQ-CI-04  Upon each new connection, the client MUST validate the server's
+             TLS certificate against the registered trust anchor. Certificate
+             mismatch MUST cause immediate connection termination with an
+             auditable error event.
+
+4.2.4  Discovery Phase
+
+  (See Section 5 — Discovery Mechanism Security Requirements for detailed
+  controls specific to this phase.)
+
+4.2.5  Invocation & Execution Phase
+
+  REQ-IE-01  Every tool invocation MUST carry a valid, non-expired access
+             token in the Authorization: Bearer <token> header. The server
+             MUST validate the token's issuer, audience, scope, and lifetime
+             before executing any operation.
+
+  REQ-IE-02  Tool inputs MUST NOT be interpolated directly into shell commands
+             or operating system calls. Input sanitization and parameterized
+             execution are MANDATORY.
+
+  REQ-IE-03  Tool outputs MUST be filtered before injection into model context
+             to prevent credential leakage through log, trace, or response
+             channels.
+
+  REQ-IE-04  Multi-step workflows MUST implement compensating transactions or
+             explicit rollback procedures to prevent transactional integrity
+             gaps when individual tool calls fail.
+
+  REQ-IE-05  A context-aware revalidation check MUST be triggered whenever
+             a tool invocation transitions to a higher-sensitivity operation
+             than the token's original issuance context anticipated (e.g.,
+             read-only session escalating to a write or delete action).
+
+4.2.6  Update & Maintenance Phase
+
+  REQ-UM-01  Access tokens and API credentials MUST be rotated on a schedule
+             defined by the organization's credential management policy, not
+             to exceed 90 days for long-lived tokens. Rotation events MUST
+             be logged with a timestamp and the initiating identity.
+
+  REQ-UM-02  Tool manifests updated in place MUST undergo integrity
+             verification (hash comparison against a known-good baseline)
+             before the update is accepted by the registry.
+
+  REQ-UM-03  Dependency updates for MCP server packages MUST pass software
+             composition analysis (SCA) gates before deployment. Known-
+             vulnerable packages MUST be blocked at the CI/CD pipeline.
+
+  REQ-UM-04  Configuration drift detection MUST be run at least weekly across
+             all registered MCP servers. Servers whose effective configuration
+             diverges from the baseline MUST be flagged for remediation
+             within 5 business days.
+
+4.2.7  Shutdown & Deregistration Phase
+
+  REQ-SD-01  Upon shutdown, all active session identifiers and access tokens
+             associated with the decommissioned server MUST be explicitly
+             invalidated at the authorization server. Passive expiry alone
+             is not sufficient.
+
+  REQ-SD-02  All tool, resource, and prompt registrations associated with
+             the decommissioned server MUST be removed from the central
+             namespace registry within 24 hours of shutdown.
+
+  REQ-SD-03  Temporary files, cached credentials, process memory artifacts,
+             and debug logs produced during the server's lifetime MUST be
+             securely deleted upon deregistration. Residual data left in
+             logs, caches, or crash dumps constitutes a reportable
+             compliance gap.
+
+  REQ-SD-04  The deregistration event MUST generate an immutable audit record
+             containing the server identity, timestamp, initiating operator,
+             and a list of invalidated tokens and deregistered capabilities.
+
+================================================================================
+SECTION 5 — DISCOVERY MECHANISM SECURITY REQUIREMENTS
+================================================================================
+
+5.1  Criticality of the Discovery Phase
+
+The Discovery Phase is a high-risk lifecycle stage. During capability
+enumeration, MCP clients surface tool descriptions, resource schemas, and
+prompt templates directly to the LLM. Adversaries who control server
+metadata at this phase can implant hidden instructions that influence model
+behavior without ever being invoked. The following requirements govern all
+aspects of secure capability discovery.
+
+5.2  Discovery Protocol Controls
+
+  REQ-DC-01  Capability discovery MUST only be initiated over an
+             authenticated, encrypted session established in accordance with
+             Section 4.2.3. Discovery MUST NOT proceed over unauthenticated
+             or unencrypted channels.
+
+  REQ-DC-02  The client MUST verify that the server's identity (as presented
+             during Connection & Initialization) matches the identity of the
+             server returned in the tools/list, resources/list, and
+             prompts/list responses. Identity mismatch MUST abort the
+             discovery session.
+
+  REQ-DC-03  All tool, resource, and prompt metadata returned during
+             discovery MUST be treated as untrusted input until validated
+             against the registered, signed manifest. Discrepancies between
+             advertised metadata and the signed manifest MUST be flagged and
+             MUST NOT be silently accepted.
+
+  REQ-DC-04  Discovery responses MUST be logged in their entirety. The log
+             MUST include the server identity, the full list of advertised
+             capabilities, and the timestamp of the enumeration. Discovery
+             logs MUST be retained for the duration of the organization's
+             audit retention policy (minimum 12 months).
+
+5.3  Tool Metadata Integrity
+
+  REQ-TM-01  Tool descriptions, YAML manifests, and docstrings MUST be
+             inspected for hidden prompt injection payloads prior to being
+             surfaced to the LLM. Static analysis tools capable of detecting
+             anomalous instruction-like text in metadata fields MUST be
+             integrated into the registration pipeline.
+
+  REQ-TM-02  Tool names MUST be registered in a centrally governed namespace.
+             The registry MUST enforce uniqueness and MUST apply similarity
+             detection to reject names that differ from existing registrations
+             only by hyphens, underscores, character transpositions, or
+             other typosquatting variants.
+
+  REQ-TM-03  Tool annotations (e.g., readOnlyHint, destructiveHint) MUST
+             NOT be used as the sole basis for security-critical decisions.
+             These annotations are advisory only. Risk-tier classification
+             MUST be based on independent server-side policy, not client-
+             interpreted hints.
+
+  REQ-TM-04  Where an MCP deployment spans multiple servers, the host MUST
+             maintain an authoritative tool registry that resolves ambiguous
+             or colliding tool names deterministically. Ambiguous bindings
+             MUST default to rejection, not to last-seen or most-recently-
+             registered precedence.
+
+5.4  Dynamic Capability Enumeration Constraints
+
+  REQ-DE-01  Agents MUST NOT automatically invoke newly discovered tools
+             without explicit authorization from the host's policy engine.
+             Discovery of a new capability does not constitute authorization
+             to invoke it.
+
+  REQ-DE-02  The set of tools discoverable by a given client MUST be scoped
+             to that client's authorized capability set as defined in its
+             access token. Servers MUST NOT advertise tools for which the
+             requesting client holds no valid scope.
+
+  REQ-DE-03  Any change to a server's advertised capability set between
+             successive discovery calls MUST generate an audit event. The
+             host MUST evaluate the delta before permitting invocation of
+             newly appeared capabilities. This control mitigates Rug Pull
+             via Dynamic Tool Redefinition attacks.
+
+  REQ-DE-04  ANSI escape codes and other terminal control sequences MUST be
+             stripped or escaped from all metadata fields before rendering
+             in CLI interfaces, inspectors, or log viewers. This prevents
+             display-layer spoofing attacks that mask malicious listings
+             from human reviewers.
+
+5.5  Preference Manipulation Mitigations
+
+  REQ-PM-05  Tool selection logic MUST be governed by deterministic,
+             policy-based ranking criteria rather than by the persuasiveness
+             of tool descriptions. Descriptions that claim superior safety,
+             elevated capability, or recommended status MUST be treated as
+             suspect and flagged for human review before influencing selection.
+
+  REQ-PM-06  The host MUST implement tool selection audit logging that records
+             the full set of candidate tools, the selection rationale, and
+             the ultimate binding decision for every invocation. This enables
+             post-hoc detection of preference manipulation.
+
+================================================================================
+SECTION 6 — AUTHORIZATION FRAMEWORK REQUIREMENTS
+================================================================================
+
+6.1  OAuth 2.1 Implementation
+
+  REQ-AU-01  All protected MCP deployments MUST implement OAuth 2.1 for
+             authorization. Legacy OAuth 2.0 flows that lack PKCE (Proof Key
+             for Code Exchange) MUST NOT be used for new deployments.
+
+  REQ-AU-02  MCP servers MUST expose OAuth Protected Resource Metadata
+             endpoints and support authorization server discovery in
+             conformance with the MCP authorization specification.
+
+  REQ-AU-03  Access tokens MUST be audience-bound to the specific MCP server
+             resource for which they are issued. Token passthrough (presenting
+             a token issued for Server A to Server B) is explicitly PROHIBITED.
+             This control prevents confused deputy attacks in multi-agent
+             delegation chains.
+
+  REQ-AU-04  Token scopes MUST be defined at the granularity of individual
+             tool-level operations where technically feasible. Broad
+             organizational scopes (e.g., "all-tools-read") are PERMITTED
+             only where fine-grained scoping is not technically achievable,
+             and MUST be documented with an accepted-risk justification.
+
+  REQ-AU-05  Access tokens MUST carry a bounded expiry. The maximum token
+             lifetime for interactive sessions is 1 hour. Long-lived service
+             account tokens MUST NOT exceed 24 hours without explicit re-
+             authorization.
+
+6.2  Risk-Aware Authorization
+
+  REQ-RA-01  Deployments MUST implement a risk-tier classification for all
+             registered tools. At minimum, three tiers are required:
+               Tier 1 (Read-Only)    — low risk, standard token validation
+               Tier 2 (State-Modifying) — elevated risk, step-up
+                                       authentication required
+               Tier 3 (Destructive / Privileged) — high risk, explicit
+                                       human-in-the-loop approval required
+                                       per invocation
+
+  REQ-RA-02  Tier 3 tool invocations MUST NOT be permitted in fully automated
+             (no human-in-the-loop) workflows without explicit written
+             security exception and compensating controls.
+
+  REQ-RA-03  Context-aware revalidation (see REQ-IE-05) MUST be implemented
+             as a runtime check integrated with the authorization server.
+             Step-up challenges MUST be issued when runtime context indicates
+             a higher-risk operation than the original token context permits.
+
+6.3  Role-Based Access Control
+
+  REQ-RB-01  All MCP server deployments MUST implement Role-Based Access
+             Control (RBAC) or Attribute-Based Access Control (ABAC) for
+             tool, resource, and prompt access. Server-by-server reliance on
+             a single bearer token without role differentiation is NOT
+             PERMITTED for deployments classified as production.
+
+  REQ-RB-02  RBAC definitions MUST be centrally managed and version-
+             controlled. Individual servers MUST NOT define their own
+             independent RBAC schemas in isolation; all role definitions
+             MUST be reconciled with the central policy store.
+
+  REQ-RB-03  Per-user scope isolation MUST be enforced in all multi-tenant
+             MCP deployments. A token issued to User A MUST NOT grant access
+             to capabilities or data scoped to User B.
+
+6.4  Session and Token Lifecycle
+
+  REQ-ST-01  Session identifiers MUST be treated as sensitive authentication
+             material. They MUST NOT appear in URL query parameters, HTTP
+             Referer headers, or application logs in plaintext.
+
+  REQ-ST-02  Orphaned sessions (sessions not explicitly terminated at
+             shutdown) MUST be detected by the authorization server and
+             invalidated within the organization's defined session timeout
+             period (not to exceed 8 hours of inactivity).
+
+  REQ-ST-03  Explicit token revocation MUST be implemented and tested. The
+             ability to revoke a specific token without waiting for natural
+             expiry is MANDATORY for incident response readiness.
+
+================================================================================
+SECTION 7 — TRANSPORT AND COMMUNICATION SECURITY
+================================================================================
+
+7.1  Channel Security
+
+  REQ-TS-01  All remote MCP transports MUST use TLS 1.2 or higher. TLS 1.0
+             and 1.1 are explicitly PROHIBITED. The preferred configuration
+             is TLS 1.3 with forward secrecy cipher suites.
+
+  REQ-TS-02  Server certificates MUST be issued by a trusted Certificate
+             Authority recognized by the organization's PKI policy. Self-
+             signed certificates are PROHIBITED in production environments.
+
+  REQ-TS-03  In HIGH and CRITICAL risk deployments, mTLS MUST be configured
+             so that MCP clients present valid client certificates. The
+             server MUST reject connections from clients that cannot present
+             a valid certificate.
+
+  REQ-TS-04  JSON-RPC message integrity MUST be verified at the transport
+             layer through TLS. At the application layer, critical tool
+             invocation responses MUST carry response signatures where
+             technically feasible to detect tampering on shared or proxied
+             infrastructure.
+
+7.2  Local Transport (stdio) Controls
+
+  REQ-LT-01  MCP servers running over stdio MUST be subject to the same
+             identity, scope, and logging requirements as remote servers.
+             The local channel does not reduce the authorization obligation.
+
+  REQ-LT-02  stdio-based servers MUST run as dedicated, minimally privileged
+             operating system accounts. They MUST NOT run as root or the
+             invoking user's full account without containerization and
+             documented justification.
+
+7.3  Man-in-the-Middle Mitigations
+
+  REQ-MM-01  Certificate pinning or public-key pinning SHOULD be implemented
+             for MCP servers handling Tier 2 or Tier 3 tool operations, as
+             an additional defense against on-path interception.
+
+  REQ-MM-02  Unexpected certificate changes (e.g., detected by pinning) MUST
+             generate a security alert and MUST terminate the session. The
+             event MUST be investigated before reconnection is permitted.
+
+================================================================================
+SECTION 8 — IDENTITY AND TRUST MANAGEMENT
+================================================================================
+
+8.1  Server Identity Verification
+
+  REQ-ID-01  MCP clients MUST verify server identity cryptographically at
+             every connection establishment. Name-based or metadata-based
+             trust is insufficient; cryptographic proof (TLS certificate
+             validated against a trust anchor registered at server creation)
+             is MANDATORY.
+
+  REQ-ID-02  The enterprise MUST maintain a centrally governed MCP Server
+             Identity Registry. Each registered server entry MUST include:
+               - Canonical server name
+               - TLS certificate fingerprint (SHA-256)
+               - Registered tool and resource namespaces
+               - Owning team and data classification
+               - Registration date and last audit date
+
+  REQ-ID-03  Servers not present in the Identity Registry MUST be treated as
+             untrusted. Clients MUST NOT establish sessions with unregistered
+             servers in production environments without explicit, time-bound
+             security exception approval.
+
+8.2  Implicit Trust Elimination
+
+  REQ-IT-01  The assumption that localhost or internal-network MCP servers
+             are inherently trustworthy is PROHIBITED as an architectural
+             principle. All servers, regardless of network location, MUST
+             be subject to authentication and authorization controls.
+
+  REQ-IT-02  Any process capable of reaching an MCP server's network port
+             MUST NOT be able to issue tool invocations without presenting
+             a valid, scoped access token. Network reachability does not
+             constitute authorization.
+
+8.3  Naming Governance
+
+  REQ-NG-01  Server names, tool names, resource names, and prompt names MUST
+             be registered in a centrally governed namespace. Naming policy
+             MUST define prohibited patterns, reserved prefixes, and maximum
+             similarity thresholds between registered names.
+
+  REQ-NG-02  Automated similarity detection MUST be run against all new
+             registration requests. Requests that fall within the similarity
+             threshold of an existing registration MUST be held for human
+             review and MUST NOT be auto-approved.
+
+================================================================================
+SECTION 9 — SUPPLY CHAIN AND CODE INTEGRITY CONTROLS
+================================================================================
+
+9.1  Package and Dependency Governance
+
+  REQ-SC-01  All MCP server packages, dependencies, and installer binaries
+             MUST be sourced from organization-approved repositories. Direct
+             installation from public package registries (PyPI, npm) without
+             an intermediate vetting step is PROHIBITED in production
+             environments.
+
+  REQ-SC-02  Software Composition Analysis (SCA) MUST be run on all MCP
+             server dependencies prior to every production deployment.
+             Packages with known critical or high CVEs MUST be blocked.
+             Medium CVEs MUST generate a security review gate.
+
+  REQ-SC-03  MCP installer tools (e.g., Smithery-CLI, mcp-get, mcp-installer)
+             MUST be version-pinned and their checksums verified before use.
+             Auto-update channels for installer tools MUST be disabled in
+             production unless update authenticity is verified cryptographically.
+
+9.2  Integrity Verification
+
+  REQ-IV-01  All MCP server binaries and manifests MUST be signed with the
+             organization's code-signing key. Unsigned artifacts MUST NOT
+             be deployed.
+
+  REQ-IV-02  Cryptographic hash checks (SHA-256 minimum) MUST be performed
+             on all MCP artifacts at deployment time. Hash comparison MUST
+             be against a baseline stored in a tamper-evident system
+             (e.g., a version-controlled, access-controlled artifact store).
+
+  REQ-IV-03  Build pipelines for MCP servers MUST include Static Application
+             Security Testing (SAST). Security findings classified as HIGH
+             or CRITICAL MUST block the deployment pipeline.
+
+9.3  Stale Manifest Prevention
+
+  REQ-SM-01  Lockfiles and deployment manifests MUST be validated at
+             deployment time to confirm that referenced versions match the
+             current approved artifact store. Deployment MUST FAIL if
+             lockfile hashes do not match.
+
+  REQ-SM-02  Automated checks MUST detect and alert on MCP server instances
+             running versions that differ from the current approved baseline.
+             Instances running deprecated or unpatched versions MUST be
+             remediated within the organization's defined SLA for critical
+             vulnerabilities (not to exceed 72 hours for CRITICAL severity).
+
+================================================================================
+SECTION 10 — EXECUTION ENVIRONMENT CONTROLS
+================================================================================
+
+10.1  Isolation Requirements
+
+  REQ-EE-01  All MCP server processes MUST run in isolated execution
+             environments (containers, virtual machines, or equivalent
+             sandboxing mechanisms). Direct execution on the host operating
+             system without isolation is PROHIBITED for production deployments.
+
+  REQ-EE-02  Container images used for MCP server execution MUST be based on
+             minimal, hardened base images. Unnecessary operating system
+             utilities, shells, and package managers MUST be removed from
+             production images.
+
+  REQ-EE-03  MCP server processes MUST run as dedicated, non-root operating
+             system accounts with the minimum privileges required for their
+             function. Execution as root or Administrator is explicitly
+             PROHIBITED.
+
+  REQ-EE-04  The container runtime and underlying hypervisor MUST be kept
+             patched against known sandbox escape vulnerabilities (e.g.,
+             CVE-2019-5736 class flaws). Patch application SLAs apply as
+             per the organization's vulnerability management policy.
+
+10.2  Resource and Rate Controls
+
+  REQ-RC-01  Per-agent, per-session, and per-user rate limits MUST be
+             enforced on tool invocations to prevent Denial of Service
+             through resource exhaustion.
+
+  REQ-RC-02  CPU, memory, and I/O quotas MUST be defined for each MCP server
+             container. Workloads that exceed defined quotas MUST be
+             terminated and the event MUST generate a security alert.
+
+  REQ-RC-03  Timeouts MUST be enforced for all tool invocations. The default
+             maximum invocation timeout MUST NOT exceed 30 seconds unless
+             documented as a justified exception. Long-running operations
+             MUST be implemented as asynchronous jobs with explicit result
+             polling, not as unbounded blocking calls.
+
+10.3  Input and Output Handling
+
+  REQ-IO-01  All tool inputs MUST be validated against the registered JSON
+             schema before execution. Inputs that fail schema validation MUST
+             be rejected and MUST generate an audit event.
+
+  REQ-IO-02  Shell command construction from tool inputs is PROHIBITED.
+             Where operating system interaction is required, parameterized
+             system call interfaces MUST be used.
+
+  REQ-IO-03  Tool outputs MUST be filtered to remove credentials, tokens,
+             internal URLs, stack traces, and other sensitive operational
+             data before the output is injected into model context or
+             returned to the client.
+
+================================================================================
+SECTION 11 — CREDENTIAL AND DATA PROTECTION
+================================================================================
+
+11.1  Secret Management
+
+  REQ-CM-01  MCP server credentials (API keys, OAuth tokens, database
+             passwords) MUST be stored in an enterprise secrets management
+             system (e.g., HashiCorp Vault, AWS Secrets Manager, Azure Key
+             Vault). Plaintext storage in configuration files, environment
+             variables, or source code repositories is PROHIBITED.
+
+  REQ-CM-02  Each MCP server MUST be issued its own isolated credential set.
+             Sharing a single credential store across multiple servers is
+             PROHIBITED unless the servers share an explicit trust boundary
+             documented in the architecture review.
+
+  REQ-CM-03  Debug logging MUST be configured to suppress credentials, bearer
+             tokens, and personally identifiable information. Log review
+             processes MUST include automated scanning for inadvertently
+             logged secrets.
+
+11.2  Token Scope Minimization
+
+  REQ-TS-05  MCP tools and servers MUST request the narrowest OAuth scope
+             sufficient to complete their function. Scope escalation requests
+             made at runtime MUST require a new authorization flow, not
+             silent token upgrade.
+
+  REQ-TS-06  Tokens issued for read-only operations MUST NOT carry write or
+             delete scopes. A single token MUST NOT grant access to
+             operations spanning more than one risk tier (see Section 6.2).
+
+11.3  Cross-Tool Data Flow Controls
+
+  REQ-CF-01  Data returned by one tool MUST NOT be automatically forwarded
+             to an external network endpoint without explicit, auditable
+             authorization. The host MUST implement data-flow policies that
+             govern which tool outputs may be passed to which downstream
+             tools or external services.
+
+  REQ-CF-02  Retrieval-based workflows (where tools fetch external content
+             and inject it into model context) MUST implement content
+             inspection to detect and block embedded prompt injection
+             payloads before the retrieved content reaches the LLM.
+
+11.4  Aggregation Risk Management
+
+  REQ-AR-01  The host MUST implement context accumulation monitoring to detect
+             when the aggregation of outputs from multiple tool calls
+             approaches sensitive disclosure thresholds (e.g., combining
+             calendar, email, and file metadata to reconstruct personal
+             schedules or organizational intelligence).
+
+  REQ-AR-02  Data minimization MUST be applied at the host layer: only the
+             tool output fields required for the immediate reasoning step
+             MUST be included in the model's working context. Full tool
+             response objects MUST NOT be injected wholesale.
+
+================================================================================
+SECTION 12 — WORKFLOW AND CONFIGURATION GOVERNANCE
+================================================================================
+
+12.1  Configuration Management
+
+  REQ-CG-01  All MCP server configurations (authentication settings, scope
+             definitions, allow-lists, logging rules, dependency versions)
+             MUST be managed as code, stored in version control, and subject
+             to change management processes.
+
+  REQ-CG-02  A configuration baseline MUST be established for each registered
+             MCP server at deployment time. Automated drift detection MUST
+             compare running configurations against this baseline on a
+             scheduled basis (minimum weekly).
+
+  REQ-CG-03  Shadow MCP servers (servers deployed without central governance
+             review) MUST be detected through network scanning and asset
+             discovery processes. Confirmed shadow servers MUST be reported
+             to the Information Security function within 24 hours of
+             detection.
+
+12.2  Transactional Integrity
+
+  REQ-TI-01  Multi-step MCP workflows that span multiple servers and modify
+             shared state MUST define explicit success criteria, failure
+             modes, and compensating actions. Partial completion states
+             MUST be detectable and recoverable without manual intervention.
+
+  REQ-TI-02  Workflows that apply access control changes, configuration
+             modifications, or financial transactions MUST implement an
+             atomic commitment pattern or, where atomicity is not achievable,
+             an idempotent retry mechanism with state verification.
+
+12.3  Observability and Logging
+
+  REQ-OL-01  All MCP tool invocations MUST be logged with the following
+             minimum fields:
+               - Timestamp (UTC, millisecond precision)
+               - Session identifier
+               - Client identity
+               - Server identity
+               - Tool name
+               - Invocation parameters (redacted per REQ-CM-03)
+               - Response status (success / failure / error code)
+               - Latency
+
+  REQ-OL-02  Logs MUST be written to a centralized, tamper-evident log
+             management system. Local log storage on the MCP server is
+             insufficient as the sole logging mechanism.
+
+  REQ-OL-03  Security events (authentication failures, authorization
+             denials, schema validation failures, unexpected capability
+             changes) MUST generate alerts delivered to the Security
+             Operations function within a defined SLA (not to exceed
+             15 minutes for CRITICAL events).
+
+================================================================================
+SECTION 13 — MULTI-AGENT AND ORCHESTRATION SECURITY
+================================================================================
+
+13.1  Agent Handoff Controls
+
+  REQ-AH-01  When an MCP agent delegates a task to another agent or server,
+             the delegating agent MUST issue a new, narrowly scoped token
+             for the delegated operation. Token passthrough (presenting the
+             delegating agent's token to the receiving agent) is PROHIBITED.
+
+  REQ-AH-02  The receiving agent MUST verify the identity and authorization
+             scope of the delegating agent before executing delegated
+             actions. Unverified agent handoffs constitute a confused deputy
+             condition and MUST be rejected.
+
+  REQ-AH-03  Agent handoff events MUST be logged with both the delegating
+             and receiving agent identities, the delegated scope, and a
+             correlation identifier that enables end-to-end traceability
+             across the workflow.
+
+13.2  Collusion Detection
+
+  REQ-CD-01  Multi-agent deployments MUST implement behavioral monitoring
+             to detect coordination patterns between agents that could
+             indicate collusion (e.g., unusual tool call sequences, out-of-
+             band data aggregation, systematic enumeration of resources
+             across multiple agents).
+
+  REQ-CD-02  The MCP Sampling API (server-initiated agentic behaviors) MUST
+             be explicitly scoped and logged. Servers MUST NOT initiate
+             sampling without explicit host authorization. Unscoped sampling
+             enables agent collusion and is PROHIBITED.
+
+13.3  Orchestration Drift Prevention
+
+  REQ-OD-01  Multi-step orchestration workflows MUST be defined as explicit,
+             versioned policy artifacts. Ad-hoc or dynamically constructed
+             workflow chains that bypass policy review are PROHIBITED in
+             production environments.
+
+  REQ-OD-02  Deprecated tools that re-appear in discovery responses after
+             deregistration MUST generate a CRITICAL security alert. The
+             host MUST refuse to bind to re-appeared capabilities until a
+             security review confirms the re-registration is legitimate.
+
+================================================================================
+SECTION 14 — THREAT MAPPING REFERENCE (STRIDE × MAESTRO)
+================================================================================
+
+The following table maps the nine primary MCP threat categories to STRIDE
+properties and MAESTRO layers. Each pairing informs control prioritization and
+audit focus.
+
+  ┌─────────────────────────────────────┬──────────────────────────┬─────────────────────────────┐
+  │ Threat Category                     │ STRIDE Classification    │ MAESTRO Layer               │
+  ├─────────────────────────────────────┼──────────────────────────┼─────────────────────────────┤
+  │ Identity & Trust Management         │ Spoofing                 │ Security & Compliance       │
+  │ Supply Chain & Code Integrity       │ Tampering                │ Deployment Infrastructure   │
+  │ Malicious / Poisoned Tool Servers   │ Spoofing, Tampering      │ Agent Frameworks            │
+  │ Prompt, Input & Context Injection   │ Tampering                │ Data Operations             │
+  │ Credential Leakage & Data Exposure  │ Information Disclosure,  │ Security & Compliance,      │
+  │                                     │ Elevation of Privilege   │ Data Operations             │
+  │ Authorization & Access Control Gaps │ Elevation of Privilege   │ Security & Compliance       │
+  │ Execution Environment & Sandbox     │ Elevation of Privilege,  │ Deployment Infrastructure   │
+  │                                     │ Tampering, DoS           │                             │
+  │ Workflow & Configuration Risks      │ Repudiation, Tampering,  │ Agent Ecosystem,            │
+  │                                     │ Information Disclosure   │ Evaluation & Observability  │
+  │ Multi-Agent & Orchestration Risks   │ Tampering, Elevation of  │ Agent Ecosystem,            │
+  │                                     │ Privilege, Spoofing      │ Foundation Models           │
+  └─────────────────────────────────────┴──────────────────────────┴─────────────────────────────┘
+
+Threat Density by Component and Phase (indicative counts from source taxonomy):
+
+  Component             │ Creation │ Discovery │ Invocation │ Update │ Shutdown
+  ──────────────────────┼──────────┼───────────┼────────────┼────────┼─────────
+  Host / Client         │    7     │    24     │     8      │   3    │   —
+  Transport Layer       │    2     │     4     │     8      │   16   │   3
+  Server (Tools/Res/Pr) │    2     │     0     │     6      │    6   │   2
+  Auth Infrastructure   │    0     │     0     │     5      │    0   │   0
+  Data Layer            │    0     │     1     │     6      │    4   │   1
+
+  The Discovery and Invocation/Execution phases carry the highest aggregate
+  threat density. Controls in Section 5 and Section 4.2.5 are accordingly
+  the highest priority for implementation.
+
+================================================================================
+SECTION 15 — VERIFICATION CHECKS AND AUDIT EVIDENCE
+================================================================================
+
+15.1  CI/CD Gate Checks
+
+The following checks MUST be integrated as blocking gates in the CI/CD
+pipeline before any MCP server artifact is promoted to a staging or
+production environment.
+
+  CHECK-01  Manifest Signature Verification
+            Pass: Artifact signature verified against organization code-
+                  signing key.
+            Fail: Signature absent or verification failure. Deployment BLOCKED.
+
+  CHECK-02  SCA Dependency Scan
+            Pass: No CRITICAL or HIGH CVEs in dependency graph.
+            Fail: One or more CRITICAL/HIGH CVEs present. Deployment BLOCKED.
+
+  CHECK-03  SAST Security Scan
+            Pass: No HIGH or CRITICAL findings unresolved.
+            Fail: Unresolved HIGH/CRITICAL finding. Deployment BLOCKED.
+
+  CHECK-04  Lockfile Hash Consistency
+            Pass: Lockfile hashes match approved artifact store baseline.
+            Fail: Hash mismatch. Deployment BLOCKED.
+
+  CHECK-05  Namespace Collision Check
+            Pass: Server name, tool names, and resource names are unique in
+                  the central registry within similarity thresholds.
+            Fail: Collision detected. Registration BLOCKED for human review.
+
+  CHECK-06  Scope Definition Review
+            Pass: All tool scopes are defined at Tier 1, 2, or 3 with no
+                  wildcard default scopes.
+            Fail: Wildcard scope detected without documented justification.
+                  Deployment BLOCKED.
+
+15.2  Runtime Monitoring Signals
+
+The following signals MUST be monitored continuously and correlated in the
+Security Information and Event Management (SIEM) system.
+
+  SIGNAL-01  Capability delta between successive discovery calls for the
+             same server (new tools appearing, existing tools disappearing).
+             Severity: HIGH.
+
+  SIGNAL-02  Token presented to a server whose audience claim does not match
+             the server's registered resource identifier (passthrough
+             detection).
+             Severity: CRITICAL.
+
+  SIGNAL-03  Tool invocation parameters containing shell metacharacters,
+             path traversal sequences (../), or known prompt injection
+             patterns.
+             Severity: HIGH.
+
+  SIGNAL-04  Tool output containing credential-like patterns (regex patterns
+             for API keys, tokens, private key headers).
+             Severity: CRITICAL.
+
+  SIGNAL-05  Session identifier appearing in URL query string or log
+             plaintext.
+             Severity: HIGH.
+
+  SIGNAL-06  MCP server process running as root or UID 0.
+             Severity: CRITICAL.
+
+  SIGNAL-07  Discovery request from a client presenting a token that does
+             not include discovery scope for the target server.
+             Severity: MEDIUM.
+
+  SIGNAL-08  Rate limit threshold exceeded for a single agent, session, or
+             user identity.
+             Severity: MEDIUM.
+
+15.3  Audit Evidence Requirements
+
+For each production MCP deployment, the following evidence artifacts MUST
+be maintained and made available to security auditors on request.
+
+  EVIDENCE-01  Server Identity Registry entry (REQ-ID-02) with current
+               TLS certificate fingerprint.
+
+  EVIDENCE-02  Signed manifest for each registered server version.
+
+  EVIDENCE-03  SCA scan report for the current production version.
+
+  EVIDENCE-04  SAST scan report for the current production version.
+
+  EVIDENCE-05  Configuration baseline snapshot with drift detection run
+               history.
+
+  EVIDENCE-06  OAuth scope definition document for all registered tools.
+
+  EVIDENCE-07  Token rotation log for the preceding 12 months.
+
+  EVIDENCE-08  Deregistration audit records for all servers decommissioned
+               in the preceding 12 months.
+
+  EVIDENCE-09  Incident log (SIGNAL-01 through SIGNAL-08 events) with
+               resolution status for the preceding 12 months.
+
+================================================================================
+SECTION 16 — COMPLIANCE CHECKLIST
+================================================================================
+
+Security auditors MUST use the following checklist to assess compliance with
+this framework. Each item maps to one or more requirements in Sections 4–13.
+
+  LIFECYCLE & DISCOVERY
+  [ ] Server names verified against namespace registry at registration (REQ-CR-01, REQ-NG-01)
+  [ ] Tool manifests cryptographically signed (REQ-CR-02)
+  [ ] Trust anchors configured at registration (REQ-CR-03)
+  [ ] Default scopes narrowest viable (REQ-CR-04)
+  [ ] Discovery only over authenticated, encrypted sessions (REQ-DC-01)
+  [ ] Metadata validated against signed manifest (REQ-DC-03)
+  [ ] Discovery responses fully logged (REQ-DC-04)
+  [ ] Capability deltas trigger audit events (REQ-DE-03)
+  [ ] ANSI escape codes stripped from metadata (REQ-DE-04)
+
+  AUTHORIZATION
+  [ ] OAuth 2.1 with PKCE implemented (REQ-AU-01)
+  [ ] Tokens audience-bound; passthrough prohibited (REQ-AU-03)
+  [ ] Risk-tier classification for all tools (REQ-RA-01)
+  [ ] RBAC centrally managed (REQ-RB-01, REQ-RB-02)
+  [ ] Per-user scope isolation enforced (REQ-RB-03)
+  [ ] Session identifiers not in URLs or logs (REQ-ST-01)
+  [ ] Token revocation implemented and tested (REQ-ST-03)
+
+  TRANSPORT
+  [ ] All remote transports over TLS 1.2+ (REQ-TS-01)
+  [ ] No self-signed certificates in production (REQ-TS-02)
+  [ ] mTLS for HIGH/CRITICAL deployments (REQ-TS-03)
+
+  IDENTITY
+  [ ] Cryptographic server identity verification at every connection (REQ-ID-01)
+  [ ] Central Server Identity Registry maintained (REQ-ID-02)
+  [ ] Localhost not treated as implicitly trusted (REQ-IT-01)
+
+  SUPPLY CHAIN
+  [ ] All packages from approved repositories (REQ-SC-01)
+  [ ] SCA on all dependencies pre-deployment (REQ-SC-02)
+  [ ] Installer tools version-pinned and checksum-verified (REQ-SC-03)
+  [ ] All artifacts signed (REQ-IV-01)
+  [ ] Lockfile hash consistency check in pipeline (REQ-SM-01)
+
+  EXECUTION ENVIRONMENT
+  [ ] All servers in isolated containers or VMs (REQ-EE-01)
+  [ ] No root execution (REQ-EE-03)
+  [ ] Rate limits and quotas enforced (REQ-RC-01, REQ-RC-02)
+  [ ] Tool inputs schema-validated (REQ-IO-01)
+  [ ] Shell command construction from inputs prohibited (REQ-IO-02)
+  [ ] Tool outputs filtered before context injection (REQ-IO-03)
+
+  CREDENTIALS & DATA
+  [ ] Credentials in secrets management system (REQ-CM-01)
+  [ ] Isolated credential sets per server (REQ-CM-02)
+  [ ] Narrowest OAuth scope requested (REQ-TS-05)
+  [ ] Cross-tool data forwarding requires authorization (REQ-CF-01)
+  [ ] Retrieval content inspected for prompt injection (REQ-CF-02)
+
+  WORKFLOW & CONFIGURATION
+  [ ] Configuration managed as code (REQ-CG-01)
+  [ ] Automated drift detection active (REQ-CG-02)
+  [ ] Shadow server detection active (REQ-CG-03)
+  [ ] All invocations logged to centralized system (REQ-OL-01, REQ-OL-02)
+  [ ] Security event alerts within defined SLA (REQ-OL-03)
+
+  MULTI-AGENT
+  [ ] New scoped tokens issued per delegation (REQ-AH-01)
+  [ ] Receiving agent verifies delegating agent identity (REQ-AH-02)
+  [ ] Sampling API explicitly scoped and logged (REQ-CD-02)
+  [ ] Deprecated tools re-appearing trigger CRITICAL alert (REQ-OD-02)
+
+================================================================================
+DOCUMENT CONTROL
+================================================================================
+
+  Framework Version     1.0
+  Status                Active
+  Applicable To         All MCP production deployments
+  Review Cycle          Annually or upon material MCP specification change
+  Owner                 Enterprise Architecture & Information Security
+  Primary Reference     Securing The Model Context Protocol (MCP): A Dual-Axis
+                        Survey with a Mitigation-Oriented Threat Taxonomy
+                        (OpenReview, 2025 — under review for TMLR)
+  Secondary References  OAuth 2.1 (draft-ietf-oauth-v2-1)
+                        MCP Authorization Specification (Anthropic, 2025)
+                        NIST SP 800-53 Rev 5
+                        STRIDE Threat Modeling Framework
+                        MAESTRO Agentic AI Threat Framework
+
+  This document is intended as a living standard. Implementers are responsible
+  for tracking updates to the MCP specification, the OAuth 2.1 standard, and
+  the organization's risk classification policy, and for initiating a review
+  of this framework when material changes occur in any of those sources.
+
+================================================================================
+END OF DOCUMENT
+================================================================================
