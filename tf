@@ -1,118 +1,146 @@
-# Proof of Concept (POC) Guidelines: TrueFoundry in an AWS AgentCore Environment
+## Enterprise POC Guideline: AWS AgentCore & TrueFoundry Coexistence Matrix
 
----
+### 1. Summary & Objective of the POC
 
-## 1. Summary & Objective of the POC
+The objective of this Proof of Concept (POC) is to evaluate a **Hybrid Control Plane architecture** that leverages **AWS Bedrock AgentCore** as the core multi-agent execution environment alongside **TrueFoundry** as the enterprise cross-model AI gateway, governance fabric, and tool/MCP repository.
 
-The objective of this Proof of Concept (POC) is to evaluate and establish **TrueFoundry** as the centralized **Control, Infrastructure Governance, and Marketplace Plane** for enterprise AI workloads, while leveraging **AWS Bedrock AgentCore** as the low-latency, serverless **Agent Execution and Runtime Isolation Layer**.
-
-Rather than treating these platforms as mutually exclusive alternatives, this POC seeks to define a complementary blueprint that prevents features from overlapping and instead optimizes their respective strengths:
-
-### Division of Responsibilities
+While both platforms feature overlapping gateway capabilities, this POC establishes a clear separation of concerns to avoid architectural competition. AWS AgentCore is treated as the **Build-to-Scale Framework & Execution Runtime**, whereas TrueFoundry serves as the **Global AI Policy, Discovery, Cost Governance, and Multi-Cloud Abstraction Layer**.
 
 ```
- ┌─────────────────────────────────────────────────────────┐
- │                   TRUEFOUNDRY LAYER                     │
- │  • Central Catalog  • Model Serving  • Cost Tracking    │
- └───────────────────────────┬─────────────────────────────┘
-                             │ (Discovery / Specs)
-                             ▼
- ┌─────────────────────────────────────────────────────────┐
- │                  AWS AGENTCORE LAYER                    │
- │  • MicroVM Runtime  • Tool Gateway   • Policy / Memory  │
- └─────────────────────────────────────────────────────────┘
+   ┌─────────────────────────────────────────────────────────────┐
+   │             TrueFoundry Enterprise Control Plane            │
+   │  (Global Cost Enforcement, Guardrails, Agent/MCP Catalog)   │
+   └──────────────────────────────┬──────────────────────────────┘
+                                  │ (Unified Model/Tool Routing)
+                                  ▼
+   ┌─────────────────────────────────────────────────────────────┐
+   │               AWS Bedrock AgentCore Runtime                 │
+   │   (MicroVM Execution, Session State, Memory Management)     │
+   └─────────────────────────────────────────────────────────────┘
 
 ```
 
-* **TrueFoundry (The Control and Governance Plane):** Responsible for global model hosting (vLLM/Triton), central registry/catalog management for models and agents, cross-team tenant cost-enforcement/reporting, and multi-cloud consistency.
-* **AWS AgentCore (The Execution and Perimeter Plane):** Responsible for hosting the live, stateful agent execution loop inside serverless MicroVM sandboxes, enforcing zero-trust data boundaries (Cedar policies), managing long-running state/memory, and serving as the direct tool gateway to internal APIs.
+#### Shared & Dedicated Responsibilities
+
+| Capability | AWS Bedrock AgentCore | TrueFoundry | Operational Boundary |
+| --- | --- | --- | --- |
+| **Agent Execution Loop** | **Dedicated:** Spawns sandboxed MicroVM runtimes, short/long-term memory, state machine resolution. | *None* | AgentCore owns the compute lifecycle of the running agent. |
+| **Model Ingress / Egress** | *None* (Bypasses default LiteLLM approach). | **Dedicated:** Cross-provider model fallback, token caching, uniform OpenAI spec routing. | AgentCore calls the TrueFoundry AI Gateway endpoint as its `base_url`. |
+| **MCP & Tool Cataloging** | *Consumer:* Dynamically binds tools to specific execution instances. | *Provider:* Centralized registration, semantic tool indexing, OAuth injection. | TrueFoundry acts as the registry; AgentCore queries TrueFoundry to discover and execute tools. |
+| **Cost & FinOps Management** | *Local tracking:* Token counts per session. | **Dedicated:** Hard dollar budgets, team-level cost back-billing, cross-cloud financial rollups. | TrueFoundry intercepts the API calls to enforce hard limits and prevent runaway recursive loops. |
+| **Guardrails & Security** | *AWS Context:* IAM bounds, VPC endpoint constraints. | *Data Context:* PII scrubbing (Presidio/Akto), real-time malicious input blocking. | TrueFoundry filters inputs/outputs at the API boundary; AgentCore handles infrastructure security. |
 
 ---
 
-## 2. POC Use Cases
+## 2. Technical Use Cases
 
-### Use Case 1: Agent Discovery & Registration Catalog
+### Use Case 1: Agent Discovery & Capability Matching
 
-* **Description:** Evaluate how developers publish, document, and discover production-ready agents across multiple lines of business.
-* **TrueFoundry’s Role:** Acts as the **Enterprise Agent Catalog** (the "App Store"). TrueFoundry hosts the descriptive metadata, Agent Cards, and schemas defining what each agent does, what tools it requires, and who owns it.
-* **AgentCore’s Role:** Acts as the **Deployment Target**. When an agent is selected from the TrueFoundry catalog, its underlying framework code (e.g., LangGraph, Strands) runs on AgentCore Runtime infrastructure.
+* **Description:** When an agent requires an external capability (e.g., retrieving an insurance claim folder), it shouldn't hardcode tool endpoints.
+* **TrueFoundry Role:** Exposes a centralized semantic directory of available enterprise tools, OpenAPI schemas, and Model Context Protocol (MCP) servers.
+* **AgentCore Role:** Queries TrueFoundry’s discovery API during its planning phase to find the correct tool structure, then maps the tool schema to its local Action Group.
 
-### Use Case 2: Protocol Support & Interoperability
+### Use Case 2: Federated Agent Registration Catalog
 
-* **Description:** Validate cross-agent communication protocols and tool-calling interfaces.
-* **TrueFoundry’s Role:** Proxies and intercepts standardized OpenAPI schemas and Model Context Protocol (MCP) definitions for models hosted inside the corporate virtual private cloud (VPC).
-* **AgentCore’s Role:** Utilizes the **AgentCore Gateway** to transform existing internal REST APIs or AWS Lambda functions into MCP-compatible tools, natively handling Agent-to-Agent (A2A) protocol calls over JSON-RPC 2.0.
+* **Description:** Cataloging built agents across different business units to prevent duplication.
+* **TrueFoundry Role:** Serves as the organization-wide System of Record (Catalog) for all developed agents, versioned prompts, and downstream metadata.
+* **AgentCore Role:** Registers its deployed agent manifests into TrueFoundry upon pipeline deployment.
 
-### Use Case 3: Cost Management (Enforcement & Reporting)
+### Use Case 3: Polyglot Protocol Support & Multi-Model Fallbacks
 
-* **Description:** Measure, audit, and allocate total cost of ownership (TCO) across multiple business units.
-* **TrueFoundry’s Role:** Serves as the central financial clearinghouse. It enforces hard and soft token/dollar budgets per virtual API key or developer team, generating cross-provider analytics graphs.
-* **AgentCore’s Role:** Tracks execution runtime metrics (compute hours of the serverless MicroVM sandboxes) and pushes standard OpenTelemetry (OTel) cost/usage dimensions to the central logging repository.
+* **Description:** Agents executing inside AWS AgentCore need to switch seamlessly between AWS Bedrock models, Azure OpenAI instances, or self-hosted open-source models inside a private VPC.
+* **TrueFoundry Role:** Acts as the single OpenAI-compatible endpoint. It handles sub-5ms protocol translation, load balancing, and automatic fallback if Bedrock encounters rate limits or outages.
+* **AgentCore Role:** Targets TrueFoundry as its singular upstream LLM provider, eliminating the need to manage individual provider SDKs.
 
-### Use Case 4: Automated Testing & Evaluation (Add-on)
+### Use Case 4: Cost Management (Real-Time Budget Enforcement & Reporting)
 
-* **Description:** Test agent updates against regression datasets before promoting them to production.
-* **TrueFoundry’s Role:** Manages the LLM-as-a-judge infrastructure and gold-standard evaluation datasets.
-* **AgentCore’s Role:** Runs the live target agent via the AgentCore Evaluation engine, logging raw output traces for TrueFoundry to score.
+* **Description:** Agentic loops can recursively iterate, driving up astronomical token costs before a process finishes.
+* **TrueFoundry Role:** Monitors token consumption *in-flight*. It enforces hard dollar limits by user, team, or specific agent ID, throwing an immediate 403 blocking error back to the application layer if a threshold is crossed.
+* **AgentCore Role:** Gracefully handles the budget exhaustion exception thrown by TrueFoundry, checkpoints the current agent session state to storage, and alerts the user.
+
+### Use Case 5: Dynamic Identity & OAuth 2.0 Token Injection
+
+* **Description:** When an agent executes a tool on behalf of a specific user (e.g., pulling a patient chart), it must pass the appropriate security tokens.
+* **TrueFoundry Role:** Uses its MCP Gateway module to perform On-Behalf-Of (OBO) authentication mapping, securely injecting the user's OAuth 2.0 or bearer tokens into the outgoing tool request.
+* **AgentCore Role:** Passes the initial end-user identity context down through the execution chain.
+
+### Use Case 6: Regulated Data Guardrails (PHI/PII Extraction)
+
+* **Description:** Inspecting inputs and outputs for sensitive compliance leaks (HIPAA/PHI) before data leaves the environment or is processed by a model.
+* **TrueFoundry Role:** Intercepts payload contents using inline sidecar egress hooks (e.g., Akto/Presidio integration) to mask or block social security numbers, medical record numbers, or proprietary claims details.
+* **AgentCore Role:** Focuses on processing unmasked, safe data within its secure execution memory.
 
 ---
 
 ## 3. High-Level Activities & RACI Matrix
 
-| Phase / Activity | Security Team (PHI/PII) | Identity Team | Platform Team | AI / Engineering Team | Business Unit (BU) |
-| --- | --- | --- | --- | --- | --- |
-| **1. Infra Setup & VPC Peering** | A | I | R | C | I |
-| **2. IAM to TrueFoundry OIDC Mapping** | C | R | R | I | I |
-| **3. Agent Catalog Onboarding** | I | I | C | R | A |
-| **4. Guardrail Configuration (PHI/PII)** | R | I | C | C | A |
-| **5. Core Cost Allocation Policies** | I | I | R | C | A |
-| **6. End-to-End POC Execution** | I | I | I | R | C |
+### High-Level Activities
 
-> **R:** Responsible | **A:** Accountable | **C:** Consulted | **I:** Informed
+1. **Architecture & Security Guardrail Definition:** Establish the cross-VPC networking patterns between the AWS-native AgentCore environment and the Kubernetes cluster hosting TrueFoundry.
+2. **Identity Control Setup:** Map AWS Cognito/IAM roles to TrueFoundry Virtual Account Tokens and project spaces.
+3. **Gateway & Abstraction Configuration:** Point AgentCore's underlying translation configs to TrueFoundry’s unified API endpoints.
+4. **MCP Server & Tool Mounting:** Register baseline Enterprise tools into TrueFoundry's registry and present them to AgentCore.
+5. **FinOps & Policy Test Scenarios:** Trigger simulated runaway agent loops to validate TrueFoundry’s real-time cost throttling and billing dashboards.
+6. **End-to-End Execution & Lakehouse Ingestion:** Execute a full clinical or claims automation scenario, routing telemetry data directly from both systems into the corporate data lakehouse.
+
+### RACI Matrix
+
+* **R**esponsible: Does the work.
+* **A**ccountable: Final approving authority (Only one per activity).
+* **C**onsulted: Provides input/expertise.
+* **I**nformed: Updated on progress.
+
+| POC Activity | Security (PHI/PII) | Identity Team | Platform Team | AI Team | Business Unit |
+| --- | --- | --- | --- | --- | --- |
+| Define Network Boundaries & Air-gapping | C | C | **A** / **R** | R | I |
+| Configure Identity Federation & OBO Auth | C | **A** / **R** | R | C | I |
+| Deploy TrueFoundry Control Plane & Gateways | I | I | **A** / **R** | C | I |
+| Author Agentic Code inside AgentCore | I | I | C | **A** / **R** | C |
+| Establish PHI/PII Guardrail Rules | **A** / **R** | I | R | R | C |
+| Define FinOps Limits & Cost Center Mapping | I | I | C | R | **A** / **R** |
+| Run E2E Use Cases & Evaluate Metrics | I | I | I | **A** / **R** | **R** |
 
 ---
 
-## 4. Proposed POC Timeline
+## 4. Timeline (6-Week Target)
 
 ```
- Weeks:   0     1     2     3     4     5     6
-          ├─────┼─────┼─────┼─────┼─────┼─────┤
- Phase 1: [==] Infrastructure & Identity Setup
- Phase 2:       [==] Catalog Integration & Protocol Setup
- Phase 3:             [==] Security Guardrails & Governance
- Phase 4:                   [==] Scenario Run & Validation
+[ Week 1-2: Core Infra & Identity ] ──► [ Week 3-4: Tool Integration & Security ] ──► [ Week 5-6: FinOps, Testing & Review ]
 
 ```
 
-* **Weeks 1–2: Phase 1 – Infrastructure & Identity Setup**
-* Establish secure AWS VPC networking endpoints between TrueFoundry's EKS cluster control plane and serverless AWS AgentCore components.
-* Integrate corporate Identity Provider (IdP) across TrueFoundry RBAC and Amazon Cognito/AgentCore Identity.
+### Weeks 1–2: Infrastructure Foundations & Identity Alignment
 
+* Provision isolated AWS sandbox environments.
+* Deploy TrueFoundry into the targeted cluster environment; configure base model access.
+* Establish OIDC/IAM integrations connecting AgentCore runtimes to TrueFoundry tenant keys.
 
-* **Weeks 3–4: Phase 2 – Catalog Integration & Protocol Setup**
-* Register the initial agent prototypes inside TrueFoundry’s Central Catalog.
-* Implement AgentCore Gateway configurations to expose backend database APIs over MCP.
+### Weeks 3–4: Tooling Integration & Security Baseline
 
+* Deploy initial test MCP servers and document schemas into TrueFoundry.
+* Configure AgentCore action groups to query TrueFoundry's tool catalog.
+* Implement TrueFoundry input/output guardrails for automated PHI/PII masking.
 
-* **Weeks 4–5: Phase 3 – Security Guardrails & Governance**
-* Deploy inline PII masking via TrueFoundry’s proxy and implement Cedar fine-grained access policies inside AgentCore.
-* Configure multi-tenant tenant budget caps in TrueFoundry.
+### Weeks 5–6: FinOps Validation, Execution & Success Evaluation
 
-
-* **Week 6: Phase 4 – Scenario Run, Evaluation, and Validation**
-* Execute end-to-end multi-agent workflow testing.
-* Compile telemetry and evaluate against Success Criteria.
-
-
+* Conduct simulation testing (failure routing, regional fallbacks, hard cost cap overrides).
+* Validate end-to-end telemetry pipeline streaming into the corporate Lakehouse.
+* Compile data, evaluate against success criteria, and deliver final technical recommendation.
 
 ---
 
 ## 5. Success Criteria
 
-* **Successful Catalog Execution:** Developers can discover an agent configuration inside TrueFoundry, initiate it, and have the actual application logic execute reliably within an isolated AgentCore Runtime MicroVM session.
-* **Zero-Leak Guardrails:** Simulated payloads containing test PII/PHI are blocked or redacted at the platform perimeter (TrueFoundry AI Gateway or AgentCore Policy layer) before hitting external endpoints.
-* **Budget Attribution Accuracy:** 100% of LLM token spend and compute costs generated during the POC are attributed back to the initiating Business Unit's virtual key within TrueFoundry's reporting dashboards.
-* **Interop Protocol Latency:** The end-to-end multi-agent round trip (utilizing A2A or MCP routing through AgentCore Gateway and TrueFoundry) introduces less than **150ms** of non-model architectural overhead.
+### Quantitative Metrics
+
+* **Latency Overhead:** TrueFoundry’s inline AI gateway must add $\le 10\text{ ms}$ of latency overhead to the raw LLM inference time under standard load.
+* **Cost Containment Accuracy:** 100% of runaway recursive loops must be halted within 1 request of exceeding the preset dollar threshold.
+* **Telemetry Synchronization:** 100% of execution traces from AgentCore and prompt metrics from TrueFoundry must successfully correlate via a shared `trace_id` inside the corporate Data Lakehouse.
+
+### Qualitative Metrics
+
+* **Developer Ergonomics:** The AI team can swap the backend model from Bedrock to an external provider via TrueFoundry’s UI *without rewriting or redeploying* the AgentCore application code.
+* **Compliance Sign-off:** The Security/PHI team verifies that zero unmasked health records leave the designated secure data plane boundaries during tool operations.
 
 ---
 
@@ -120,24 +148,14 @@ Rather than treating these platforms as mutually exclusive alternatives, this PO
 
 ### AWS AgentCore
 
-* The POC will use the recommended **AgentCore CLI (`@aws/agentcore`)** for scaffolding and deployment configurations.
-* AgentCore will natively manage long-running state management and session persistence using its built-in serverless filesystem mechanisms.
+* The enterprise will utilize the serverless, containerized AgentCore runtime environments for executing agent nodes, acknowledging that session states and agent-to-agent (A2A) topologies will live natively within AWS compute infrastructure.
 
-### Tools & Data Architecture
+### Tools & Lakehouse Integration
 
-* Grounding tools will utilize the **Amazon Bedrock Managed Knowledge Base** via the AgentCore Gateway target adapter.
-* Deployed agents will have secure network access to interact with the enterprise data lakehouse infrastructure for retrieval operations without exposing direct database credentials.
+* The data plane telemetry (OpenTelemetry formats) generated by both TrueFoundry and AgentCore can be normalized and systematically ingested into the enterprise Data Lakehouse (e.g., Databricks/Snowflake via AWS S3) for long-term historical reporting.
+* Downstream enterprise applications (e.g., core systems) will expose standard OpenAPI or MCP endpoints readable by TrueFoundry.
 
-### Environments
+### Environments & Sandboxing
 
-* All POC activities will be conducted in a dedicated, isolated **AWS Sandbox/Non-Prod environment**.
-* No production data or real client data will be routed through the platform components during this assessment phase.
-
-### Sandboxing
-
-* Dynamic code execution tasks assigned to the agent will run within AgentCore's built-in **Code Interpreter** container sandbox environment.
-* Network traffic generated by the agent during runtime will be strictly constrained via specific AgentCore VPC condition keys and security group boundaries to ensure complete isolation.
-
----
-
-Would you like to drill down into a specific area, such as mapping out the detailed OIDC token exchange sequence between the TrueFoundry Gateway and AgentCore Identity?
+* All POC activities will happen within a non-production, network-isolated AWS Sandbox environment.
+* Synthesized, de-identified datasets will be utilized exclusively during the testing phase to prevent accidental exposure of live production records prior to final guardrail validation.
