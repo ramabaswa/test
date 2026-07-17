@@ -1,0 +1,78 @@
+Imagine two AI agents, perhaps a procurement agent from Company A and a supplier agent from Company B, needing to talk business. They've never met, there's no shared system, and no human to vouch for them. When that first message arrives, how does Company B's agent know who it's really talking to? How can it trust the sender?
+
+In today's web, our usual security tools like TLS, OAuth, or API keys fall short for AI agent identity. TLS confirms a domain, but not the specific agent within it. OAuth and OpenID Connect are built for human users, and API keys are essentially passwords. These don't provide the granular, verifiable identity that autonomous AI agents need to operate securely across different organizations.
+
+We need answers to three critical questions, automatically and without human intervention:
+
+Who is this agent? A stable identity that lasts across sessions.
+Who controls it? Which organization is accountable for its actions?
+What is it authorized to do? Its specific permissions, including any delegated authority.
+Without a robust answer, agents face a dilemma: reject all unknown callers (stifling open commerce) or accept everything (risking security breaches). Neither is a viable option for systems handling money and sensitive data autonomously.
+
+Enter W3C DIDs and Verifiable Credentials: The Agent's Passport
+The solution lies in two powerful W3C standards: Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs). Often grouped under
+the umbrella term self-sovereign identity, these technologies provide a cryptographic, verifiable identity for agents.
+
+What are DIDs?
+A Decentralized Identifier (DID) is an identifier an agent creates and controls itself, without needing permission from a central authority. Think of it like a self-issued, globally unique username. A DID, such as did:web:agents.company-a.example:procurement-7, resolves to a DID Document. This JSON document contains crucial information like public keys, verification methods, and service endpoints. Crucially, it contains no personal attributes, allowing for privacy-preserving identity. DIDs are anchored on a ledger or verifiable data source, ensuring their integrity and trustworthiness.
+
+Key properties of DIDs for agents:
+
+Privacy-preserving: DID Documents only carry keys and pointers, not sensitive personal data.
+Key rotation: Agents can update their cryptographic keys without changing their DID, ensuring stable identity over time.
+Delegation: DID Documents can declare other DIDs authorized to act on their behalf, enabling human-to-agent ownership and agent-to-agent delegation.
+What are Verifiable Credentials (VCs)?
+A Verifiable Credential (VC) is a digitally signed statement about a subject, issued by a trusted party. It includes an issuer, a subject (identified by its DID), a set of claims (arbitrary key-value assertions), and a cryptographic proof. The issuer signs the VC with its private key, linked to its own DID. This makes VCs self-contained and offline-verifiable, meaning the recipient can verify the credential without needing to contact the issuer directly.
+
+For our procurement agent, VCs might include:
+
+A VC from Company A's HR system: asserting "this DID is owned by Company A, role procurement."
+A VC from Company A's finance system: asserting "this DID is authorized to commit funds up to 10,000 EUR per transaction."
+A VC from an external compliance auditor: asserting "this DID operates under audit framework ISO 42001."
+Each issuer has its own DID, allowing the supplier agent to resolve the issuer's public key and verify the VC's signature without direct contact. This offline verifiability is crucial for agents meeting for the first time.
+
+The Power Couple: DIDs and VCs Together
+Alone, a DID proves an agent controls a key. Alone, a VC has no stable subject. But together, they form a powerful combination. The DID provides a stable, cryptographic identity, while VCs allow third parties to attach verifiable claims to that identity. This pairing gives the receiving agent everything it needs to answer those three critical questions (who, who controls, what authorized) in a single, trustless handshake, even without prior setup between organizations.
+
+The Trust Handshake: How Agents Say 'Hello' Securely
+So, how does this secure handshake actually work when two agents meet? It's a four-phase process, designed to establish trust without any prior bilateral agreements:
+
+Phase 1: Exchanging DIDs
+Each agent sends its DID to the other. The receiving agent resolves the DID to fetch the sender's DID Document, which contains their public key and verification methods. At this point, both agents know which key they should be talking to, but not yet if the counterpart actually controls it.
+
+Phase 2: Proving Control
+This is a challenge-response. The receiving agent sends a unique, random value (a nonce) and asks the sender to sign it with the private key linked to its DID. The sender signs it, returns the signature, and the receiver verifies it against the public key from the DID Document. This step transforms identity into authentication. Only the legitimate controller of the DID can produce a valid signature.
+
+Phase 3: Presenting Credentials
+Now, each agent selectively presents the Verifiable Credentials relevant to the current dialogue. For example, our procurement agent might present its ownership VC and spending authority VC. If the supplier agent requires a compliance attestation, the procurement agent would also include that VC. These VCs are wrapped in a Verifiable Presentation, signed by the holder's DID, proving the agent presenting the credentials is indeed the subject they refer to.
+
+Phase 4: Verifying Issuers and Policy
+This is where the real trust decision happens. The receiving agent takes each VC, resolves the issuer's DID, fetches their public key, and verifies the VC's signature. It also checks for expiration or revocation. Crucially, the agent then applies its own local policy to determine if it accepts the issuer as authoritative for that specific type of claim. For instance, a VC from Company A's HR system might be accepted for an ownership claim, but not for spending authority.
+
+Differentiated Trust: A New Paradigm for Authorization
+This handshake leads to a concept called differentiated trust. Instead of a global authority dictating what a token grants, each agent decides, in real-time, which credentials hold how much weight for which actions, and from which issuers. This means:
+
+No transitive trust: The supplier agent doesn't trust Company A's HR system because Company A says so. It trusts it because its own policy lists it as authoritative for ownership claims.
+Stateless onboarding: Organizations can interact without prior setup. Onboarding shifts from "register every counterparty" to "curate your set of trusted issuers." This is a much more scalable and stable approach.
+This model solves a significant problem: cross-domain authorization often involves claims from various sources with different levels of authority. Differentiated trust allows each issuer to speak only for what it truly knows, and the verifier to compose the answer based on its own rules.
+
+Where LLMs Fit (and Don't Fit) in Agent Identity
+While the cryptographic primitives of DIDs and VCs are robust, problems arise when Large Language Models (LLMs) are given too much control over the security procedure itself. LLMs are probabilistic, but identity verification needs to be deterministic and auditable.
+
+Common failure modes when LLMs are in charge:
+
+Dialogue as an attack surface: An attacker can manipulate the conversation to trick the LLM into accepting credentials it shouldn't.
+Selective disclosure leaks: Insistent counterparts can pressure LLMs to over-disclose credentials that aren't pertinent to the dialogue.
+Trusted-issuer drift: If the trust policy is just text in a prompt, the LLM's application of it can drift over time, leading to inconsistent or insecure decisions.
+Revocation skipped: LLMs might quietly omit revocation checks, leading to expired or revoked credentials being accepted.
+The key takeaway here is that the failure isn't in DIDs or VCs; it's in using a probabilistic reasoner for tasks that demand determinism. Identity primitives must reside in a deterministic security layer that the LLM invokes as tools. The LLM orchestrates the dialogue and reasons about the outcome, but it doesn't perform the verification, hold the keys, or arbitrate the trust policy. These critical operations belong in code, behind a clean interface, with the LLM calling that interface and reading its boolean output.
+
+Key Design Decisions for Secure AI Agents
+To build secure AI agents using DIDs and VCs, specific architectural decisions are crucial:
+
+Private keys are not the LLM's problem: The agent's private key must reside in a secure component (e.g., hardware security module, enclave) that the LLM cannot access. The LLM only invokes a sign(payload) function.
+Credential store as a managed asset: The agent's VCs need a lifecycle. The store should be a service with explicit operations (list, fetch, mark expired), not a static blob the LLM reads from.
+Trust policy is code, not a prompt: The policy defining which issuers are authoritative for which claim types must be in a deterministic policy engine, versioned, reviewed, and auditable. Adding a new trusted issuer should be a code change.
+DID method choice matters: Different DID methods (e.g., did:web, did:key, ledger-anchored DIDs) have different properties and operational consequences. The choice should align with the agent's needs for resolution speed, censorship resistance, and key rotation.
+Caching must respect rotation: Caching DID Documents is necessary for performance, but the Time-To-Live (TTL) must be carefully managed to ensure key rotations and revocations are promptly recognized.
+A2A integration: Identity first, application second: When using agent-to-agent transport protocols like A2A, the DID should be published in the AgentCard, and the trust handshake must occur before the application-layer dialogue begins. Authenticate first, then communicate.
