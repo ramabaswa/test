@@ -1,0 +1,96 @@
+Here is an operational execution plan for **Scenario A (CSR Exchange)**. This model ensures the private key never leaves your AWS infrastructure, eliminating manual local file decryption and removing security objections.
+
+---
+
+## 🏗️ Scenario A Operational Flow Architecture
+
+```
+                       ┌────────────────────────────────────────────────────────┐
+                       │                     YOUR COMPANY                       │
+                       └────────────────────────────────────────────────────────┘
+┌──────────────┐      ┌─────────────────────────┐      ┌────────────────────────┐      ┌──────────────┐
+│  Infrastructure  │ ──► │     Kafka / Workato     │ ──► │     AppSec / Venafi    │ ──► │  CVS / GCP   │
+│   & Ops Team │      │          Team           │      │          Team          │      │   Partner    │
+└──────────────┘      └─────────────────────────┘      └────────────────────────┘      └──────────────┘
+ 1. Provision KMS      2. Generate Key & CSR    3. Submit CSR to Venafi   6. Trust CA &
+    & Vault Store      4. Deploy Signed Cert       for Private CA Signing    Verify mTLS
+                       5. Mount Cert to Consumer 
+
+```
+
+---
+
+## 📋 Team-by-Team Execution Plan
+
+### 1. Infrastructure & Operations Team
+
+* **Responsibility:** Provision the non-exportable key store and runtime target environments.
+* **Actions:**
+* Provision an asymmetric RSA keypair (e.g., `RSA_2048` or `RSA_4096`) inside **AWS KMS** (or AWS Secrets Manager) designated for client mTLS.
+* Ensure key settings are set to prevent export (the private key stays strictly inside the AWS HSM/KMS perimeter).
+* Open outbound network firewalls/Security Groups on the Kafka/Workato egress layer to reach CVS’s Confluent endpoint.
+
+
+
+### 2. Solutions Architect / Lead Architect (Your Role)
+
+* **Responsibility:** Governance, interface alignment, and workflow approval.
+* **Actions:**
+* Coordinate with CVS technical leads to confirm mTLS requirements (TLS version, SAN attributes, signature algorithms).
+* Deliver the architectural standard to AppSec and Infrastructure: *“CSRs leave the company; Private Keys never do.”*
+* Formally define the trust bundle exchange pattern between both parties.
+
+
+
+### 3. Kafka / Integration Team (Workato / Consumer Engineers)
+
+* **Responsibility:** Generate the Certificate Signing Request (CSR) and mount the final certificate.
+* **Actions:**
+* Generate a **CSR only** using the public key from the non-exportable AWS KMS keypair.
+* Extract the raw CSR string (containing no private keys) and pass it to the AppSec / Venafi team.
+* Once the signed certificate is returned from Venafi, store the public `.crt` in AWS Secrets Manager or CyberArk Conjur.
+* Configure the Workato / MSK Kafka consumer client to reference the KMS key for signing and the public certificate for mTLS handshakes.
+
+
+
+### 4. AppSec & Venafi / CyberArk Teams
+
+* **Responsibility:** Sign the CSR via the internal Private CA and deliver the Public Certificate Chain.
+* **Actions:**
+* Receive the raw CSR from the Kafka team.
+* Submit the CSR to **Venafi** via API or UI to be signed by your organization's **Internal Private CA**.
+* Download **only** the resulting signed public client certificate and your organization's **Root/Intermediate Private CA public certificate chain**.
+* Export **zero private keys**.
+
+
+
+### 5. Security & IAM Team
+
+* **Responsibility:** External B2B trust-bootstrapping and IAM policies.
+* **Actions:**
+* Create fine-grained IAM policies restricting access to the AWS KMS key (only the specific Workato/MSK application role gets `kms:Sign` and `kms:GetPublicKey` permissions).
+* Securely transmit **only** the Public Client Certificate and Public Private-CA Root/Chain to the CVS team.
+
+
+
+### 6. CVS (External Partner / Producer)
+
+* **Responsibility:** Import public trust anchors and enable topic ACLs.
+* **Actions:**
+* Receive your organization's Public CA Root/Intermediate chain and import it into their Confluent GCP Kafka Truststore.
+* Map your Client Certificate’s Distinguished Name (DN) or SAN to their topic Access Control Lists (ACLs) so your consumer has read permissions.
+
+
+
+---
+
+## 🎯 Verification & Sign-Off Checklist
+
+| Step | Task | Owner | Status / Artifact |
+| --- | --- | --- | --- |
+| **1** | Provision Asymmetric KMS Key | Infra Ops | KMS Key ARN (Non-exportable) |
+| **2** | Generate CSR from KMS | Kafka Team | `.csr` File (Public data only) |
+| **3** | Sign CSR via Private CA | Venafi / AppSec | Signed `.crt` Client Certificate |
+| **4** | Send Public CA Chain to CVS | Security / IAM | Delivered via Secure B2B Channel |
+| **5** | Import Public CA into Truststore | CVS Team | Confluent Truststore Updated |
+| **6** | Test mTLS Egress Connection | Kafka Team | Non-prod Kafka Poll Success |
