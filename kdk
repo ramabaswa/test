@@ -1,96 +1,108 @@
-Here is an operational execution plan for **Scenario A (CSR Exchange)**. This model ensures the private key never leaves your AWS infrastructure, eliminating manual local file decryption and removing security objections.
+SLIDE 1: Scenario 1 Architecture – Using AI In Testing with Maestro MCP
+Slide Title: Architecture: AI-Driven Agentic Testing Loop via Maestro MCP
+Subtitle: Autonomous Code Generation, Execution, Inspection, and Self-Healing Test Authoring
+🎨 Visual Architecture Diagram
+Plaintext
+  +-----------------------------------------------------------------------------------+
+  |                                LOCAL / DEV ENVIRONMENT                            |
+  |                                                                                   |
+  |   +-------------------+      MCP Protocol      +-------------------------------+  |
+  |   |   AI Agent IDE    |  (JSON-RPC / stdio)   |      Maestro MCP Server       |  |
+  |   | (Cursor, Claude,  | <====================> |        (`maestro mcp`)        |  |
+  |   | Copilot, Windsurf)|                        +---------------+---------------+  |
+  |   +---------+---------+                                        |                  |
+  |             |                                                  | Driver Commands  |
+  |             | Code / Fixes                                     v                  |
+  |             v                                   +------------------------------+  |
+  |   +-------------------+                         |  Mobile Simulator / Emulator |  |
+  |   |  App Source Code  |========================>|    (iOS / Android / Web)     |  |
+  |   +-------------------+      App Build          +------------------------------+  |
+  +-----------------------------------------------------------------------------------+
+                                                           |
+                                                           | Export Deterministic YAML
+                                                           v
+                                            +------------------------------+
+                                            |   CI/CD Regression Suite     |
+                                            |  (Maestro Cloud / GitHub)    |
+                                            +------------------------------+
+🧱 Key Architectural Components
+AI Coding Agent (MCP Client): High-level orchestrator (Cursor, Claude Code, Windsurf) holding code context and UI test objectives.
 
----
+Maestro MCP Server (maestro mcp): Standardized interface exposing agentic tools:
 
-## 🏗️ Scenario A Operational Flow Architecture
+inspect_screen: Extracts compact JSON view hierarchy & bounding boxes.
 
-```
-                       ┌────────────────────────────────────────────────────────┐
-                       │                     YOUR COMPANY                       │
-                       └────────────────────────────────────────────────────────┘
-┌──────────────┐      ┌─────────────────────────┐      ┌────────────────────────┐      ┌──────────────┐
-│  Infrastructure  │ ──► │     Kafka / Workato     │ ──► │     AppSec / Venafi    │ ──► │  CVS / GCP   │
-│   & Ops Team │      │          Team           │      │          Team          │      │   Partner    │
-└──────────────┘      └─────────────────────────┘      └────────────────────────┘      └──────────────┘
- 1. Provision KMS      2. Generate Key & CSR    3. Submit CSR to Venafi   6. Trust CA &
-    & Vault Store      4. Deploy Signed Cert       for Private CA Signing    Verify mTLS
-                       5. Mount Cert to Consumer 
+run: Executes on-the-fly inline YAML commands without code compilation.
 
-```
+take_screenshot: Captures visual frame for visual disambiguation.
 
----
+Target Runtime (Device/Simulator): Black-box host running the app release build.
 
-## 📋 Team-by-Team Execution Plan
+Deterministic Output: Generates human-readable, maintainable Maestro YAML test flows for CI/CD pipeline integration.
 
-### 1. Infrastructure & Operations Team
+🔄 Step-by-Step Closed Agentic Loop Workflow
+Context & Intent: Developer asks the AI Agent to build a new feature or create/fix a UI test.
 
-* **Responsibility:** Provision the non-exportable key store and runtime target environments.
-* **Actions:**
-* Provision an asymmetric RSA keypair (e.g., `RSA_2048` or `RSA_4096`) inside **AWS KMS** (or AWS Secrets Manager) designated for client mTLS.
-* Ensure key settings are set to prevent export (the private key stays strictly inside the AWS HSM/KMS perimeter).
-* Open outbound network firewalls/Security Groups on the Kafka/Workato egress layer to reach CVS’s Confluent endpoint.
+Screen Inspection: AI Agent invokes inspect_screen via MCP to inspect accessibility nodes and UI states on the active emulator.
 
+Action Execution: AI Agent formats Maestro commands (tapOn, inputText, assertVisible) and calls run over stdio/JSON-RPC.
 
+Self-Healing & Iteration: If an assertion fails or element is missing, the AI Agent re-inspects the hierarchy, self-corrects selectors/code, and re-tests.
 
-### 2. Solutions Architect / Lead Architect (Your Role)
+YAML Export: Once validated, the AI Agent saves a clean, deterministic .yaml flow into source control for CI/CD execution.
 
-* **Responsibility:** Governance, interface alignment, and workflow approval.
-* **Actions:**
-* Coordinate with CVS technical leads to confirm mTLS requirements (TLS version, SAN attributes, signature algorithms).
-* Deliver the architectural standard to AppSec and Infrastructure: *“CSRs leave the company; Private Keys never do.”*
-* Formally define the trust bundle exchange pattern between both parties.
+💡 Architectural Takeaway
+AI is the test engineer and executor in a local loop via MCP, but the final artifact delivered to CI/CD is a fast, 100% deterministic YAML file.
 
+📄 SLIDE 2: Scenario 2 Architecture – Testing In-App AI Agents using Maestro
+Slide Title: Architecture: Validating In-App AI Agents with Maestro
+Subtitle: End-to-End Assertion of Non-Deterministic AI Interfaces & Dynamic UI Workflows
+🎨 Visual Architecture Diagram
+Plaintext
+  +-----------------------------------------------------------------------------------+
+  |                             TEST AUTOMATION ENVIRONMENT                           |
+  |                                                                                   |
+  |   +---------------------------------------------------------------------------+   |
+  |   |                            Maestro Test Runner                            |   |
+  |   |  - YAML Flow (`launchApp`, `inputText`, `assertWithAI`, `extendedWait`)   |   |
+  |   |  - GraalJS Script Engine (`http.get`, dynamic parsing, status checking)   |   |
+  |   +-------------------------------------+-------------------------------------+   |
+  |                                         |                                         |
+  |                                         v Accessibility API Driver                |
+  |   +---------------------------------------------------------------------------+   |
+  |   |                     SYSTEM UNDER TEST (SUT) MOBILE APP                    |   |
+  |   |                                                                           |   |
+  |   |   +---------------------+   App Network    +--------------------------+   |   |
+  |   |   |  App UI / Chat Bot  |=================>|  Backend AI / LLM Agent  |   |   |
+  |   |   | (Streaming Response)|   Requests/WebSock|  (API Mock or Live LLM)  |   |   |
+  |   |   +---------------------+                  +--------------------------+   |   |
+  |   +---------------------------------------------------------------------------+   |
+  +-----------------------------------------------------------------------------------+
+                                            |
+                                            v Visual & Semantic Audit
+                             +-------------------------------+
+                             |  Maestro Cloud AI Analysis    |
+                             |  (`assertWithAI` LLM Layer)   |
+                             +-------------------------------+
+🧱 Key Architectural Components
+System Under Test (SUT): The actual release build containing an embedded conversational agent or generative UI.
 
+Maestro Driver Layer: Tests app externally using OS Accessibility APIs (no app instrumentation required).
 
-### 3. Kafka / Integration Team (Workato / Consumer Engineers)
+extendedWaitUntil & Dynamic Matchers: Native Maestro mechanics handling asynchronous streaming responses and non-deterministic text generation.
 
-* **Responsibility:** Generate the Certificate Signing Request (CSR) and mount the final certificate.
-* **Actions:**
-* Generate a **CSR only** using the public key from the non-exportable AWS KMS keypair.
-* Extract the raw CSR string (containing no private keys) and pass it to the AppSec / Venafi team.
-* Once the signed certificate is returned from Venafi, store the public `.crt` in AWS Secrets Manager or CyberArk Conjur.
-* Configure the Workato / MSK Kafka consumer client to reference the KMS key for signing and the public certificate for mTLS handshakes.
+Semantic & Visual Assertion Layer (assertWithAI / assertNoDefectsWithAI): Maestro Cloud LLM evaluation layer verifying context, intent, and layout without strict exact-string matching.
 
+Backend Mocking / Deterministic Seeds: Optional Mock/Stub layer on network calls to stabilize LLM outputs during CI runs.
 
+🔄 Step-by-Step Test Execution Workflow
+Trigger Agent: Maestro inputs user prompts/intents into the app's chat input (inputText).
 
-### 4. AppSec & Venafi / CyberArk Teams
+Handle Non-Determinism & Streaming: Maestro waits for AI activity indicators (e.g., typing indicators, loading spinners) using extendedWaitUntil.
 
-* **Responsibility:** Sign the CSR via the internal Private CA and deliver the Public Certificate Chain.
-* **Actions:**
-* Receive the raw CSR from the Kafka team.
-* Submit the CSR to **Venafi** via API or UI to be signed by your organization's **Internal Private CA**.
-* Download **only** the resulting signed public client certificate and your organization's **Root/Intermediate Private CA public certificate chain**.
-* Export **zero private keys**.
+Semantic UI Assertion: Since exact AI responses vary across runs, Maestro utilizes assertWithAI to semantically validate that the AI answer fulfills the requirement (e.g., "Verify the AI generated a valid order confirmation table").
 
+UI Safety & Layout Check: assertNoDefectsWithAI scans for layout breaks, text overflows, or broken dynamic widgets generated by the LLM response.
 
-
-### 5. Security & IAM Team
-
-* **Responsibility:** External B2B trust-bootstrapping and IAM policies.
-* **Actions:**
-* Create fine-grained IAM policies restricting access to the AWS KMS key (only the specific Workato/MSK application role gets `kms:Sign` and `kms:GetPublicKey` permissions).
-* Securely transmit **only** the Public Client Certificate and Public Private-CA Root/Chain to the CVS team.
-
-
-
-### 6. CVS (External Partner / Producer)
-
-* **Responsibility:** Import public trust anchors and enable topic ACLs.
-* **Actions:**
-* Receive your organization's Public CA Root/Intermediate chain and import it into their Confluent GCP Kafka Truststore.
-* Map your Client Certificate’s Distinguished Name (DN) or SAN to their topic Access Control Lists (ACLs) so your consumer has read permissions.
-
-
-
----
-
-## 🎯 Verification & Sign-Off Checklist
-
-| Step | Task | Owner | Status / Artifact |
-| --- | --- | --- | --- |
-| **1** | Provision Asymmetric KMS Key | Infra Ops | KMS Key ARN (Non-exportable) |
-| **2** | Generate CSR from KMS | Kafka Team | `.csr` File (Public data only) |
-| **3** | Sign CSR via Private CA | Venafi / AppSec | Signed `.crt` Client Certificate |
-| **4** | Send Public CA Chain to CVS | Security / IAM | Delivered via Secure B2B Channel |
-| **5** | Import Public CA into Truststore | CVS Team | Confluent Truststore Updated |
-| **6** | Test mTLS Egress Connection | Kafka Team | Non-prod Kafka Poll Success |
+💡 Architectural Takeaway
+Maestro treats the app's internal AI as a black box—using flexible timing, regex/semantic assertions (assertWithAI), and external driver actions to test unpredictable app responses.
