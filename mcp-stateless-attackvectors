@@ -1,0 +1,44 @@
+Whether these attack surfaces are covered depends entirely on where your security tools operate:
+
+### **Short Answer**
+
+* **By standard network/gateway security tools (WAFs, Network DLP, API Gateways)?** **No.** Network-layer security tools cannot see or protect against these risks because the interactions happen locally inside the conversation context, the local host filesystem, or the IDE rendering process.
+* **By endpoint security / agentic security tools & server-side design?** **Yes**, provided specific endpoint controls and MCP server implementations are put in place.
+
+---
+
+### **Breakdown of the 3 Attack Surfaces & Coverage Requirements**
+
+#### **1. Handle Hijacking (Stateless Architecture Shift)**
+
+* **The Risk:** MCP shifted from stateful session IDs in HTTP headers to portable "handle" strings (e.g., `{"browser_id": "browser-abc123"}`) passed directly inside the conversation context. Anyone who reads or manipulates the conversation (via prompt injection, shared logs, or transcripts) can hijack or replay the handle.
+* **Are Network Gateways Covering It?** No. Network gateways treat conversation payloads as standard HTTP body text and cannot distinguish valid handle usage from hijacked handle replays.
+* **How to Cover It:**
+* **Server-side Validation:** Validate `(handle + auth context)` pairs rather than relying solely on the handle string.
+* **Short Lifetime:** Enforce strict expiration policies on handles.
+* **Conversation Hygiene:** Enforce prompt injection guardrails and conversation filtering.
+
+
+
+---
+
+#### **2. Filesystem Scope Gap (Deprecation of `Roots`)**
+
+* **The Risk:** Deprecating the `Roots` capability removes the protocol-level structural filesystem boundary. Scope enforcement becomes opt-in for individual MCP server developers, allowing unconstrained agents to potentially read local `.env` files, credential stores, or SSH keys.
+* **Are Network Gateways Covering It?** No. Local filesystem calls executed by an agent on a developer's machine never cross network boundaries.
+* **How to Cover It:**
+* **Endpoint Process Sandboxing:** Run local MCP servers in containerized/sandboxed environments with explicit mount restrictions.
+* **Server Audit:** Audit and mandate explicit path validation inside all deployed/installed MCP servers.
+* **Endpoint Process Monitoring:** Use endpoint security software that monitors host process file access.
+
+
+
+---
+
+#### **3. MCP Apps / In-IDE HTML Rendering (SEP-1865)**
+
+* **The Risk:** Allows local MCP servers to ship interactive HTML interfaces directly into an iframe in the developer's IDE. This opens vectors for UI mimicry (e.g., fake VS Code login prompts), XSS, or IDE sandbox escapes.
+* **Are Network Gateways Covering It?** No. In-IDE iframe rendering occurs locally within the developer environment without generating inspectable network traffic.
+* **How to Cover It:**
+* **MCP Inventory & Policy:** Inventory which installed MCP servers have `MCP Apps` capability enabled and restrict unauthorized server installation.
+* **IDE Sandboxing Controls:** Enforce strict iframe policies and origin isolation within the IDE extension framework.
