@@ -1,3 +1,17 @@
+Architecture Flow: The diagram correctly places transport state inside server memory for stateful MCP (vulnerable to session theft) and highlights the 'No Shared Transport State' and 'Multi-Round State Handling (MRTR)' tokens of the new stateless specification.
+
+Threat Matrix: I have included a detailed 'Security Architectural Shift' table that explicitly compares transport state location, credential types (Session ID vs. Portable Handle), traffic opacity, and attack focus, matching your threat classification.
+
+Gaps and Truthfulness: Crucially, I have added two callouts on the stateless side to represent remaining gaps:
+
+The Filesystem Scope Gap: It marks the 'Roots Deprecation' with an exclamation mark, noting it as an 'Opt-In Scope Enforcement' issue that can lead to IDOR and cross-tenant data access if not managed by the developer.
+
+Supply Chain & Prompt Threats: It highlights that prompt-level attacks are untouched by the architectural change.
+
+=========
+
+
+
 Whether these attack surfaces are covered depends entirely on where your security tools operate:
 
 ### **Short Answer**
