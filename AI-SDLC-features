@@ -90,4 +90,80 @@ Onboarding knowledge guide: Curate onboarding paths from repo context
 PR context retrieval: Surface related prior decisions for reviewers
 Post-mortem knowledge capture: Extract lessons from incidents into knowledge base
 
-VALIDATE CONTINUOUSLY
+VALIDATE CONTINUOUSLY"
+Test design agent:
+Test case synthesis: Generate test cases from stories and specs
+BDD scenario generator: Draft Gherkin scenarios from acceptance criteria
+Edge case prediction: Infer boundary and error scenarios from context
+Test data mocking: Generate realistic synthetic test data sets
+Natural language test scripting: Convert plain-English tests to automation code
+Test coverage gap analysis: Identify scenarios not covered by existing tests
+Risk-based test prioritization: Order tests by defect probability and impact
+Regression test automation agent:
+Self-healing test scripts: Auto-update locators and assertions on UI change
+Flaky test identification: Detect and quarantine non-deterministic tests
+Impact analysis mapping: Run only tests affected by a change set
+Visual regression checking: Pixel-diff and layout change detection
+Cross-browser compatibility: AI-driven cross-browser test execution
+Performance bottleneck detection: Profile test runs for latency regressions
+Regression baseline management: Maintain golden snapshots per release
+Validation & Compliance agent:
+Compliance auditing: Validate stories and code against policy rules
+Hallucination rate measurement: Score AI output grounding against source data
+Adversarial attack simulation: Red-team AI features before release
+Model bias evaluation: Detect demographic or content bias in outputs
+Data leakage auditing: Confirm PHI/PII not exposed in agent outputs
+Acceptance test validation: Gate release on automated acceptance criteria
+Regulatory evidence package: Auto-compile compliance artifacts for audit
+
+RELEASE:
+Pipeline engineering agent:
+Self-fixing PR loop: Auto-remediate pipeline failures and rerun
+Pipeline-as-code generation: Scaffold CI/CD pipeline from project context
+Hard budget cap enforcement: Block deploys exceeding token or cloud budget
+Canary release orchestration: Auto-manage traffic split and health checks
+Build optimization agent: Reduce pipeline runtime via parallelization
+Dependency cache management: Intelligently manage and warm build caches
+Release note generation: Auto-draft notes from commits and tickets
+Infra env & platform agent:
+Infrastructure-as-code gen: Scaffold Terraform/CDK from architecture specs
+Environment drift detection: Alert on config drift between environments
+Secrets rotation automation: Auto-rotate credentials on schedule or breach
+Cost optimization recommender: Right-size infra from utilization telemetry
+Environment provisioning agent: Spin up on-demand preview environments
+Platform compliance scanner: Validate infra config against CIS benchmarks
+Capacity forecast model: Predict infra load from release content
+Release orchestration agent:
+Release readiness scorecard: Gate release on quality, security, and coverage
+Gamified CD dashboard: Squad deployment health and velocity scorecards
+Automated velocity measurement: Track deployment frequency and lead time
+Rollback decision agent: Auto-recommend rollback on anomaly detection
+Change risk scoring: Score release risk from blast radius analysis
+Cross-team coordination agent: Coordinate multi-squad release dependencies
+Post-deploy verification: Run smoke and sanity suite post-deployment
+
+OPERATE & OPTIMIZE
+Observability agent:
+Log error categorization: Cluster and classify log errors by impact
+Anomaly detection: ML-driven baseline deviation alerting
+Distributed trace analysis: Summarize traces across service boundaries
+SLO burn rate alerting: Predict SLO breach before threshold hit
+Token consumption accounting: Track LLM spend per agent and feature
+Latency percentile profiling: Profile P50/P95/P99 latency per endpoint
+Observability runbook agent: Auto-generate triage steps from alert context
+Incident management agent:
+Bug triaging: Auto-classify, route, and prioritize incidents
+Root cause identification: Correlate signals to likely causal change
+Blast containment agent: Auto-isolate misbehaving agents or services
+Incident summary generation: Draft SEV notifications from event timeline
+On-call context briefing: Surface relevant runbooks and prior incidents
+MTTR tracker: Measure and trend mean time to resolution
+Post-mortem draft agent: Auto-draft post-mortem from incident timeline
+Continous improvement agent:
+Automated velocity measurement: Track sprint velocity trends and forecast
+Technical debt scoring: Monitor debt accumulation across the codebase
+Retrospective synthesis: Extract action items from retro transcripts
+DORA metrics dashboard: Track deployment frequency, MTTR, change fail rate
+Hard budget cap optimization: Recommend budget reallocation from cost data
+Model drift monitoring: Detect degradation in AI feature output quality
+Knowledge graph refinement: Continuously improve enterprise KG from feedback
