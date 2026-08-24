@@ -1,0 +1,93 @@
+DEFINE & PRIORITIZE
+Epic strategy agent:
+Epic decomposition AI: Auto-break epics into stories by value stream
+Automated velocity measurement: Real-time throughput calculation per team
+Outcome hypothesis generator: Draft measurable OKRs from epic intent
+Dependency mapping agent: Surface cross-epic blockers before planning
+Theme clustering: Group backlog items by business theme
+Stakeholder signal analysis: Extract priority signals from meeting transcripts
+Epic value scoring: Score by business value, risk, and complexity
+Backlog decomposition agent:
+Story synthesis from specs: Convert PRDs into structured user stories
+Acceptance criteria generator: Draft Given-When-Then from story intent
+Duplicate story detection: Flag semantically similar backlog items
+Story point estimation AI: Predict effort from historical analogues
+Definition of ready check: Gate stories against DoR before sprint
+Bug triaging: Classify, route, and prioritize defects
+Backlog health scoring: Detect stale, orphaned, or conflicting items
+Prioritization & PI planning agent:
+PI planning facilitator: Auto-generate PI objectives from features
+WSJF auto-scoring: Compute weighted shortest job first score
+Risk-adjusted prioritization: Factor security, compliance, and tech debt
+Capacity modeling: Align backlog to team velocity and capacity
+Dependency risk radar: Predict ART-level scheduling conflicts
+Program increment simulator: Simulate PI scenarios before commitment
+Stakeholder alignment digest: Summarize PI decisions for exec review
+
+ARCHITECT & ENABLE
+Solution architect agent:
+Architecture pattern recommender: Suggest patterns from NFR + domain context
+ADR auto-draft: Generate architecture decision records
+Architecture fitness evaluation: Score designs against enterprise principles
+API surface designer: Propose contract-first API definitions
+Tech radar alignment check: Flag choices against approved tech stack
+Architecture mapping: Visualize service dependencies across domains
+Domain model generator: Infer bounded contexts from feature specs
+Enabler definition agent:
+Enabler story generator: Convert spikes into structured enabler stories
+Infrastructure need forecaster: Predict platform needs from roadmap signals
+Technical debt cataloger: Identify and score debt from codebase analysis
+Spike outcome synthesizer: Summarize research spikes into decisions
+Enabler impact estimator: Quantify velocity unlock from each enabler
+Platform capability gap analysis: Compare current vs. needed platform state
+Governance & Compliance agent:
+Policy-as-code validator: Enforce OPA/Cedar rules on design decisions
+HIPAA/SOC2 impact scanner: Flag compliance risk in architectural choices
+Hard budget cap: Enforce token and cloud spend envelopes
+License compliance scanner: Check third-party library license risk
+Security posture assessment: Score design against MAESTRO threat model
+Privacy by design checker: Identify PHI/PII exposure at design time
+ARB pre-review briefing: Auto-generate ARB submission from design docs
+
+DEVELOP & INTEGRATE:
+Feature development agemt:
+Code generation: Scaffold features from story + design context
+Self-fixing PR loop: Auto-detect and remediate failing CI checks
+Auto code review & refactoring: Inline review, style, and refactor suggestions
+Commit message generation: Generate semantic commit messages from diff
+Inline commenting: Add documentation comments to new code
+PR summarization: One-paragraph PR description for reviewers
+Merge conflict resolution: AI-assisted conflict resolution in PRs
+Technical debt scoring; Score and annotate new debt introduced per PR
+Integrate agent:
+MCP connector scaffolding: Generate MCP server stubs from API contracts
+API drift detection: Alert on breaking changes vs. published contract
+Integration test generation: Synthesize integration tests from API schemas
+Schema migration assistant: Generate and validate DB migration scripts
+Event contract validator: Enforce Kafka/MSK topic schema contracts
+Dependency update agent: Auto-PR safe dependency version bumps
+A2A handshake validator: Test inter-agent protocol compliance
+Code Quality agent:
+Auto code review & refactoring: Inline quality gate on every PR
+Code coverage analysis: Identify untested paths and suggest tests
+Complexity hotspot detection: Flag cyclomatic complexity outliers
+Duplication scanner: Detect copy-paste code across the codebase
+Documentation synthesis: Generate module and API documentation
+Test case synthesis: Generate unit tests from implementation
+Flaky test identification: Detect and quarantine non-deterministic tests
+Code Security agent
+Vulnerability scanning: SAST scan on every commit with fix suggestions
+Secret detection: Block commits containing credentials or keys
+Dependency CVE alerting: Flag known CVEs in transitive dependencies
+Prompt injection fuzzing: Test AI code paths for injection vectors
+OWASP compliance check: Validate code against OWASP Top 10: Security vulnerability fuzzing: Automated fuzzing of API and input surfaces
+Supply chain SBOM: Generate software bill of materials per build
+Knowledge agent:
+Codebase Q&A: Answer questions from code and architecture docs
+Decision log synthesis: Extract and store architectural decisions
+Runbook generation: Generate operational runbooks from code context
+Onboarding knowledge guide: Curate onboarding paths from repo context
+PR context retrieval: Surface related prior decisions for reviewers
+Post-mortem knowledge capture: Extract lessons from incidents into knowledge base
+
+VALIDATE CONTINUOUSLY
