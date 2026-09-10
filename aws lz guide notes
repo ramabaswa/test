@@ -1,0 +1,43 @@
+Here are presenter talking points for all 12 slides, grounded in the actual deck content:
+
+---
+
+**Slide 1 — Title**
+This deck lays out a hub-and-spoke pattern for running generative AI at enterprise scale on AWS. Two landing zones: the AI Gateway Landing Zone is the hub — it centralizes Bedrock model access. The AI AgentCore Landing Zone is the spoke — one per business unit, where agents actually get built and run. Everything after this slide is about why that split exists and how it maps to real AWS services.
+
+**Slide 2 — Executive Summary**
+The core idea is simple: centralize what should be shared, decentralize what should be owned. Model access, guardrails, usage metering, and chargeback belong in one governed place — duplicating that per team wastes money and creates inconsistent policy. But agent logic, tools, and business data belong with the team that owns them. Call out the one thing people most often get wrong: AgentCore Gateway is not a model gateway — it's an agent-to-tool connector, and it lives in the spoke. That distinction is worth pausing on because it resurfaces on slide 8.
+
+**Slide 3 — Reference Pattern (diagram)**
+This is the picture version of slide 2. One hub, N spokes, connected over Transit Gateway. The hub owns Bedrock and governance; every spoke owns its own agents and tools. The only thing crossing the account boundary is the model-invocation call — that's the one arrow in this diagram, and it's the most important arrow in the whole deck.
+
+**Slide 4 — The Hub (narrative)**
+The hub is its own AWS account, a peer to every spoke, not a parent of them. Bedrock foundation models, cross-region inference, and provisioned throughput get provisioned once here instead of per business unit. A regional API Gateway plus WAF is the single door every spoke has to come through — no spoke ever talks to Bedrock's public endpoint directly, which is what makes guardrails and chargeback actually enforceable. Point to the four boxes on the right as the concrete deliverables this account owns.
+
+**Slide 5 — The Hub (architecture diagram)**
+This is the full account and network layout: AWS Organizations at top, the hub account in the middle with Bedrock, guardrails, PII detection, usage metering, and the model registry all in one place. Don't try to read every icon live — walk through the three takeaways below instead: single entry point, centralized guardrails, automatic metering. The diagram is there as the leave-behind reference for the engineering team.
+
+**Slide 6 — The Spoke (narrative)**
+Flip side of slide 4. Each business unit gets its own account, same Workloads OU, same Transit Gateway hub. AgentCore Runtime hosts the actual agent code and it's framework-agnostic — Strands, LangChain, LangGraph, CrewAI, whatever the team already uses. The line to emphasize out loud: AgentCore Gateway turns that team's internal APIs and Lambda functions into MCP-compatible tools, with its own OAuth handling — and it sits here, next to the agent, not back at the hub. The spoke only calls home for one thing: model invocation.
+
+**Slide 7 — The Spoke (architecture diagram)**
+Same treatment as slide 5, mirrored for the spoke. Point out the "AgentCore Gateway subnet" sitting right next to "Agent runtime subnet" — that's the visual proof of the point from slide 6. The three takeaways matter more than the icons: tools stay local, only one call ever leaves the account, and every spoke is a repeatable template — which sets up slide 11's rollout plan.
+
+**Slide 8 — Two Different "Gateways"**
+This slide exists because the naming collision is a real source of confusion and it's worth addressing head-on rather than hoping nobody asks. Amazon API Gateway lives at the hub, fronts Bedrock, one shared instance for the whole org. Bedrock AgentCore Gateway lives at the spoke, fronts that team's own tools, one instance per spoke. Same word, two accounts, two completely different jobs — if there's one slide to slow down on, it's this one.
+
+**Slide 9 — Component Reference Table**
+This is the "what do I actually provision" slide for engineering. Read it as two columns, layer by layer: hub gets Bedrock, API Gateway, Service Catalog, CloudWatch; spoke gets AgentCore Runtime, AgentCore Gateway, AgentCore Identity/Memory/Observability. Notice the "Tool / API integration" row — hub says "not applicable," which is the whole architecture in one cell.
+
+**Slide 10 — Design Principles**
+Six adoption rules, and a few deserve emphasis: stand up the hub before the first spoke exists, because retrofitting governance later is much more disruptive than starting with it. Spokes must never bypass the hub's private API Gateway path to reach Bedrock directly — that one rule is what makes guardrails and chargeback real instead of aspirational. And principle six is the honest one: validate HIPAA eligibility and current AgentCore GA-vs-preview status before scaling — this service is moving fast.
+
+**Slide 11 — Adoption Roadmap**
+Four phases: stand up the hub with no spokes yet, pilot exactly one spoke end-to-end, harden that pilot into an account-vending template via Control Tower, then scale out. The italic line at the bottom is the "don't skip this" list — region/DR strategy, CIDR allocation, HIPAA/BAA coverage, and AgentCore's feature maturity all need answers before this goes past the pilot.
+
+**Slide 12 — Questions & Discussion**
+Close here and open the floor. The references are there if anyone wants to go verify the AgentCore Gateway claims directly against the AWS blog post this deck was built from.
+
+---
+
+Want me to also add these as actual speaker notes inside the .pptx file (via `addNotes()`) so they travel with the deck, rather than just living in this chat?
