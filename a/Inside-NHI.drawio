@@ -1,0 +1,375 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="j0roLIl4bC2y_SHt85cV">
+    <mxGraphModel dx="1178" dy="766" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontColor=#333333;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:16px&#39;&gt;NHI Control Plane — Deep Dive&lt;/b&gt;&lt;br&gt;Internal capabilities, data flows, and product mappings across the 6 NHI sub-components" vertex="1">
+          <mxGeometry height="45" width="600" x="40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="in_label" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="&lt;b&gt;EXTERNAL INPUTS&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="16" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="in_entra" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Microsoft Entra ID&lt;/b&gt;&lt;br&gt;Azure IAM" vertex="1">
+          <mxGeometry height="50" width="200" x="16" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="in_cloud" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Cloud IAM / SaaS&lt;/b&gt;&lt;br&gt;AWS, GCP, Salesforce, M365" vertex="1">
+          <mxGeometry height="50" width="200" x="16" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="in_cicd" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;CI/CD / Secrets / Repos&lt;/b&gt;&lt;br&gt;Jenkins, GitHub, Terraform, K8s" vertex="1">
+          <mxGeometry height="50" width="200" x="16" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="in_aigw" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;AI Gateway / MCP&lt;/b&gt;&lt;br&gt;Agent runtime, tool calls" vertex="1">
+          <mxGeometry height="50" width="200" x="16" y="285" as="geometry" />
+        </mxCell>
+        <mxCell id="in_logs" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Logs / Telemetry&lt;/b&gt;&lt;br&gt;Audit events, access logs" vertex="1">
+          <mxGeometry height="50" width="200" x="16" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9673A6;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="290" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#7B5EA7&#39;&gt;1. Discovery &amp;amp; Inventory&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="290" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Continuous Scanning&lt;/b&gt;&lt;br&gt;Cloud, SaaS, CI/CD, on-prem" vertex="1">
+          <mxGeometry height="55" width="170" x="300" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Credential Discovery&lt;/b&gt;&lt;br&gt;API keys, secrets, certs,&lt;br&gt;tokens, connection strings" vertex="1">
+          <mxGeometry height="55" width="175" x="480" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;SP / Managed Identity&lt;/b&gt;&lt;br&gt;Enumeration&lt;br&gt;Service principals, system-assigned,&lt;br&gt;user-assigned identities" vertex="1">
+          <mxGeometry height="65" width="170" x="300" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align:center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;OAuth App / Service&lt;br&gt;Account Discovery&lt;/b&gt;&lt;br&gt;App registrations, enterprise apps,&lt;br&gt;delegated permissions" vertex="1">
+          <mxGeometry height="65" width="175" x="480" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;AI Agent / MCP Server&lt;br&gt;Discovery&lt;/b&gt;&lt;br&gt;Agent identities, MCP endpoints,&lt;br&gt;tool registrations" vertex="1">
+          <mxGeometry height="55" width="355" x="300" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Oasis, Astrix, Token, Entro, Clarity, SailPoint, Saviynt, GitGuardian&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="355" x="300" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_flow" edge="1" parent="1" source="c1_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#9673A6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c2_box" value="inventory feed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9673A6;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="710" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#7B5EA7&#39;&gt;2. Identity Graph &amp;amp; Lineage&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="710" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Relationship Mapping&lt;/b&gt;&lt;br&gt;Who created what, what&lt;br&gt;accesses what, parent-child" vertex="1">
+          <mxGeometry height="60" width="175" x="720" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Blast Radius Computation&lt;/b&gt;&lt;br&gt;If this NHI is compromised,&lt;br&gt;what can an attacker reach?" vertex="1">
+          <mxGeometry height="60" width="175" x="905" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Privilege Chain Analysis&lt;/b&gt;&lt;br&gt;Credential → identity → role →&lt;br&gt;permission → resource chains" vertex="1">
+          <mxGeometry height="60" width="175" x="720" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Credential-to-Identity&lt;br&gt;Linking&lt;/b&gt;&lt;br&gt;Map secrets to their owning&lt;br&gt;service principals / workloads" vertex="1">
+          <mxGeometry height="60" width="175" x="905" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Cross-Platform Correlation&lt;/b&gt;&lt;br&gt;Same identity across AWS, Azure, GCP, SaaS, CI/CD — unified view" vertex="1">
+          <mxGeometry height="55" width="360" x="720" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Token, P0, Entro, Opal, Oasis&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="360" x="720" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_flow" edge="1" parent="1" source="c2_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#9673A6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c3_box" value="graph relationships">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9673A6;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="1130" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#7B5EA7&#39;&gt;3. Risk / Posture Scoring&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="1130" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Over-Privilege Detection&lt;/b&gt;&lt;br&gt;Excessive scopes, unused roles,&lt;br&gt;unnecessary admin access" vertex="1">
+          <mxGeometry height="60" width="175" x="1140" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Unused Credential&lt;br&gt;Detection&lt;/b&gt;&lt;br&gt;Dormant SPs, stale tokens,&lt;br;expired secrets" vertex="1">
+          <mxGeometry height="60" width="175" x="1325" y="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Stale Identity Detection&lt;/b&gt;&lt;br&gt;No activity in 30/60/90 days,&lt;br&gt;orphaned service accounts" vertex="1">
+          <mxGeometry height="60" width="175" x="1140" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Exposed Secret Detection&lt;/b&gt;&lt;br&gt;Secrets in code, public repos,&lt;br&gt;plaintext in configs" vertex="1">
+          <mxGeometry height="60" width="175" x="1325" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D6A000;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Risk Confidence Calculation&lt;/b&gt;&lt;br&gt;Aggregate score: privilege + usage + exposure + age + blast radius → confidence level (High / Medium / Low)" vertex="1">
+          <mxGeometry height="55" width="360" x="1140" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Oasis, Token, Clarity, Unosecur, P0, Nexis&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="360" x="1140" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_flow" edge="1" parent="1" source="c3_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#9673A6;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="c4_box" value="risk signals">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9673A6;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="195" y="488" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#7B5EA7&#39;&gt;4. Governance / Lifecycle&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="195" y="491" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Provisioning /&lt;br&gt;Deprovisioning&lt;/b&gt;&lt;br&gt;Create NHI on join,&lt;br&gt;remove on offboarding" vertex="1">
+          <mxGeometry height="65" width="175" x="205" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Access Reviews /&lt;br&gt;Recertification&lt;/b&gt;&lt;br&gt;Periodic review of NHI&lt;br&gt;permissions and entitlements" vertex="1">
+          <mxGeometry height="65" width="175" x="390" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Least Privilege Enforcement&lt;/b&gt;&lt;br&gt;Reduce excessive scopes,&lt;br&gt;enforce RBAC, remove unused" vertex="1">
+          <mxGeometry height="60" width="175" x="205" y="593" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Compliance / Audit&lt;br&gt;Reporting&lt;/b&gt;&lt;br&gt;SOC2, ISO 27001, NIST,&lt;br&gt;CIS benchmarks for NHI" vertex="1">
+          <mxGeometry height="60" width="175" x="390" y="593" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Ownership Attribution&lt;/b&gt;&lt;br&gt;Assign each NHI to a team / owner / budget code — every identity has an accountable owner" vertex="1">
+          <mxGeometry height="55" width="360" x="205" y="663" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Saviynt, SailPoint, Nexis, Andromeda, PlainID, Opal, Whiteswan&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="360" x="205" y="728" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_flow" edge="1" parent="1" source="c4_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#9673A6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c5_box" value="policy enforcement rules">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#9673A6;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="615" y="488" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#7B5EA7&#39;&gt;5. Detection / Response&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="615" y="491" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Runtime Monitoring&lt;/b&gt;&lt;br&gt;Live API calls, auth events,&lt;br&gt;credential usage, token refresh" vertex="1">
+          <mxGeometry height="60" width="175" x="625" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Anomalous Access&lt;br&gt;Detection&lt;/b&gt;&lt;br&gt;Unusual API calls, off-hours,&lt;br&gt;new IP / geo / device" vertex="1">
+          <mxGeometry height="60" width="175" x="810" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Credential Misuse&lt;br&gt;Detection&lt;/b&gt;&lt;br&gt;Token replay, shared secrets,&lt;br&gt;credential stuffing" vertex="1">
+          <mxGeometry height="60" width="175" x="625" y="588" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Impossible Travel /&lt;br&gt;Geo Anomalies&lt;/b&gt;&lt;br&gt;SP used from two geos&lt;br&gt;in impossible timeframe" vertex="1">
+          <mxGeometry height="60" width="175" x="810" y="588" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Threat Correlation&lt;/b&gt;&lt;br&gt;Correlate NHI events with SIEM signals, MITRE ATT&amp;amp;CK mapping, kill-chain analysis" vertex="1">
+          <mxGeometry height="55" width="360" x="625" y="658" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Oasis, Token, Entro, Unosecur, Astrix, Clarity&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="360" x="625" y="728" as="geometry" />
+        </mxCell>
+        <mxCell id="c5_flow" edge="1" parent="1" source="c5_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#9673A6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c6_box" value="anomaly event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#B85450;strokeWidth=2;" value="" vertex="1">
+          <mxGeometry height="320" width="380" x="1146" y="488" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:12px;color:#B85450&#39;&gt;6. Remediation Orchestration&lt;/b&gt;" vertex="1">
+          <mxGeometry height="22" width="380" x="1146" y="491" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Auto-Revoke Credentials&lt;/b&gt;&lt;br&gt;Disable compromised tokens,&lt;br&gt;revoke OAuth grants,&lt;br&gt;invalidate sessions" vertex="1">
+          <mxGeometry height="65" width="175" x="1156" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Auto-Rotate Secrets&lt;/b&gt;&lt;br&gt;Rotate exposed API keys,&lt;br&gt;renew certificates,&lt;br&gt;generate new credentials" vertex="1">
+          <mxGeometry height="65" width="175" x="1341" y="518" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Disable / Decommission&lt;br&gt;Identities&lt;/b&gt;&lt;br&gt;Remove stale SPs,&lt;br&gt;decommission unused accounts" vertex="1">
+          <mxGeometry height="65" width="175" x="1156" y="593" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Remove Excessive&lt;br&gt;Permissions&lt;/b&gt;&lt;br&gt;Trim scopes, remove roles,&lt;br&gt;enforce least privilege" vertex="1">
+          <mxGeometry height="65" width="175" x="1341" y="593" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D6A000;fontSize=9;align=center;verticalAlign=top;spacingTop=4;" value="&lt;b&gt;Open ITSM Tickets / Escalation&lt;/b&gt;&lt;br&gt;Create ServiceNow / Jira tickets, notify owners, escalate to SOC if unresolvable" vertex="1">
+          <mxGeometry height="55" width="360" x="1156" y="668" as="geometry" />
+        </mxCell>
+        <mxCell id="c6_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#666&#39;&gt;&lt;b&gt;Products:&lt;/b&gt; Oasis, Clarity, Token, Entro, C1.ai, Nexis, Akeyless, Arcon&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="360" x="1156" y="733" as="geometry" />
+        </mxCell>
+        <mxCell id="db1" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;NHI Graph /&lt;br&gt;Inventory DB&lt;/b&gt;&lt;br&gt;&lt;br&gt;Identity records&lt;br&gt;Relationships&lt;br&gt;Lineage&lt;br&gt;Entitlements&lt;br&gt;Risk scores" vertex="1">
+          <mxGeometry height="110" width="180" x="310" y="848" as="geometry" />
+        </mxCell>
+        <mxCell id="db2" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Evidence /&lt;br&gt;Audit Store&lt;/b&gt;&lt;br&gt;&lt;br&gt;Access logs&lt;br&gt;Change history&lt;br&gt;Remediation records&lt;br&gt;Compliance evidence" vertex="1">
+          <mxGeometry height="110" width="180" x="620" y="848" as="geometry" />
+        </mxCell>
+        <mxCell id="db3" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Policy /&lt;br&gt;Exception Store&lt;/b&gt;&lt;br&gt;&lt;br&gt;Policy rules&lt;br&gt;Exceptions&lt;br&gt;Approvals&lt;br&gt;Overrides" vertex="1">
+          <mxGeometry height="110" width="180" x="885" y="848" as="geometry" />
+        </mxCell>
+        <mxCell id="out_label" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="&lt;b&gt;EXTERNAL OUTPUTS&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="1620" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="out_entra" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Microsoft Entra ID&lt;/b&gt;&lt;br&gt;Disable / revoke SP&lt;br&gt;Remove app roles" vertex="1">
+          <mxGeometry height="60" width="220" x="1620" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="out_kv" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Azure Key Vault&lt;/b&gt;&lt;br&gt;Rotate secrets / certs" vertex="1">
+          <mxGeometry height="50" width="220" x="1620" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="out_pam" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;PAM / APIM / AI Gateway&lt;/b&gt;&lt;br&gt;Block API keys, revoke sessions,&lt;br&gt;disable agent access" vertex="1">
+          <mxGeometry height="60" width="220" x="1620" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="out_sentinel" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF0F0;strokeColor=#99004D;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Microsoft Sentinel / SIEM&lt;/b&gt;&lt;br&gt;Forward threat alerts,&lt;br&gt;audit trail, incident data" vertex="1">
+          <mxGeometry height="60" width="220" x="1620" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="out_itsm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D6A000;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;ITSM / Ticketing&lt;/b&gt;&lt;br&gt;ServiceNow / Jira tickets,&lt;br&gt;owner notifications" vertex="1">
+          <mxGeometry height="60" width="220" x="1620" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF0F5;strokeColor=#B8547C;strokeWidth=2;dashed=1;" value="" vertex="1">
+          <mxGeometry height="100" width="1800" x="40" y="998" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;b style=&#39;font-size:11px;color:#B8547C&#39;&gt;Agent Access Management (AAM) — adjacent NHI domain&lt;/b&gt;" vertex="1">
+          <mxGeometry height="20" width="500" x="50" y="1003" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Agent Identity Registry&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="50" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Tool Permission Catalog&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="220" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Intent / Task Context&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="390" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Runtime Guardrails&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="560" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Session Controls&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="730" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD6E7;strokeColor=#B8547C;fontSize=9;align=center;verticalAlign=middle;" value="&lt;b&gt;Agent-to-Agent AuthZ&lt;/b&gt;" vertex="1">
+          <mxGeometry height="30" width="160" x="900" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="aam_prod" parent="1" style="text;html=1;align=left;verticalAlign=middle;fillColor=none;strokeColor=none;" value="&lt;font style=&#39;font-size:8px;color:#B8547C&#39;&gt;&lt;b&gt;Primary:&lt;/b&gt; Astrix, C1.ai  |  &lt;b&gt;Adjacent:&lt;/b&gt; Oasis, Token, Entro, P0, PlainID, Opal, Akeyless, Teleport&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="700" x="1080" y="1028" as="geometry" />
+        </mxCell>
+        <mxCell id="ie1" edge="1" parent="1" source="in_entra" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.2;entryDx=0;entryDy=0;" target="c1_box" value="identity metadata">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ie2" edge="1" parent="1" source="in_cloud" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" target="c1_box" value="cloud identities">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ie3" edge="1" parent="1" source="in_cicd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c1_box" value="secrets / code">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ie4" edge="1" parent="1" source="in_aigw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" target="c1_box" value="agent identities">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ie5" edge="1" parent="1" source="in_logs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.35;entryDx=0;entryDy=0;" target="c5_box" value="runtime events">
+          <mxGeometry relative="1" x="-0.363" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="260" y="375" />
+              <mxPoint x="260" y="450" />
+              <mxPoint x="600" y="450" />
+              <mxPoint x="600" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oe1" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B85450;dashed=1;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="out_entra" value="disable / revoke SP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B85450;dashed=1;exitX=1;exitY=0.35;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="out_kv" value="rotate secrets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe3" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B85450;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="out_pam" value="block / revoke sessions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe4" edge="1" parent="1" source="c5_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#99004D;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="out_sentinel" value="threat alerts">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1120" y="648" />
+              <mxPoint x="1120" y="850" />
+              <mxPoint x="1540" y="850" />
+              <mxPoint x="1540" y="335" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oe5" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#D6A000;dashed=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="tickets / approvals">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1620" y="478" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ds1" edge="1" parent="1" source="c1_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="db1" value="inventory records">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ds2" edge="1" parent="1" source="c2_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="db2" value="evidence / audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ds3" edge="1" parent="1" source="c3_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="db3" value="policy exceptions">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1320" y="616.5" />
+              <mxPoint x="1010" y="616.5" />
+              <mxPoint x="1010" y="848" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ds4" edge="1" parent="1" source="c4_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;" target="db3" value="enforcement rules">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ds5" edge="1" parent="1" source="c5_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;" target="db2" value="access logs / change history">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ds6" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#666666;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="db2" value="remediation records">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loop1" edge="1" parent="1" source="c6_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B85450;dashed=1;exitX=0;exitY=0.8;exitDx=0;exitDy=0;entryX=1;entryY=0.8;entryDx=0;entryDy=0;" target="c1_box" value="closure feedback — re-scan to verify remediation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae1" edge="1" parent="1" source="aam_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B8547C;dashed=1;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="c1_box" value="agent registry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ae2" edge="1" parent="1" source="aam_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B8547C;dashed=1;exitX=0.35;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="c2_box" value="agent lineage">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="670" y="691.52" />
+              <mxPoint x="1060.08" y="691.52" />
+              <mxPoint x="1060.08" y="420.08" />
+              <mxPoint x="995" y="420.08" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ae3" edge="1" parent="1" source="aam_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B8547C;dashed=1;exitX=0.55;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="c3_box" value="agent risk">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="998" />
+              <mxPoint x="1110" y="385" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ae4" edge="1" parent="1" source="aam_box" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;strokeColor=#B8547C;dashed=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="c5_box" value="agent telemetry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_box" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CCCCCC;" value="" vertex="1">
+          <mxGeometry height="70" width="1800" x="40" y="1128" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_title" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontColor=#333333;fillColor=none;strokeColor=none;" value="&lt;b&gt;LEGEND&lt;/b&gt;" vertex="1">
+          <mxGeometry height="18" width="80" x="55" y="1133" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#9673A6;fillColor=none;strokeColor=none;" value="── Solid purple: NHI internal data flow" vertex="1">
+          <mxGeometry height="16" width="250" x="55" y="1156" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#666666;fillColor=none;strokeColor=none;" value="─ ─ Dashed gray: Input feeds / data store sync" vertex="1">
+          <mxGeometry height="16" width="280" x="55" y="1176" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#B85450;fillColor=none;strokeColor=none;" value="─ ─ Dashed red: Remediation actions" vertex="1">
+          <mxGeometry height="16" width="250" x="320" y="1156" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#B8547C;fillColor=none;strokeColor=none;" value="─ ─ Dashed pink: AAM integration" vertex="1">
+          <mxGeometry height="16" width="250" x="320" y="1176" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#99004D;fillColor=none;strokeColor=none;" value="─ ─ Dashed magenta: SOC / SIEM telemetry" vertex="1">
+          <mxGeometry height="16" width="280" x="580" y="1156" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#D6A000;fillColor=none;strokeColor=none;" value="─ ─ Dashed amber: ITSM / ticketing" vertex="1">
+          <mxGeometry height="16" width="250" x="580" y="1176" as="geometry" />
+        </mxCell>
+        <mxCell id="leg7" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontColor=#666666;fontStyle=2;fillColor=none;strokeColor=none;" value="* = overlapping capability across multiple products; integration depth must be validated" vertex="1">
+          <mxGeometry height="16" width="400" x="850" y="1156" as="geometry" />
+        </mxCell>
+        <mxCell id="leg8" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontColor=#666666;fontStyle=2;fillColor=none;strokeColor=none;" value="Source: NHIMG Product Landscape (nhimg.org/products) | CSA NHI Security Report" vertex="1">
+          <mxGeometry height="16" width="400" x="850" y="1176" as="geometry" />
+        </mxCell>
+        <mxCell id="leg9" parent="1" style="text;html=1;align=left;verticalAlign=middle;fontSize=8;fontColor=#666666;fillColor=none;strokeColor=none;" value="All 19 products: Oasis, Astrix, Token, Entro, Clarity, Nexis, SailPoint, Saviynt, Unosecur, P0, Opal, Andromeda, C1, PlainID, Whiteswan, Arcon, Akeyless, Teleport, GitGuardian" vertex="1">
+          <mxGeometry height="30" width="580" x="1250" y="1156" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
