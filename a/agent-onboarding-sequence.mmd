@@ -1,0 +1,118 @@
+sequenceDiagram
+    autonumber
+    actor Req as Requester / Agent Owner
+    participant SN as ServiceNow (Catalog, Flow Designer, Approvals)
+    participant CMDB as ServiceNow CMDB (AI Agent CI)
+    participant OMS as Onboarding Microservice (Managed Identity)
+    participant State as State Store (Idempotency, Saga Log, Audit)
+    participant UCF as Use-Case Framework (Criticality x Role)
+    participant Entra as Microsoft Entra ID (Agent ID, App Reg, SP)
+    participant KV as Azure Key Vault
+    participant APIM as Azure API Management
+    participant MCPGW as AI Gateway / MCP Gateway (Tools + A2A)
+    participant EntApp as Enterprise Apps / Tool APIs
+    participant Oasis as Oasis NHI Platform
+    participant Wiz as Wiz (Posture Management)
+    participant OTel as OTel Collector (Dynatrace, Splunk)
+
+    Note over Req,OTel: All components emit OpenTelemetry with traceparent = onboarding correlation ID. Collector exports traces and metrics to Dynatrace, logs to Splunk
+
+    Note over Req,UCF: Phase 1 - Intake and classification
+    Req->>SN: Submit form: name, purpose, origin (Agent 365 or Claude), runtime host, envs, owner + backup owner, role (supervisor or worker), tools requested, data classification, autonomy level, use-case ID
+    SN->>CMDB: Create AI Agent CI (status = Requested, correlation ID)
+    SN->>OMS: POST /agents/classify (OAuth client credentials or mTLS)
+    OMS->>UCF: Evaluate criticality (complexity x availability x data sensitivity) and role
+    UCF-->>OMS: Onboarding profile: tier, approval chain, credential type, rate-limit tier, guardrail set, telemetry level, test depth, recertification cadence, delegation rules
+    OMS->>State: Store profile version + correlation ID
+    OMS-->>SN: Profile + required approvals
+
+    Note over SN,CMDB: Phase 2 - Tier-driven approval
+    alt Tier = Critical
+        SN->>SN: Owner manager, security architecture, data owner, CAB (Prod)
+    else Tier = Standard
+        SN->>SN: Owner manager, security
+    else Tier = Low
+        SN->>SN: Owner manager only
+    end
+    SN->>CMDB: CI status = Approved
+    SN->>OMS: POST /agents/onboard (correlation ID, idempotency key, profile version)
+    OMS-->>SN: 202 Accepted (job ID)
+
+    activate OMS
+    OMS->>State: Record job, check idempotency key, lock profile version
+
+    Note over OMS,KV: Phase 3 - Identity (one identity per agent per environment)
+    alt Origin = Microsoft Agent 365
+        OMS->>Entra: Graph - verify Agent ID, blueprint, sponsor, owner, env
+        Entra-->>OMS: Agent object ID and app ID (confirmed, not assumed)
+    else Origin = Claude or external
+        OMS->>Entra: Create agent identity (Agent ID or App Reg + SP), owner, sponsor, tags (env, tier, role, CI ID, use-case ID)
+        alt Runtime hosted on Azure
+            OMS->>Entra: Bind managed identity or federated credential (no secret)
+        else Runtime outside Azure
+            OMS->>Entra: Federated credential if OIDC issuer available, else certificate
+            OMS->>KV: Store certificate, rotation policy per tier, grant agent Get only
+        end
+        Entra-->>OMS: Agent client ID and object ID
+    end
+    OMS->>Entra: Assign least-privilege app roles and scopes on APIM and tool APIs
+    OMS->>Entra: Apply Conditional Access for workload identities (Critical tier, where licensed)
+    OMS->>State: Checkpoint - identity complete
+
+    Note over OMS,EntApp: Phase 4 - Runtime enforcement per environment
+    loop Each approved environment (dev, qa, uat, prod)
+        OMS->>APIM: Product + subscription, validate-jwt (aud, iss, appid or azp, roles), rate-limit tier, correlation header, OTel diagnostics
+        APIM-->>OMS: 200 or 201
+        OMS->>MCPGW: Register agent client ID, tool allow-list, per-tool scopes, guardrail set, token exchange rules
+        alt Role = Supervisor
+            OMS->>MCPGW: Bind allowed worker agent IDs (workers must be Active), max delegation depth, on-behalf-of rules
+        else Role = Worker
+            OMS->>MCPGW: Allow invocation only from approved supervisors, deny agent-to-agent calls outward
+        end
+        MCPGW-->>OMS: Agent registered
+    end
+    OMS->>State: Checkpoint - gateways complete
+
+    Note over OMS,Wiz: Phase 5 - Governance and posture
+    OMS->>Oasis: Register or enrich agent: object ID, owner, CI ID, tier, role, tools, envs (verify Oasis API, else rely on Entra discovery + tags)
+    Oasis->>Entra: Discover identity, entitlements, credentials
+    Oasis-->>OMS: Under governance (baseline posture)
+    Wiz->>Entra: Connector scan - identity, entitlements
+    Wiz->>APIM: Connector scan - Azure resource configuration
+    Note over Wiz: Wiz discovers via cloud connectors, it is not an OTel sink
+    OMS->>State: Checkpoint - governance complete
+
+    Note over OMS,EntApp: Phase 6 - Verification (depth per tier)
+    OMS->>Entra: Acquire token as agent
+    OMS->>APIM: Test call with agent token
+    APIM->>MCPGW: Forward
+    MCPGW->>EntApp: Allowed tool call
+    EntApp-->>MCPGW: 200 OK
+    MCPGW-->>OMS: Allowed call OK, disallowed tool denied
+    opt Tier = Critical
+        OMS->>MCPGW: Guardrail tests, delegation tests, failover check
+    end
+    OMS->>OTel: Confirm trace arrived for smoke test
+    deactivate OMS
+
+    alt All steps succeeded
+        OMS->>SN: Callback - success, IDs per env, APIM product, MCP registration, Oasis ID, profile version
+        SN->>CMDB: CI status = Active, relationships (owner, APIM, MCP, Oasis, supervisor-worker)
+        SN-->>Req: Onboarded notification
+    else Any step failed
+        OMS->>OMS: Compensate in reverse (MCP, APIM, role assignments, credentials, identity)
+        OMS->>OTel: Failure event with step and reason
+        OMS->>SN: Callback - failed, step, reason
+        SN->>CMDB: CI status = Failed
+        SN-->>Req: Failure notice + incident
+    end
+
+    Note over Req,OTel: Phase 7 - Day-2 lifecycle
+    Oasis->>SN: NHI findings - excess permissions, stale agent, owner departed, credential aging
+    Wiz->>SN: Posture findings - misconfiguration, exposure, toxic combinations
+    SN->>OMS: Change, recertify (cadence per tier), or offboard request
+    OMS->>MCPGW: Deregister agent, remove supervisor-worker bindings
+    OMS->>APIM: Revoke subscription
+    OMS->>Entra: Remove roles, disable then delete identity
+    OMS->>KV: Revoke certificate
+    OMS->>SN: CI status = Retired

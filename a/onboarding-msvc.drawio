@@ -1,0 +1,385 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="2Jn1OyIUx9VQcO9zAL0-">
+    <mxGraphModel dx="3113" dy="1953" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1170" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gL" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="EXTERNAL SOURCES AND POWER PLATFORM" vertex="1">
+          <mxGeometry height="1130" width="270" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sn" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DEEBF7;strokeColor=#1F4E79;fontSize=10;" value="&lt;b&gt;ServiceNow&lt;/b&gt;&lt;br&gt;Catalog item + Flow Designer&lt;br&gt;REST step: /classify /onboard&lt;br&gt;Scripted REST callback endpoint&lt;br&gt;OAuth client credentials (Entra)" vertex="1">
+          <mxGeometry height="110" width="230" x="40" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="gP" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="POWER PLATFORM (Managed Environment)" vertex="1">
+          <mxGeometry height="500" width="240" x="35" y="185" as="geometry" />
+        </mxCell>
+        <mxCell id="pa1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E6F3;strokeColor=#742774;fontSize=10;" value="&lt;b&gt;Flow A: Agent created trigger&lt;/b&gt;&lt;br&gt;Copilot Studio / Agent 365 event&lt;br&gt;or Dataverse row&lt;br&gt;-&amp;gt; create ServiceNow request" vertex="1">
+          <mxGeometry height="85" width="210" x="50" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="pa2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E6F3;strokeColor=#742774;fontSize=10;" value="&lt;b&gt;Flow B: Teams approvals&lt;/b&gt;&lt;br&gt;Owner / sponsor adaptive card&lt;br&gt;result -&amp;gt; ServiceNow approval" vertex="1">
+          <mxGeometry height="85" width="210" x="50" y="315" as="geometry" />
+        </mxCell>
+        <mxCell id="pa3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E6F3;strokeColor=#742774;fontSize=10;" value="&lt;b&gt;Flow C: Notifications&lt;/b&gt;&lt;br&gt;Teams / email on success,&lt;br&gt;failure, recert due, findings" vertex="1">
+          <mxGeometry height="85" width="210" x="50" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="pcc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E6F3;strokeColor=#742774;fontSize=10;" value="&lt;b&gt;Custom connector&lt;/b&gt;&lt;br&gt;Entra OAuth to APIM facade&lt;br&gt;Policy: DLP business group" vertex="1">
+          <mxGeometry height="75" width="210" x="50" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="pvn" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E6F3;strokeColor=#742774;fontSize=10;" value="&lt;b&gt;Power Platform VNet support&lt;/b&gt;&lt;br&gt;Subnet delegation&lt;br&gt;Private path to internal APIM" vertex="1">
+          <mxGeometry height="75" width="210" x="50" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="a365" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;fontSize=10;" value="&lt;b&gt;Microsoft Agent 365 agents&lt;/b&gt;&lt;br&gt;Entra Agent ID&lt;br&gt;(verify, not create)" vertex="1">
+          <mxGeometry height="90" width="230" x="40" y="715" as="geometry" />
+        </mxCell>
+        <mxCell id="cla" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;fontSize=10;" value="&lt;b&gt;Claude agents&lt;/b&gt;&lt;br&gt;Azure-hosted: managed identity&lt;br&gt;External: federated cred / cert" vertex="1">
+          <mxGeometry height="90" width="230" x="40" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="cicd" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;fontSize=10;" value="&lt;b&gt;CI/CD (GitHub Actions / Azure DevOps)&lt;/b&gt;&lt;br&gt;OIDC federated to Entra, no secrets&lt;br&gt;Build, sign, scan, push to ACR&lt;br&gt;Bicep / Terraform deploy" vertex="1">
+          <mxGeometry height="100" width="230" x="40" y="935" as="geometry" />
+        </mxCell>
+        <mxCell id="gS" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="AZURE - PLATFORM SUBSCRIPTION (Onboarding Service)" vertex="1">
+          <mxGeometry height="1130" width="1190" x="310" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="gV" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="SPOKE VNET vnet-agent-onboarding (UDR 0.0.0.0/0 -&amp;gt; Azure Firewall)" vertex="1">
+          <mxGeometry height="860" width="885" x="325" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="gA" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="snet-apim" vertex="1">
+          <mxGeometry height="300" width="220" x="340" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="apim" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4DFEC;strokeColor=#4B2C83;fontSize=10;" value="&lt;b&gt;APIM (internal VNet)&lt;/b&gt;&lt;br&gt;Onboarding API facade&lt;br&gt;validate-jwt (aud, iss, roles)&lt;br&gt;ServiceNow + Power Platform callers&lt;br&gt;rate limit, correlation ID&lt;br&gt;OTel / diagnostics" vertex="1">
+          <mxGeometry height="150" width="200" x="350" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="agw" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4DFEC;strokeColor=#4B2C83;fontSize=10;" value="&lt;b&gt;App Gateway WAF v2 (public)&lt;/b&gt;&lt;br&gt;Only public entry&lt;br&gt;ServiceNow IP allow-list&lt;br&gt;mTLS optional" vertex="1">
+          <mxGeometry height="95" width="200" x="350" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="gPP" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#742774;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;fontColor=#742774;" value="snet-powerplatform (delegated)" vertex="1">
+          <mxGeometry height="80" width="220" x="340" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="gE" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="snet-aca: Container Apps Environment (internal, workload profiles, Dapr enabled)" vertex="1">
+          <mxGeometry height="600" width="620" x="575" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-onboarding-api&lt;/b&gt;&lt;br&gt;HTTP ingress (internal)&lt;br&gt;/classify /onboard /offboard /status&lt;br&gt;Idempotency check, 202 + job ID&lt;br&gt;UAMI: mi-onb-api" vertex="1">
+          <mxGeometry height="95" width="285" x="590" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="wf" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-orchestrator&lt;/b&gt;&lt;br&gt;Dapr Workflow (saga)&lt;br&gt;or Durable Task Scheduler&lt;br&gt;Checkpoints, retries, compensation&lt;br&gt;UAMI: mi-onb-wf" vertex="1">
+          <mxGeometry height="95" width="285" x="895" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ucf" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-usecase-rules&lt;/b&gt;&lt;br&gt;Use-Case Framework engine&lt;br&gt;Criticality x role -&amp;gt; profile&lt;br&gt;Rules versioned in App Configuration" vertex="1">
+          <mxGeometry height="80" width="285" x="590" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="cb" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-callback-notifier&lt;/b&gt;&lt;br&gt;ServiceNow callback (OAuth)&lt;br&gt;Power Automate HTTP trigger&lt;br&gt;UAMI: mi-onb-cb" vertex="1">
+          <mxGeometry height="80" width="285" x="895" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="w1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-identity-worker&lt;/b&gt;&lt;br&gt;Graph: verify / create&lt;br&gt;agent identity, fed cred,&lt;br&gt;app roles, CA&lt;br&gt;UAMI: mi-onb-idn" vertex="1">
+          <mxGeometry height="95" width="190" x="590" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="w2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-apim-worker&lt;/b&gt;&lt;br&gt;ARM: product, subscription,&lt;br&gt;policy per env&lt;br&gt;UAMI: mi-onb-apim" vertex="1">
+          <mxGeometry height="95" width="190" x="790" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="w3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-mcp-worker&lt;/b&gt;&lt;br&gt;MCP Gateway admin API:&lt;br&gt;tools, guardrails,&lt;br&gt;A2A bindings&lt;br&gt;UAMI: mi-onb-mcp" vertex="1">
+          <mxGeometry height="95" width="190" x="990" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="w4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-governance-worker&lt;/b&gt;&lt;br&gt;Oasis register / enrich&lt;br&gt;Resource tags for Wiz&lt;br&gt;UAMI: mi-onb-gov" vertex="1">
+          <mxGeometry height="95" width="190" x="590" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="w5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ca-verify-worker&lt;/b&gt;&lt;br&gt;Smoke tests per tier:&lt;br&gt;allow, deny, guardrail,&lt;br&gt;delegation&lt;br&gt;UAMI: mi-onb-test" vertex="1">
+          <mxGeometry height="95" width="190" x="790" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="job" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#7F3F00;fontSize=10;" value="&lt;b&gt;ACA Jobs (scheduled)&lt;/b&gt;&lt;br&gt;Drift reconciliation&lt;br&gt;Recert / inactivity sweep&lt;br&gt;Credential expiry scan" vertex="1">
+          <mxGeometry height="95" width="190" x="990" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="otel" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#005A70;fontSize=10;" value="&lt;b&gt;ca-otel-collector&lt;/b&gt;&lt;br&gt;OTLP receiver -&amp;gt; Dynatrace (OTLP) and Splunk (HEC exporter). PII redaction, tail sampling per tier" vertex="1">
+          <mxGeometry height="55" width="590" x="590" y="545" as="geometry" />
+        </mxCell>
+        <mxCell id="keda" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F2F2F2;strokeColor=#000000;fontSize=10;" value="&lt;b&gt;Scaling and resilience&lt;/b&gt;&lt;br&gt;KEDA scale on Service Bus queue depth. Min 1 replica for api and orchestrator (Critical path). Zone redundant environment" vertex="1">
+          <mxGeometry height="55" width="590" x="590" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="gPE" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="snet-private-endpoints (Private DNS zones linked from hub)" vertex="1">
+          <mxGeometry height="200" width="855" x="340" y="695" as="geometry" />
+        </mxCell>
+        <mxCell id="sb" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Service Bus Premium&lt;/b&gt;&lt;br&gt;Queues per step:&lt;br&gt;identity, apim, mcp,&lt;br&gt;gov, verify, callback&lt;br&gt;DLQ + sessions" vertex="1">
+          <mxGeometry height="150" width="130" x="355" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="cos" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Cosmos DB&lt;/b&gt;&lt;br&gt;Jobs, checkpoints,&lt;br&gt;idempotency keys,&lt;br&gt;profile versions,&lt;br&gt;bindings mirror" vertex="1">
+          <mxGeometry height="150" width="130" x="495" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="kv" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Key Vault (platform)&lt;/b&gt;&lt;br&gt;ServiceNow client cert&lt;br&gt;Oasis / MCP API creds&lt;br&gt;(only where no Entra auth)" vertex="1">
+          <mxGeometry height="150" width="130" x="635" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="appc" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;App Configuration&lt;/b&gt;&lt;br&gt;Use-case rules,&lt;br&gt;tier thresholds,&lt;br&gt;feature flags,&lt;br&gt;env endpoints" vertex="1">
+          <mxGeometry height="150" width="130" x="775" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="acr" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Container Registry&lt;/b&gt;&lt;br&gt;Signed images&lt;br&gt;AcrPull via UAMI&lt;br&gt;Public access off" vertex="1">
+          <mxGeometry height="150" width="130" x="915" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="st" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Storage (immutable)&lt;/b&gt;&lt;br&gt;WORM audit archive&lt;br&gt;of every onboarding&lt;br&gt;request and change" vertex="1">
+          <mxGeometry height="150" width="130" x="1055" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="gH" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="HUB VNET (Platform Landing Zone)" vertex="1">
+          <mxGeometry height="330" width="265" x="1225" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="fw" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#0063B1;fontSize=10;" value="&lt;b&gt;Azure Firewall&lt;/b&gt;&lt;br&gt;FQDN egress allow-list:&lt;br&gt;graph.microsoft.com, ServiceNow,&lt;br&gt;Oasis, MCP GW, Dynatrace,&lt;br&gt;Splunk, management.azure.com" vertex="1">
+          <mxGeometry height="130" width="235" x="1240" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="dns" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#0063B1;fontSize=10;" value="&lt;b&gt;Private DNS zones&lt;/b&gt;&lt;br&gt;servicebus, documents, vault,&lt;br&gt;azconfig, azurecr, blob" vertex="1">
+          <mxGeometry height="70" width="235" x="1240" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="def" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#0063B1;fontSize=10;" value="&lt;b&gt;Defender for Cloud / Policy&lt;/b&gt;&lt;br&gt;Deny public endpoints,&lt;br&gt;require private link, tags" vertex="1">
+          <mxGeometry height="65" width="235" x="1240" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="gT" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d0cee2;strokeColor=#56517e;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="TARGET ENVIRONMENTS (per-env subscriptions)" vertex="1">
+          <mxGeometry height="515" width="265" x="1225" y="395" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;APIM dev / qa / uat / prod&lt;/b&gt;&lt;br&gt;Agent products, subscriptions,&lt;br&gt;validate-jwt policies&lt;br&gt;RBAC: API Management Service&lt;br&gt;Contributor for mi-onb-apim" vertex="1">
+          <mxGeometry height="110" width="235" x="1240" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;Key Vault per env&lt;/b&gt;&lt;br&gt;Agent certs (non-Azure runtimes)&lt;br&gt;RBAC: Certificates Officer&lt;br&gt;for mi-onb-idn" vertex="1">
+          <mxGeometry height="95" width="235" x="1240" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;AI / MCP Gateway per env&lt;/b&gt;&lt;br&gt;Agent registrations, tool&lt;br&gt;allow-lists, guardrails, A2A&lt;br&gt;(self-hosted on ACA/AKS or SaaS)" vertex="1">
+          <mxGeometry height="110" width="235" x="1240" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;Agent runtimes on Azure&lt;/b&gt;&lt;br&gt;Claude agents on ACA / AKS&lt;br&gt;Managed identity per agent per env&lt;br&gt;OTel SDK -&amp;gt; collector" vertex="1">
+          <mxGeometry height="110" width="235" x="1240" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="gI" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;" value="IDENTITY AND ACCESS FOR THE SERVICE (least privilege per workload)" vertex="1">
+          <mxGeometry height="215" width="1165" x="325" y="925" as="geometry" />
+        </mxCell>
+        <mxCell id="mi" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;User-assigned managed identities&lt;/b&gt;&lt;br&gt;mi-onb-api: Service Bus Sender, Cosmos Data Contributor, App Config Reader&lt;br&gt;mi-onb-wf: Service Bus Sender/Receiver, Cosmos Data Contributor&lt;br&gt;mi-onb-idn: Graph app perms (Application.ReadWrite.OwnedBy + Agent ID perms), KV Certs Officer per env&lt;br&gt;mi-onb-apim: API Management Service Contributor on target APIM only&lt;br&gt;mi-onb-mcp: MCP Gateway admin role&lt;br&gt;mi-onb-gov: Oasis API (fed/cert), Tag Contributor&lt;br&gt;mi-onb-cb: KV Secrets User (ServiceNow cred)&lt;br&gt;All: AcrPull. No shared identity. No client secrets" vertex="1">
+          <mxGeometry height="170" width="560" x="340" y="955" as="geometry" />
+        </mxCell>
+        <mxCell id="entra" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Microsoft Entra ID&lt;/b&gt;&lt;br&gt;App reg: onboarding-api (audience)&lt;br&gt;App roles: Onboard.Invoke, Status.Read&lt;br&gt;Assigned to ServiceNow + Power Platform&lt;br&gt;connector clients only&lt;br&gt;PIM for human admins&lt;br&gt;CA for workload identities" vertex="1">
+          <mxGeometry height="170" width="280" x="915" y="955" as="geometry" />
+        </mxCell>
+        <mxCell id="ops" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Operations&lt;/b&gt;&lt;br&gt;Entra audit + Azure activity logs&lt;br&gt;-&amp;gt; Splunk&lt;br&gt;Alerts: DLQ depth, saga failures,&lt;br&gt;Graph throttling, cert expiry&lt;br&gt;-&amp;gt; Dynatrace + ServiceNow incident" vertex="1">
+          <mxGeometry height="170" width="265" x="1210" y="955" as="geometry" />
+        </mxCell>
+        <mxCell id="gR" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;dashed=1;verticalAlign=top;align=left;spacingLeft=4;fontStyle=1;fontSize=11;fontColor=#ffffff;" value="EXTERNAL SERVICES" vertex="1">
+          <mxGeometry height="1130" width="360" x="1520" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="graph" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E2EFDA;strokeColor=#006100;fontSize=10;" value="&lt;b&gt;Microsoft Graph&lt;/b&gt;&lt;br&gt;Agent ID, app registrations,&lt;br&gt;service principals, app role&lt;br&gt;assignments, CA policies" vertex="1">
+          <mxGeometry height="90" width="320" x="1540" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="arm" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#0063B1;fontSize=10;" value="&lt;b&gt;Azure Resource Manager&lt;/b&gt;&lt;br&gt;management.azure.com&lt;br&gt;APIM + Key Vault + tag operations" vertex="1">
+          <mxGeometry height="70" width="320" x="1540" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="mcps" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E4DFEC;strokeColor=#4B2C83;fontSize=10;" value="&lt;b&gt;MCP Gateway admin API (if SaaS)&lt;/b&gt;&lt;br&gt;Solo.io / vendor control plane" vertex="1">
+          <mxGeometry height="80" width="320" x="1540" y="245" as="geometry" />
+        </mxCell>
+        <mxCell id="oasis" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;Oasis Security&lt;/b&gt;&lt;br&gt;NHI register / enrich API&lt;br&gt;Discovers Entra + Azure&lt;br&gt;Findings -&amp;gt; ServiceNow" vertex="1">
+          <mxGeometry height="90" width="320" x="1540" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="wiz" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE7E7;strokeColor=#9C0006;fontSize=10;" value="&lt;b&gt;Wiz&lt;/b&gt;&lt;br&gt;Azure connector scan of subscriptions,&lt;br&gt;ACA, identities, AI resources&lt;br&gt;Issues -&amp;gt; ServiceNow VR" vertex="1">
+          <mxGeometry height="90" width="320" x="1540" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="dyn" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#005A70;fontSize=10;" value="&lt;b&gt;Dynatrace&lt;/b&gt;&lt;br&gt;OTLP ingest: traces, metrics&lt;br&gt;SLOs per tier, alerting" vertex="1">
+          <mxGeometry height="80" width="320" x="1540" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="spl" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DDEBF7;strokeColor=#005A70;fontSize=10;" value="&lt;b&gt;Splunk&lt;/b&gt;&lt;br&gt;HEC: logs, audit, deny events,&lt;br&gt;onboarding job logs" vertex="1">
+          <mxGeometry height="80" width="320" x="1540" y="645" as="geometry" />
+        </mxCell>
+        <mxCell id="snapi" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DEEBF7;strokeColor=#1F4E79;fontSize=10;" value="&lt;b&gt;ServiceNow REST API&lt;/b&gt;&lt;br&gt;Callback, CMDB / CI updates,&lt;br&gt;findings, recert tasks" vertex="1">
+          <mxGeometry height="80" width="320" x="1540" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="sn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1F4E79;fontColor=#1F4E79;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.8;entryX=0;entryY=0.3;" target="agw" value="1. HTTPS /onboard&lt;br&gt;(OAuth token)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="143" />
+              <mxPoint x="300" y="303" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="agw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1F4E79;fontColor=#1F4E79;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="apim" value="2. WAF pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="pcc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#742774;fontColor=#742774;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;" target="pvn" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="pvn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#742774;fontColor=#742774;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.8;" target="apim" value="P1. Private call via delegated subnet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="637" />
+              <mxPoint x="330" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="pa1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#742774;fontColor=#742774;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="sn" value="P2. Create request">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="apim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1F4E79;fontColor=#1F4E79;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.3;entryX=0;entryY=0.3;" target="api" value="3. validate-jwt, forward">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#7F3F00;fontColor=#7F3F00;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;" target="ucf" value="4. Classify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#7F3F00;fontColor=#7F3F00;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;" target="wf" value="5. Start workflow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="wf" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#7F3F00;fontColor=#7F3F00;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.9;entryX=1;entryY=0.2;" target="sb" value="6. Enqueue steps">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1190" y="195" />
+              <mxPoint x="1190" y="690" />
+              <mxPoint x="485" y="690" />
+              <mxPoint x="485" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="sb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#7F3F00;fontColor=#7F3F00;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0;entryY=0.5;" target="w1" value="7. KEDA-scaled consumers">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="710" />
+              <mxPoint x="570" y="710" />
+              <mxPoint x="570" y="367" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#006100;fontColor=#006100;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.8;entryX=0.5;entryY=0;" target="cos" value="Idempotency">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="582" y="186" />
+              <mxPoint x="582" y="700" />
+              <mxPoint x="560" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="w1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0063B1;fontColor=#0063B1;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0;entryY=0.4;" target="fw" value="8. Egress via UDR">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="685" y="305" />
+              <mxPoint x="1205" y="305" />
+              <mxPoint x="1205" y="132" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="fw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#006100;fontColor=#006100;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.2;entryX=0;entryY=0.5;" target="graph" value="Graph">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="fw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0063B1;fontColor=#0063B1;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.45;entryX=0;entryY=0.5;" target="arm" value="ARM">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="fw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#0063B1;fontColor=#0063B1;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.7;entryX=0;entryY=0.4;" target="mcps" value="MCP admin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="fw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.95;entryX=0;entryY=0.3;" target="oasis" value="Oasis API">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="w2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0;entryY=0.2;" target="t1" value="9. Policy per env">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="885" y="425" />
+              <mxPoint x="1215" y="425" />
+              <mxPoint x="1215" y="447" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="w3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.8;entryX=0;entryY=0.3;" target="t3" value="10. Register agent">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="396" />
+              <mxPoint x="1200" y="693" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="w1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.9;entryX=0;entryY=0.6;" target="t2" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="582" y="405" />
+              <mxPoint x="582" y="688" />
+              <mxPoint x="1218" y="688" />
+              <mxPoint x="1218" y="607" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="w5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" target="t4" value="11. Smoke test">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="885" y="535" />
+              <mxPoint x="1212" y="535" />
+              <mxPoint x="1212" y="840" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="cb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#1F4E79;fontColor=#1F4E79;fontSize=9;dashed=0;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.3;entryX=0;entryY=0.5;" target="snapi" value="12. Callback status">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1205" y="244" />
+              <mxPoint x="1205" y="20" />
+              <mxPoint x="1510" y="20" />
+              <mxPoint x="1510" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="cb" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#742774;fontColor=#742774;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=1;entryY=0.5;" target="pa3" value="P3. Notify">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1037" y="95" />
+              <mxPoint x="310" y="95" />
+              <mxPoint x="310" y="457" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="otel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#005A70;fontColor=#005A70;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="dyn" value="OTLP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1203" y="572" />
+              <mxPoint x="1203" y="388" />
+              <mxPoint x="1512" y="388" />
+              <mxPoint x="1512" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="otel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#005A70;fontColor=#005A70;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.8;entryX=0;entryY=0.5;" target="spl" value="HEC">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1208" y="589" />
+              <mxPoint x="1208" y="391" />
+              <mxPoint x="1506" y="391" />
+              <mxPoint x="1506" y="685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="t4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#005A70;fontColor=#005A70;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.3;entryX=1;entryY=0.2;" target="otel" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1205" y="818" />
+              <mxPoint x="1205" y="556" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="cicd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#404040;fontColor=#404040;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" target="acr" value="Push signed image">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="985" />
+              <mxPoint x="300" y="905" />
+              <mxPoint x="980" y="905" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e27" edge="1" parent="1" source="wiz" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.8;entryX=1;entryY=0.5;" target="def" value="Scan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1500" y="517" />
+              <mxPoint x="1500" y="337" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e28" edge="1" parent="1" source="oasis" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#9C0006;fontColor=#9C0006;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.9;entryX=1;entryY=0.2;" target="entra" value="Discover">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1505" y="421" />
+              <mxPoint x="1505" y="989" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e29" edge="1" parent="1" source="ops" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;strokeColor=#005A70;fontColor=#005A70;fontSize=9;dashed=1;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.3;entryX=0.5;entryY=1;" target="spl" value="Logs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1700" y="1006" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
