@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-09-30T13:36:50.570168+00:00" agent="Perplexity Enterprise Architecture" version="24.7.17" type="device">
+  <diagram id="02-enterprise-technical-architecture" name="02 Enterprise Technical Architecture">
+    <mxGraphModel dx="1800" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1500" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Enterprise Technical Architecture — Vendor Integration Patterns on Amazon MSK" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=26;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="15" width="1900" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="A productized MSK platform offering for Cohere Health and other healthcare/business vendors" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="40" y="55" width="1900" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="External Ecosystem" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontColor=#0f172a;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="30" y="105" width="390" height="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Enterprise Edge &amp; Network" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontColor=#0f172a;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="440" y="105" width="340" height="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="AWS MSK Platform — Shared Services Account" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#fff7ed;strokeColor=#f59e0b;fontColor=#7c2d12;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="800" y="105" width="900" height="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Domain / Application Accounts" style="swimlane;html=1;rounded=1;startSize=34;horizontal=1;fillColor=#f8fafc;strokeColor=#94a3b8;fontColor=#0f172a;fontStyle=1;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1720" y="105" width="430" height="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="&lt;b&gt;Cohere Health&lt;/b&gt;&lt;br&gt;FHIR CRD / DTR / PAS&lt;br&gt;prior-auth request + decision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="&lt;b&gt;SaaS API Vendor&lt;/b&gt;&lt;br&gt;REST/FHIR • OAuth 2.0&lt;br&gt;webhook or polling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="295" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="&lt;b&gt;Kafka-Capable Vendor&lt;/b&gt;&lt;br&gt;producer / consumer&lt;br&gt;mTLS, SCRAM, or OAuth on vendor broker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="420" width="330" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="&lt;b&gt;Legacy / Batch Partner&lt;/b&gt;&lt;br&gt;SFTP • MFT • CSV/JSON/XML&lt;br&gt;scheduled extracts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="555" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="&lt;b&gt;Cloud / Cross-Account Team&lt;/b&gt;&lt;br&gt;AWS VPC • IAM role&lt;br&gt;private Kafka client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="60" y="680" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="&lt;b&gt;Vendor Operations&lt;/b&gt;&lt;br&gt;onboarding contacts • certificates&lt;br&gt;rate limits • SLA • incident bridge" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontColor=#713f12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="835" width="330" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="&lt;b&gt;API Product Edge&lt;/b&gt;&lt;br&gt;Route 53 • API Gateway&lt;br&gt;WAF • Entra JWT authorizer&lt;br&gt;FHIR validation / throttling" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="160" width="280" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="&lt;b&gt;Connectivity Hub&lt;/b&gt;&lt;br&gt;Transit Gateway&lt;br&gt;Direct Connect / VPN&lt;br&gt;PrivateLink / multi-VPC&lt;br&gt;controlled egress + DNS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="470" y="335" width="280" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="&lt;b&gt;Managed File Intake&lt;/b&gt;&lt;br&gt;Transfer Family / MFT&lt;br&gt;S3 landing + malware scan&lt;br&gt;manifest + checksum" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="535" width="280" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="&lt;b&gt;Identity Federation&lt;/b&gt;&lt;br&gt;Entra → IAM Identity Center&lt;br&gt;SAML + SCIM for workforce&lt;br&gt;OIDC → STS for workload role" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="700" width="280" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="&lt;b&gt;Edge Security Telemetry&lt;/b&gt;&lt;br&gt;WAF / flow / API access logs&lt;br&gt;CloudTrail • SIEM forwarding" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;fontColor=#7f1d1d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="470" y="885" width="280" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="&lt;b&gt;Self-Service Integration Portal / Catalog&lt;/b&gt;&lt;br&gt;request pattern • owner • classification • SLA • schemas • connectivity • runbook" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontColor=#713f12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="830" y="150" width="840" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="&lt;b&gt;Ingress / Egress Runtimes&lt;/b&gt;&lt;br&gt;MSK Connect • ECS/EKS adapters • Lambda&lt;br&gt;DMS/Debezium CDC • API pollers • sink workers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="830" y="270" width="260" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="&lt;b&gt;Amazon MSK Streaming Backbone&lt;/b&gt;&lt;br&gt;Provisioned or Serverless&lt;br&gt;multi-AZ • TLS • KMS • IAM/SCRAM/mTLS&lt;br&gt;domain topics • retry/DLQ • consumer groups" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#0f172a;fontColor=#ffffff;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="270" width="300" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="&lt;b&gt;Processing &amp; Routing&lt;/b&gt;&lt;br&gt;Kafka Streams / Flink / containers&lt;br&gt;filter • enrich • redact • canonical mapping&lt;br&gt;fan-out • aggregate • deduplicate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="270" width="220" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="&lt;b&gt;Data Contracts&lt;/b&gt;&lt;br&gt;Glue Schema Registry&lt;br&gt;FHIR R4 profiles / Da Vinci&lt;br&gt;Avro/JSON/Protobuf compatibility" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="830" y="480" width="260" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="&lt;b&gt;Workflow State&lt;/b&gt;&lt;br&gt;DynamoDB correlation / idempotency&lt;br&gt;Step Functions sagas&lt;br&gt;S3 archive / reconciliation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="480" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="&lt;b&gt;Resilience&lt;/b&gt;&lt;br&gt;MSK Replicator&lt;br&gt;cross-Region DR / migration&lt;br&gt;offsets + topic metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="480" width="220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="&lt;b&gt;Security Guardrails&lt;/b&gt;&lt;br&gt;least-privilege IAM / Kafka ACLs&lt;br&gt;KMS CMKs • Secrets Manager • PCA&lt;br&gt;SCPs • Config • Security Hub" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="830" y="655" width="260" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="&lt;b&gt;Observability &amp; SRE&lt;/b&gt;&lt;br&gt;CloudWatch • Prometheus • dashboards&lt;br&gt;lag / throughput / auth failures&lt;br&gt;SLOs • alerting • trace/correlation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="655" width="300" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="&lt;b&gt;Governance &amp; FinOps&lt;/b&gt;&lt;br&gt;topic naming / retention / quotas&lt;br&gt;PHI tags • lineage • audit evidence&lt;br&gt;showback • lifecycle / deletion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontColor=#713f12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="655" width="220" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="&lt;b&gt;MSK Platform Products Offered&lt;/b&gt;&lt;br&gt;① Managed topic + IAM/ACL package  ② Managed connector  ③ API↔Kafka adapter  ④ CDC onboarding&lt;br&gt;⑤ Fan-out subscription  ⑥ Bidirectional workflow kit  ⑦ Schema/contract CI gate  ⑧ DR/replay service  ⑨ SRE dashboard/runbook" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="830" y="865" width="840" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="&lt;b&gt;Platform Team Responsibilities&lt;/b&gt;&lt;br&gt;Landing-zone IaC • broker lifecycle/patching • capacity/quotas • auth templates • approved plugins • observability • incident ownership • cost model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="830" y="1030" width="840" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="&lt;b&gt;Payer / UM Systems&lt;/b&gt;&lt;br&gt;eligibility • benefits • medical policy&lt;br&gt;authorization system of record" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="160" width="370" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="&lt;b&gt;Clinical &amp; Provider Domain&lt;/b&gt;&lt;br&gt;EHR/FHIR server • documents&lt;br&gt;provider directory" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="305" width="370" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="&lt;b&gt;Claims / Member Domain&lt;/b&gt;&lt;br&gt;claims engine • enrollment&lt;br&gt;member communications" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="440" width="370" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="&lt;b&gt;Analytics / Lakehouse&lt;/b&gt;&lt;br&gt;S3 • Glue • warehouse&lt;br&gt;quality / regulatory reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffedd5;strokeColor=#ea580c;fontColor=#7c2d12;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="575" width="370" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="&lt;b&gt;Independent Consumers&lt;/b&gt;&lt;br&gt;care mgmt • fraud • notifications&lt;br&gt;each uses its own consumer group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#64748b;fontColor=#0f172a;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="710" width="370" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="&lt;b&gt;Domain Team Responsibilities&lt;/b&gt;&lt;br&gt;data owner/steward • schema semantics&lt;br&gt;producer quality • consumer idempotency&lt;br&gt;reconciliation • L2 application support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9c3;strokeColor=#ca8a04;fontColor=#713f12;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1750" y="870" width="370" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="FHIR / OAuth 2.0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="8" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="REST + webhook/poll" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="9" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="Kafka over private/TLS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="10" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="SFTP / file" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="11" target="16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="41" value="PrivateLink / TGW" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="12" target="15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="support + telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="13" target="18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="43" value="validated API payload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="14" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="44" value="private Kafka data path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="15" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="object-created / manifest" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="16" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="46" value="user/group entitlement" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="17" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="47" value="workload role / service identity" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="17" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="48" value="central telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="18" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="49" value="provision adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="19" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="50" value="topic-as-code" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="19" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="publish / consume" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="20" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="52" value="stream records" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="derived topics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="22" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="54" value="validate/serialize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="23" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="55" value="contract IDs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="23" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="56" value="watermark/correlation" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="24" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="57" value="async replication" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="25" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="58" value="authorize/encrypt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="26" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="59" value="metrics/logs/lag" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="27" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="60" value="policy gates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="28" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="service templates" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="29" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="62" value="operate" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=open;endFill=0;dashed=1;strokeWidth=2;strokeColor=#64748b;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="30" target="29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="63" value="commands + status" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="64" value="FHIR/clinical events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="65" value="claims/member events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="66" value="sink / archive" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#16a34a;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="34">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="67" value="fan-out topics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#2563eb;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="21" target="35">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="68" value="decision/change events" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="31" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="69" value="CDC/outbox" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="32" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="70" value="CDC/outbox" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;strokeWidth=3;strokeColor=#9333ea;fontSize=12;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="33" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="71" value="&lt;b&gt;Pattern A — Target / Push&lt;/b&gt;&lt;br&gt;System event or CDC → MSK → transform → target API/DB&lt;br&gt;&lt;b&gt;Best for:&lt;/b&gt; near-real-time delivery and fan-out&lt;br&gt;&lt;b&gt;Controls:&lt;/b&gt; outbox, idempotent sink, retry/DLQ, rate limit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontColor=#1e3a8a;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1220" width="650" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="72" value="&lt;b&gt;Pattern B — Pull from Source&lt;/b&gt;&lt;br&gt;scheduler → source API/FHIR history → watermark → MSK&lt;br&gt;&lt;b&gt;Best for:&lt;/b&gt; source has no webhook/event stream&lt;br&gt;&lt;b&gt;Controls:&lt;/b&gt; ETag/delta token, pagination, overlap window, reconciliation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontColor=#14532d;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1220" width="650" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="73" value="&lt;b&gt;Pattern C — Bidirectional&lt;/b&gt;&lt;br&gt;command topic/API → Cohere/vendor → status/result topic&lt;br&gt;&lt;b&gt;Best for:&lt;/b&gt; prior-auth lifecycle and request/response&lt;br&gt;&lt;b&gt;Controls:&lt;/b&gt; correlation ID, saga state, conflict owner, loop prevention" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontColor=#581c87;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="1220" width="740" height="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
