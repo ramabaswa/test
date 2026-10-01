@@ -1,0 +1,160 @@
+<mxGraphModel dx="1488" dy="1943" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="100" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;fontColor=#1F2937;" value="Agentic AI Security Architecture: API Gateway + AI/LLM Gateway + MCP Gateway + Registration &amp;amp; NHI" vertex="1">
+      <mxGeometry height="40" width="880" x="330" y="20" as="geometry" />
+    </mxCell>
+    <mxCell id="101" parent="1" style="swimlane;html=1;rounded=1;fontStyle=1;fontSize=16;horizontal=1;startSize=30;fillColor=#E8F1FB;strokeColor=#4A90D9;fontColor=#17365D;" value="Traditional API / Network Controls" vertex="1">
+      <mxGeometry height="550" width="250" x="35" y="95" as="geometry" />
+    </mxCell>
+    <mxCell id="102" parent="1" style="swimlane;html=1;rounded=1;fontStyle=1;fontSize=16;horizontal=1;startSize=30;fillColor=#EAF7EE;strokeColor=#46A758;fontColor=#174D26;" value="AI / Agent Runtime Enforcement" vertex="1">
+      <mxGeometry height="550" width="655" x="330" y="95" as="geometry" />
+    </mxCell>
+    <mxCell id="103" parent="1" style="swimlane;html=1;rounded=1;fontStyle=1;fontSize=16;horizontal=1;startSize=30;fillColor=#FFF4E5;strokeColor=#D98324;fontColor=#7A3E00;" value="Systems of Record &amp;amp; Tool Execution" vertex="1">
+      <mxGeometry height="550" width="470" x="1030" y="95" as="geometry" />
+    </mxCell>
+    <mxCell id="104" parent="1" style="swimlane;html=1;rounded=1;fontStyle=1;fontSize=16;horizontal=1;startSize=30;fillColor=#F3EAF8;strokeColor=#8E5BAA;fontColor=#4A235A;" value="Cross-Cutting Identity, Registration &amp;amp; Governance Control Plane" vertex="1">
+      <mxGeometry height="195" width="1465" x="35" y="690" as="geometry" />
+    </mxCell>
+    <mxCell id="110" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4D5B6A;fontSize=14;" value="Users / Applications CI/CD Workloads" vertex="1">
+      <mxGeometry height="65" width="190" x="65" y="150" as="geometry" />
+    </mxCell>
+    <mxCell id="111" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D8EAFB;strokeColor=#4A90D9;fontStyle=1;fontSize=14;" value="API Gateway TLS • WAF • AuthN Route / rate limits" vertex="1">
+      <mxGeometry height="85" width="190" x="65" y="290" as="geometry" />
+    </mxCell>
+    <mxCell id="112" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4A90D9;fontSize=14;" value="API services REST • gRPC • GraphQL" vertex="1">
+      <mxGeometry height="65" width="190" x="65" y="455" as="geometry" />
+    </mxCell>
+    <mxCell id="113" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#C0392B;fontColor=#7B241C;fontSize=12;" value="What it does NOT natively govern: prompt injection • model selection • tokens/cost • MCP discovery • tool semantics • delegation" vertex="1">
+      <mxGeometry height="85" width="210" x="55" y="535" as="geometry" />
+    </mxCell>
+    <mxCell id="120" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF3E3;strokeColor=#46A758;fontStyle=1;fontSize=14;" value="AI / LLM Gateway Provider abstraction • model allowlist Model routing • token/cost budgets Prompt/output DLP • AI telemetry" vertex="1">
+      <mxGeometry height="105" width="260" x="365" y="180" as="geometry" />
+    </mxCell>
+    <mxCell id="121" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#46A758;fontStyle=1;fontSize=14;" value="Agent Orchestrator / Runtime Plans • retrieves • calls tools Bounded steps / action budget" vertex="1">
+      <mxGeometry height="105" width="260" x="680" y="180" as="geometry" />
+    </mxCell>
+    <mxCell id="122" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DDF3E3;strokeColor=#46A758;fontStyle=1;fontSize=14;" value="MCP Gateway Approved discovery • capability/session control Per-tool policy • schema validation Risk-based approval • audit trail" vertex="1">
+      <mxGeometry height="110" width="260" x="680" y="395" as="geometry" />
+    </mxCell>
+    <mxCell id="123" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#46A758;fontSize=14;" value="Enterprise Retrieval / RAG Document provenance • ACL filtering Tenant-isolated vector search" vertex="1">
+      <mxGeometry height="85" width="260" x="365" y="395" as="geometry" />
+    </mxCell>
+    <mxCell id="124" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#46A758;fontSize=14;" value="External / Internal LLM Providers" vertex="1">
+      <mxGeometry height="65" width="260" x="365" y="535" as="geometry" />
+    </mxCell>
+    <mxCell id="125" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;" value="Human approval / policy decision High-impact &amp;amp; irreversible actions" vertex="1">
+      <mxGeometry height="65" width="260" x="680" y="535" as="geometry" />
+    </mxCell>
+    <mxCell id="130" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9F0;strokeColor=#D98324;fontSize=14;" value="Registered MCP Servers Trusted tools + versions" vertex="1">
+      <mxGeometry height="70" width="190" x="1060" y="190" as="geometry" />
+    </mxCell>
+    <mxCell id="131" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D98324;fontSize=14;" value="Business / SaaS Systems CRM • ITSM • Email • Payments" vertex="1">
+      <mxGeometry height="70" width="170" x="1300" y="190" as="geometry" />
+    </mxCell>
+    <mxCell id="132" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D98324;fontSize=14;" value="Data Systems Databases • Files • Data lake" vertex="1">
+      <mxGeometry height="65" width="190" x="1060" y="395" as="geometry" />
+    </mxCell>
+    <mxCell id="133" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9F0;strokeColor=#D98324;fontSize=14;" value="Protected Execution Sandbox • egress controls SSRF prevention" vertex="1">
+      <mxGeometry height="75" width="170" x="1300" y="395" as="geometry" />
+    </mxCell>
+    <mxCell id="140" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0E3F7;strokeColor=#8E5BAA;fontStyle=1;fontSize=14;" value="Registration &amp;amp; Trust Registry Agents • MCP servers • tools • model integrations Owner • environment • risk tier • approved version" vertex="1">
+      <mxGeometry height="90" width="335" x="80" y="750" as="geometry" />
+    </mxCell>
+    <mxCell id="141" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0E3F7;strokeColor=#8E5BAA;fontStyle=1;fontSize=14;" value="NHI &amp;amp; Credential Broker Workload identity • mTLS / attestation Short-lived, audience-bound delegated tokens" vertex="1">
+      <mxGeometry height="90" width="335" x="505" y="750" as="geometry" />
+    </mxCell>
+    <mxCell id="142" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0E3F7;strokeColor=#8E5BAA;fontStyle=1;fontSize=14;" value="Policy Administration &amp;amp; Decision Least privilege • per-tool scopes • data/model policy Action budgets • approval rules • revocation" vertex="1">
+      <mxGeometry height="90" width="300" x="930" y="750" as="geometry" />
+    </mxCell>
+    <mxCell id="143" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0E3F7;strokeColor=#8E5BAA;fontStyle=1;fontSize=14;" value="Unified Audit / SIEM / FinOps user → agent NHI → model → tool → resource Prompts, retrieval, policy decisions, tokens, actions" vertex="1">
+      <mxGeometry height="90" width="180" x="1290" y="750" as="geometry" />
+    </mxCell>
+    <mxCell id="200" edge="1" parent="1" source="110" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="111" value="API traffic">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="201" edge="1" parent="1" source="111" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="112" value="standard APIs">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="202" edge="1" parent="1" source="111" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="120" value="AI request">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="203" edge="1" parent="1" source="120" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="121" value="governed inference">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="204" edge="1" parent="1" source="121" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" target="123" value="retrieve context">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="750" y="285" />
+          <mxPoint x="750" y="310.05" />
+          <mxPoint x="690" y="310.05" />
+          <mxPoint x="690" y="437.53" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="205" edge="1" parent="1" source="120" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="124" value="model invocation">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="206" edge="1" parent="1" source="121" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="122" value="discover / call tool">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="207" edge="1" parent="1" source="122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="130" value="authorized tool calls">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="208" edge="1" parent="1" source="130" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="131" value="invoke">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="209" edge="1" parent="1" source="130" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="132" value="read/write">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="210" edge="1" parent="1" source="122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#4D5B6A;" target="133" value="controlled execution">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="211" edge="1" parent="1" source="122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#D6B656;" target="125" value="approval required">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="220" edge="1" parent="1" source="140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="130" value="register / verify">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="221" edge="1" parent="1" source="141" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="120" value="NHI / token exchange">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="222" edge="1" parent="1" source="141" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="122" value="NHI / delegated scope">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="223" edge="1" parent="1" source="142" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;exitX=0.25;exitY=0;exitDx=0;exitDy=0;" target="120" value="policy decision">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1080" y="750.05" />
+          <mxPoint x="1080" y="730.05" />
+          <mxPoint x="640" y="730.05" />
+          <mxPoint x="640" y="232.47" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="224" edge="1" parent="1" source="142" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="122" value="tool policy">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="225" edge="1" parent="1" source="120" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="143" value="correlated events">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="660" y="232.47" />
+          <mxPoint x="660" y="660.05" />
+          <mxPoint x="1380" y="660.05" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="226" edge="1" parent="1" source="122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="143" value="correlated events">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="227" edge="1" parent="1" source="130" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#8E5BAA;" target="143" value="tool audit">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1270" y="225" />
+          <mxPoint x="1270" y="795" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
