@@ -1,0 +1,432 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="azure-container-apps-ai-platform" name="Azure Container Apps AI Platform">
+    <mxGraphModel dx="2100" dy="1900" grid="1" gridSize="10"
+      guides="1" tooltips="1" connect="1" arrows="1" fold="1"
+      page="1" pageScale="1" pageWidth="2300" pageHeight="2200"
+      math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- TITLE -->
+
+        <mxCell id="title" parent="1" vertex="1"
+          value="ENTERPRISE AI PLATFORM — AZURE CONTAINER APPS DEPLOYMENT"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=22;">
+          <mxGeometry x="30" y="20" width="2220" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="summary" parent="1" vertex="1"
+          value="PROPOSED DESIGN — standalone agentgateway; no AKS, Kubernetes controller, CRDs, namespaces or Helm dependency&#xa;Separate management and runtime ACA environments in a private Azure network. Custom platform features stay under ai-platform/.&#xa;Azure AI Content Safety is the target moderation service. Content Moderator is temporary legacy support. Purview is a governance integration—not an assumed inline enforcement engine."
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontSize=12;align=left;spacing=12;">
+          <mxGeometry x="30" y="95" width="2220" height="95" as="geometry"/>
+        </mxCell>
+
+        <!-- USERS AND IDENTITY -->
+
+        <mxCell id="operators" parent="1" vertex="1"
+          value="PLATFORM USERS&#xa;Developers / Administrators / Security / Auditors&#xa;Private corporate connectivity"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;fontStyle=1;fontSize=12;">
+          <mxGeometry x="90" y="225" width="460" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="applications" parent="1" vertex="1"
+          value="RUNTIME CLIENTS&#xa;Applications / Agents / IDEs&#xa;Model API and MCP requests"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;fontStyle=1;fontSize=12;">
+          <mxGeometry x="930" y="225" width="460" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="entra" parent="1" vertex="1"
+          value="MICROSOFT ENTRA ID&#xa;User OIDC / application identity&#xa;Managed identities for Azure resource access&#xa;Application authorization remains explicit"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontSize=12;spacing=8;">
+          <mxGeometry x="1780" y="215" width="440" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- PRIVATE VNET -->
+
+        <mxCell id="vnet" parent="1" vertex="1"
+          value="AZURE VNET — PRIVATE APPLICATION CONNECTIVITY / CONTROLLED EGRESS / PRIVATE DNS"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#334155;strokeWidth=3;verticalAlign=top;align=left;fontStyle=1;fontSize=16;spacingTop=12;spacingLeft=15;">
+          <mxGeometry x="30" y="355" width="1600" height="1110" as="geometry"/>
+        </mxCell>
+
+        <!-- MANAGEMENT ENVIRONMENT -->
+
+        <mxCell id="mgmt_env" parent="1" vertex="1"
+          value="ACA ENVIRONMENT: ai-platform-management — INTERNAL / DEDICATED SUBNET"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;spacingTop=12;spacingLeft=12;">
+          <mxGeometry x="60" y="415" width="710" height="670" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="console" parent="1" vertex="1"
+          value="CONTAINER APP: platform-console&#xa;ai-platform/apps/console&#xa;Published at internal environment ingress&#xa;Tenant-aware UI / onboarding / policy and audit views"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=12;spacing=8;">
+          <mxGeometry x="90" y="485" width="650" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="api" parent="1" vertex="1"
+          value="CONTAINER APP: platform-control-api&#xa;ai-platform/apps/control-api&#xa;Environment-internal backend via console BFF&#xa;Tenant authorization / registry / approvals / desired state&#xa;Status APIs / usage queries / audit outbox"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bfdbfe;strokeColor=#2563eb;strokeWidth=2;fontSize=12;spacing=8;">
+          <mxGeometry x="90" y="635" width="650" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="worker" parent="1" vertex="1"
+          value="CONTAINER APP: platform-worker — NO INGRESS&#xa;ai-platform/apps/worker&#xa;Queue-driven onboarding / approvals / evidence export&#xa;Compile and validate gateway configuration&#xa;Submit approved release requests; reconcile observed status&#xa;Separate managed identity; no broad subscription permissions"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bfdbfe;strokeColor=#2563eb;strokeWidth=2;fontSize=12;spacing=8;">
+          <mxGeometry x="90" y="810" width="650" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="feature_modules" parent="1" vertex="1"
+          value="FEATURE FOLDERS — modular code, not a service per feature&#xa;tenant-access | application-registry | onboarding | gateway-routes | model-catalog&#xa;mcp-governance | approvals | policy-lifecycle | observability | finops | audit | operations"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#60a5fa;dashed=1;fontSize=10;spacing=8;">
+          <mxGeometry x="90" y="975" width="650" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- RUNTIME ENVIRONMENT -->
+
+        <mxCell id="runtime_env" parent="1" vertex="1"
+          value="ACA ENVIRONMENT: ai-platform-runtime — INTERNAL / SEPARATE SUBNET"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;spacingTop=12;spacingLeft=12;">
+          <mxGeometry x="810" y="415" width="790" height="670" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="gateway" parent="1" vertex="1"
+          value="CONTAINER APP: agentgateway&#xa;Pinned upstream image — standalone flat-YAML configuration&#xa;Published at internal environment ingress for VNet clients&#xa;&#xa;AI/API: supported auth, traffic controls and routing&#xa;LLM: approved models/providers, streaming and supported policies&#xa;MCP: connectivity, discovery and supported tool authorization&#xa;&#xa;Warm minimum replicas per SLO; session/revision behavior tested"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbf7d0;strokeColor=#15803d;strokeWidth=3;fontSize=12;spacing=10;">
+          <mxGeometry x="850" y="485" width="710" height="195" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="guardrail" parent="1" vertex="1"
+          value="CONTAINER APP: safety-policy-adapter&#xa;Custom integration using a verified gateway extension contract&#xa;Request/response checks, thresholds and policy decisions&#xa;Explicit timeouts, outage behavior and payload-size limits&#xa;Output buffering/chunking semantics validated before streaming use&#xa;Content Safety signals are not identity or authorization decisions"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;fontSize=12;spacing=8;">
+          <mxGeometry x="850" y="745" width="710" height="130" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="mcp" parent="1" vertex="1"
+          value="CONTAINER APP(S): APPROVED INTERNAL MCP SERVERS&#xa;HTTP transport validated against selected gateway release&#xa;Environment-internal ingress / scoped identity / resource limits&#xa;No arbitrary server execution inside the control API"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontSize=12;spacing=8;">
+          <mxGeometry x="850" y="930" width="710" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- NETWORK SERVICES / COLLECTOR -->
+
+        <mxCell id="network_notes" parent="1" vertex="1"
+          value="PRIVATE NETWORK / RUNTIME DESIGN&#xa;• Internal ACA environments have no public endpoint. Publish selected apps at the environment boundary for VNet reachability.&#xa;• Environment-internal backend apps are not automatically reachable from the other ACA environment. Publish only required cross-environment endpoints.&#xa;• Use private DNS, service-specific private connectivity where supported, managed identities and controlled egress.&#xa;• Standard HTTP ingress documents a 240-second request timeout: validate LLM streaming, MCP sessions, reconnects and long-running tool patterns.&#xa;• Public access, if required, is a separate design: approved edge/WAF/API-management path and private backend connectivity."
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#ea580c;fontSize=11;align=left;spacing=12;">
+          <mxGeometry x="60" y="1130" width="930" height="260" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="otel" parent="1" vertex="1"
+          value="OPTIONAL ACA OTEL COLLECTOR&#xa;Private reachable ingestion endpoint&#xa;App/gateway telemetry export&#xa;Redaction / cardinality controls&#xa;Export health and ingestion-lag monitoring&#xa;No raw prompt/tool payload capture by default"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontSize=12;spacing=8;">
+          <mxGeometry x="1050" y="1160" width="510" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- AZURE MANAGED SERVICES -->
+
+        <mxCell id="services" parent="1" vertex="1"
+          value="AZURE MANAGED SERVICES / EXTERNAL BACKENDS"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#64748b;strokeWidth=2;dashed=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;spacingTop=12;spacingLeft=12;">
+          <mxGeometry x="1690" y="355" width="560" height="1280" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="models" parent="1" vertex="1"
+          value="APPROVED MODEL ENDPOINTS&#xa;Azure OpenAI / Azure-hosted model endpoints&#xa;Approved external providers / private model serving&#xa;No GPU deployment assumed in this ACA design"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="420" width="500" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="content_safety" parent="1" vertex="1"
+          value="AZURE AI CONTENT SAFETY — TARGET&#xa;Harm-category analysis / blocklists&#xa;Prompt Shields where applicable&#xa;Adapter maps signals to evaluated platform policy&#xa;Regional availability and API support verified"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#15803d;strokeWidth=2;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="560" width="500" height="115" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="content_moderator" parent="1" vertex="1"
+          value="AZURE CONTENT MODERATOR — LEGACY ONLY&#xa;Existing resource migration / staging comparison&#xa;Deprecated; retires March 15, 2027&#xa;Do not make it a new mandatory production dependency"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;dashed=1;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="720" width="500" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="purview" parent="1" vertex="1"
+          value="MICROSOFT PURVIEW — GOVERNANCE INTEGRATION&#xa;Supported catalog / classification / compliance workflows&#xa;Metadata and evidence exchange via verified adapters&#xa;Not automatically an inline DLP engine for custom traffic&#xa;Policy enforcement remains at configured enforcement points"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;strokeWidth=2;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="870" width="500" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="keyvault" parent="1" vertex="1"
+          value="AZURE KEY VAULT&#xa;Provider/API credentials and certificates&#xa;Managed-identity access where supported&#xa;Secret references / rotation / scoped permissions"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="1035" width="500" height="95" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="state" parent="1" vertex="1"
+          value="AZURE DATABASE FOR POSTGRESQL&#xa;Registry / policy versions / approvals / desired state&#xa;Audit outbox / usage metadata / observed status&#xa;Private connectivity / backups / tenant authorization"
+          style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=12;spacing=10;">
+          <mxGeometry x="1720" y="1175" width="500" height="115" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="servicebus" parent="1" vertex="1"
+          value="AZURE SERVICE BUS&#xa;Onboarding / release / export jobs&#xa;Idempotent consumers / retries / dead-letter handling&#xa;Worker scales from queue demand"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#2563eb;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="1335" width="500" height="95" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="monitor" parent="1" vertex="1"
+          value="AZURE MONITOR / LOG ANALYTICS / APP INSIGHTS&#xa;Supported telemetry ingestion and application instrumentation&#xa;Alerts / latency / errors / traces / cost inputs&#xa;Audit export to Sentinel or approved evidence storage"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e8ff;strokeColor=#9333ea;fontSize=12;spacing=8;">
+          <mxGeometry x="1720" y="1475" width="500" height="110" as="geometry"/>
+        </mxCell>
+
+        <!-- DELIVERY -->
+
+        <mxCell id="delivery" parent="1" vertex="1"
+          value="CONTROLLED DELIVERY — SINGLE WRITER FOR ACA RUNTIME REVISIONS"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2;verticalAlign=top;align=left;fontStyle=1;fontSize=14;spacingTop=12;spacingLeft=12;">
+          <mxGeometry x="30" y="1530" width="1600" height="275" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="source" parent="1" vertex="1"
+          value="SOURCE / APPROVED RELEASE REQUEST&#xa;ai-platform/ code and documentation&#xa;Pinned gateway version&#xa;Versioned, nonsecret gateway configuration"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;fontSize=11;spacing=8;">
+          <mxGeometry x="60" y="1600" width="430" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pipeline" parent="1" vertex="1"
+          value="CI/CD — GITHUB ACTIONS OR AZURE PIPELINES&#xa;Build / unit / integration / UI / security tests&#xa;Real pinned gateway + mock model/MCP backends&#xa;Stage -> smoke -> approval -> ACA revision&#xa;Scoped federated deployment identity"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;fontSize=11;spacing=8;">
+          <mxGeometry x="550" y="1600" width="510" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="acr" parent="1" vertex="1"
+          value="AZURE CONTAINER REGISTRY&#xa;Versioned application images&#xa;Pinned gateway + validated config release artifact&#xa;No secrets baked into images&#xa;Revision rollback and compatibility metadata"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2e8f0;strokeColor=#475569;fontSize=11;spacing=8;">
+          <mxGeometry x="1120" y="1600" width="480" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="release_note" parent="1" vertex="1"
+          value="ACA revisions replace Kubernetes configuration rollout. Use the verified startup/configuration contract of the pinned gateway.&#xa;Do not assume hot reload, shared filesystem state, Kubernetes APIs or live CRD reconciliation. Apply secrets through supported ACA mechanisms."
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;dashed=1;fontSize=10;spacing=8;">
+          <mxGeometry x="60" y="1740" width="1540" height="45" as="geometry"/>
+        </mxCell>
+
+        <!-- FINAL NOTES -->
+
+        <mxCell id="constraints" parent="1" vertex="1"
+          value="IMPLEMENTATION AND SECURITY GATES&#xa;1. Validate standalone agentgateway startup, configuration delivery, extension contract and Azure authentication against exact versions.&#xa;2. Test ingress timeouts, SSE/Streamable HTTP, MCP session affinity/state, client disconnect, revision traffic changes and drain behavior.&#xa;3. Management availability must not be required for existing runtime requests. Safety adapters are runtime dependencies when enabled and need their own availability/latency objectives.&#xa;4. Purview metadata is not automatic authorization. Enforce access and data policies through verified gateway/application controls.&#xa;5. If PII detection/redaction is required, add Azure AI Language PII or another approved integration; Content Safety alone does not replace it.&#xa;6. Avoid dual mandatory moderation calls. Compare Content Moderator and Content Safety during migration, then remove the legacy dependency."
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffbeb;strokeColor=#d97706;fontSize=12;align=left;spacing=12;">
+          <mxGeometry x="30" y="1860" width="2220" height="210" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend" parent="1" vertex="1"
+          value="FLOW LEGEND: Green solid = runtime traffic | Blue dashed = management/configuration | Purple dashed = identity, governance or telemetry | Red dashed = transitional legacy dependency"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontSize=11;spacing=8;">
+          <mxGeometry x="30" y="2100" width="2220" height="45" as="geometry"/>
+        </mxCell>
+
+        <!-- MANAGEMENT FLOWS -->
+
+        <mxCell id="e_users" parent="1" edge="1" source="operators" target="console"
+          value="HTTPS via private DNS / VNet"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;strokeWidth=2;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_console_api" parent="1" edge="1" source="console" target="api"
+          value="BFF -> authenticated control API"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_jobs" parent="1" edge="1" source="api" target="worker"
+          value="Asynchronous work via Service Bus"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_release_request" parent="1" edge="1" source="worker" target="source"
+          value="Approved, validated release request"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.7;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="45" y="901"/>
+              <mxPoint x="45" y="1500"/>
+              <mxPoint x="275" y="1500"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- RUNTIME FLOWS -->
+
+        <mxCell id="e_clients" parent="1" edge="1" source="applications" target="gateway"
+          value="Private LLM / MCP ingress"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#15803d;strokeWidth=3;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_models" parent="1" edge="1" source="gateway" target="models"
+          value="Authorized model calls"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#15803d;strokeWidth=2;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.2;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_safety_adapter" parent="1" edge="1" source="gateway" target="guardrail"
+          value="Verified request/response safety hook"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#15803d;strokeWidth=2;startArrow=block;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_mcp" parent="1" edge="1" source="gateway" target="mcp"
+          value="Authorized tool calls"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#15803d;strokeWidth=2;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.8;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="641"/>
+              <mxPoint x="830" y="980"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_content_safety" parent="1" edge="1" source="guardrail" target="content_safety"
+          value="Analyze / return risk signals"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#15803d;strokeWidth=2;startArrow=block;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.2;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_legacy" parent="1" edge="1" source="guardrail" target="content_moderator"
+          value="Legacy only / migration comparison"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#dc2626;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.6;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- GOVERNANCE AND IDENTITY -->
+
+        <mxCell id="e_purview" parent="1" edge="1" source="worker" target="purview"
+          value="Verified governance metadata / evidence integration"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9333ea;dashed=1;startArrow=block;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=1;entryX=0;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="790" y="1105"/>
+              <mxPoint x="1650" y="1105"/>
+              <mxPoint x="1650" y="1005"/>
+              <mxPoint x="1720" y="1005"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_entra" parent="1" edge="1" source="console" target="entra"
+          value="OIDC / identity integration"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9333ea;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.8;exitY=0;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="335"/>
+              <mxPoint x="1660" y="335"/>
+              <mxPoint x="1660" y="265"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_runtime_identity" parent="1" edge="1" source="gateway" target="entra"
+          value="Configured token trust / identity"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9333ea;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0;entryX=0.5;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1645" y="485"/>
+              <mxPoint x="1645" y="345"/>
+              <mxPoint x="2000" y="345"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_keyvault" parent="1" edge="1" source="keyvault" target="gateway"
+          value="Supported secret-reference delivery"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#d97706;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.9;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1615" y="1082"/>
+              <mxPoint x="1615" y="660"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- DURABLE STATE AND JOBS -->
+
+        <mxCell id="e_state" parent="1" edge="1" source="worker" target="state"
+          value="Registry / jobs state / outbox"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;dashed=1;startArrow=block;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.7;exitY=1;entryX=0;entryY=0.8;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="545" y="1090"/>
+              <mxPoint x="1640" y="1090"/>
+              <mxPoint x="1640" y="1267"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_bus" parent="1" edge="1" source="worker" target="servicebus"
+          value="Consume / retry / dead letter"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;dashed=1;startArrow=block;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.9;exitY=1;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="675" y="1115"/>
+              <mxPoint x="1620" y="1115"/>
+              <mxPoint x="1620" y="1382"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- TELEMETRY -->
+
+        <mxCell id="e_gateway_otel" parent="1" edge="1" source="gateway" target="otel"
+          value="Runtime telemetry"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9333ea;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=1;exitY=0.7;entryX=1;entryY=0.4;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1580" y="622"/>
+              <mxPoint x="1580" y="1228"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e_export" parent="1" edge="1" source="otel" target="monitor"
+          value="Configured supported telemetry export"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#9333ea;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1305" y="1450"/>
+              <mxPoint x="1660" y="1450"/>
+              <mxPoint x="1660" y="1530"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- RELEASE FLOW -->
+
+        <mxCell id="e_source_ci" parent="1" edge="1" source="source" target="pipeline"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#475569;endArrow=block;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_ci_acr" parent="1" edge="1" source="pipeline" target="acr"
+          value="Publish versioned artifacts"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#475569;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e_deploy" parent="1" edge="1" source="pipeline" target="runtime_env"
+          value="Approved ACA revision / readiness / rollback"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2563eb;dashed=1;endArrow=block;fontSize=10;labelBackgroundColor=#ffffff;exitX=0;exitY=0.2;entryX=0.95;entryY=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="1505"/>
+              <mxPoint x="1595" y="1505"/>
+              <mxPoint x="1595" y="1095"/>
+              <mxPoint x="1560" y="1095"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
