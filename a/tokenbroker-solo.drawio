@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2026-10-19T00:00:00.000Z" agent="Agent" version="22.1.0" type="device">
+  <diagram name="APIM Solo.io Databricks MCP Architecture" id="mcp-solo-apim-arch">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="950" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- SWIMLANE HEADERS -->
+        <mxCell id="lane_client" value="1. Client / Agent User" style="swimlane;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="260" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_agent365" value="2. Agent 365 (Mgmt Plane)" style="swimlane;whiteSpace=wrap;html=1;startSize=40;fillColor=#e1f5fe;fontColor=#01579b;strokeColor=#0288d1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="40" width="260" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_apim" value="3. Azure APIM (Token Broker)" style="swimlane;whiteSpace=wrap;html=1;startSize=40;fillColor=#e8f5e9;fontColor=#1b5e20;strokeColor=#388e3c;" vertex="1" parent="1">
+          <mxGeometry x="560" y="40" width="280" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_solo" value="4. Solo.io AI Gateway (MCP Proxy)" style="swimlane;whiteSpace=wrap;html=1;startSize=40;fillColor=#f3e5f5;fontColor=#4a148c;strokeColor=#8e24aa;" vertex="1" parent="1">
+          <mxGeometry x="840" y="40" width="300" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_databricks" value="5. External Databricks MCP Server" style="swimlane;whiteSpace=wrap;html=1;startSize=40;fillColor=#fff3e0;fontColor=#e65100;strokeColor=#f57c00;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="40" width="280" height="850" as="geometry" />
+        </mxCell>
+
+        <!-- FLOW NODES -->
+        <mxCell id="node_1" value="Initiates Tool Invocation Request" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="lane_client">
+          <mxGeometry x="20" y="80" width="220" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="node_2" value="Evaluates JIT Policy &amp; Non-Human Identity Entitlements" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#0288d1;" vertex="1" parent="lane_agent365">
+          <mxGeometry x="20" y="160" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_3" value="Issues Time-Bound JIT Lease Context" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b3e5fc;strokeColor=#0288d1;" vertex="1" parent="lane_agent365">
+          <mxGeometry x="20" y="240" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_4" value="Sends MCP JSON-RPC Request with Bearer Token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="lane_client">
+          <mxGeometry x="20" y="320" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_5" value="Validates OAuth JWT &amp; Executes OBO Token Exchange" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;" vertex="1" parent="lane_apim">
+          <mxGeometry x="30" y="320" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_6" value="Inspects MCP Protocol Payload &amp; Applies Tool Guardrails" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;" vertex="1" parent="lane_solo">
+          <mxGeometry x="40" y="400" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_7" value="Filters Sensitive Data (PII) &amp; Injects Databricks Credentials" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;" vertex="1" parent="lane_solo">
+          <mxGeometry x="40" y="480" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_8" value="Executes Authorized Query / Catalog Tool Search" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#f57c00;" vertex="1" parent="lane_databricks">
+          <mxGeometry x="30" y="560" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_9" value="Screens Output for Leakage &amp; Emits OTel Audit Logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#8e24aa;" vertex="1" parent="lane_solo">
+          <mxGeometry x="40" y="640" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node_10" value="Receives Sanitized Output &amp; Renders Tool Result" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="lane_client">
+          <mxGeometry x="20" y="720" width="220" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- CONNECTORS / EDGES -->
+        <mxCell id="edge_1" edge="1" source="node_1" target="node_2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_2" edge="1" source="node_2" target="node_3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_3" edge="1" source="node_3" target="node_4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_4" edge="1" source="node_4" target="node_5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_5" edge="1" source="node_5" target="node_6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_6" edge="1" source="node_6" target="node_7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_7" edge="1" source="node_7" target="node_8" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_8" edge="1" source="node_8" target="node_9" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_9" edge="1" source="node_9" target="node_10" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
