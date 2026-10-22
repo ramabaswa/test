@@ -1,4 +1,377 @@
+You need two sets of REST APIs: the native APIs exposed by ServiceNow, Azure API Center, APIM, and your agent gateway; and the custom APIs you build for registration, onboarding orchestration, and APIM’s runtime asset lookup.
 
+The key architectural addition is a **registry** that maps an authenticated agent identity to its enterprise AI Asset ID, onboarding state, and approved access. I recommend APIM consult this registry through a lightweight lookup/authorization API—not call ServiceNow and Azure API Center on every agent request.
+
+Below is an implementation-oriented inventory. Native endpoints are distinguished from proposed custom endpoints so your teams know what exists versus what they must build.
+
+## 1. Corrected end-to-end workflow
+
+Both paths should converge on the same approval and provisioning process.
+
+### Path A — Manual onboarding
+
+```text
+Person completes ServiceNow form
+  → ServiceNow approval workflow: owners / managers / required reviewers
+  → Approved request invokes Onboarding Factory
+  → Factory reserves or retrieves enterprise AI Asset ID
+  → Factory registers API-facing asset metadata in Azure API Center
+  → Factory applies agent gateway configuration / entitlements
+  → Factory creates or updates ServiceNow CMDB CI
+  → Factory publishes ACTIVE identity-to-asset mapping
+  → APIM can resolve the agent and enforce approved access
+```
+
+### Path B — Discovery-driven onboarding
+
+```text
+Agent calls protected API
+  → APIM validates agent credentials
+  → APIM looks up authenticated identity
+  → Identity is valid, but agent is not onboarded
+  → APIM calls Registration API with sanitized discovery metadata
+  → Registration API creates or retrieves a ServiceNow draft
+  → APIM returns 403 with registration reference
+  → Person completes / corrects the ServiceNow draft
+  → Same approval workflow as Path A
+  → Same Onboarding Factory as Path A
+  → Agent retries after activation
+```
+
+Important corrections to Path B:
+
+- APIM must explicitly invoke the Registration API using a policy callout; returning a forbidden response does not itself invoke another service. APIM’s `send-request` policy supports calling an external service and using its response during policy processing. [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-management/api-management-sample-send-request)
+- Only a specific “authenticated but unregistered” condition should initiate onboarding. Invalid credentials, an explicitly suspended agent, and a registered agent lacking permission need separate handling.
+- Do not forward the original business request to the downstream system while onboarding is pending.
+- Human completion must happen before approvals and provisioning—not immediately after opening an incomplete request.
+
+These are proposed workflow rules, rather than default product behavior.
+
+## 2. APIs you need to build
+
+The following are proposed contracts. None of these URLs is a built-in Microsoft or ServiceNow endpoint.
+
+You can implement them in one application initially, with separate registration, factory, and runtime authorization modules.
+
+| ID | Custom REST endpoint | Caller | Purpose |
+|---|---|---|---|
+| C1 | `POST /v1/registration-discoveries` | APIM | Accept trusted identity and sanitized request context; deduplicate; create or retrieve a ServiceNow draft. |
+| C2 | `GET /v1/registrations/{registrationId}` | Portal / support / authorized agent client | Return registration state and human-completion reference. |
+| C3 | `POST /v1/onboarding-jobs` | ServiceNow approved workflow | Start provisioning from an approved, versioned request. |
+| C4 | `GET /v1/onboarding-jobs/{jobId}` | ServiceNow / operations | Return overall state and per-system provisioning results. |
+| C5 | `POST /v1/onboarding-jobs/{jobId}/retry` | Authorized operations workflow | Retry failed provisioning steps without duplicating completed resources. |
+| C6 | `POST /v1/asset-resolutions` | APIM | Resolve a validated identity to AI Asset ID and lifecycle state. |
+| C7 | `POST /v1/access-decisions` | APIM; optionally agent gateway | Evaluate whether that asset can access the requested system, operation, or tool. |
+| C8 | `PUT /v1/assets/{aiAssetId}` | Onboarding Factory | Upsert canonical asset metadata and references to external systems. |
+| C9 | `PUT /v1/assets/{aiAssetId}/identity-bindings/{bindingId}` | Onboarding Factory | Bind an authenticated workload identity to the asset. |
+| C10 | `PUT /v1/assets/{aiAssetId}/entitlements/{entitlementId}` | Onboarding Factory | Publish approved system / operation / tool permissions. |
+| C11 | `POST /v1/assets/{aiAssetId}/activate` | Onboarding Factory | Make the asset usable only after required provisioning checks succeed. |
+| C12 | `POST /v1/assets/{aiAssetId}/suspend` | Approved lifecycle workflow | Deny runtime access and propagate suspension. |
+| C13 | `POST /v1/assets/{aiAssetId}/retire` | Approved lifecycle workflow | Revoke access and update connected inventories. |
+
+You can combine C6 and C7 into one runtime call for the MVP:
+
+```http
+POST /v1/access-decisions
+Content-Type: application/json
+```
+
+```json
+{
+  "identity": {
+    "issuer": "<validated-token-issuer>",
+    "tenantId": "<validated-tenant-id>",
+    "principalObjectId": "<validated-workload-principal-id>",
+    "clientId": "<validated-client-id>"
+  },
+  "resource": {
+    "systemId": "finance-api",
+    "operationId": "read-invoices",
+    "environment": "production"
+  }
+}
+```
+
+Example response:
+
+```json
+{
+  "aiAssetId": "AIA-000123",
+  "assetState": "ACTIVE",
+  "decision": "ALLOW",
+  "reasonCode": "APPROVED_ENTITLEMENT",
+  "policyVersion": "17",
+  "cacheTtlSeconds": 30
+}
+```
+
+The identity fields must be derived from validated credentials, not accepted as authoritative merely because the agent supplied them.
+
+## 3. ServiceNow REST APIs
+
+Base:
+
+```text
+SN = https://{instance}.service-now.com
+```
+
+### 3.1 Intake and human completion
+
+| Operation | REST endpoint | Usage |
+|---|---|---|
+| Read onboarding catalog item | `GET {SN}/api/sn_sc/servicecatalog/items/{catalogItemSysId}` | Inspect the configured onboarding catalog item. |
+| Submit completed catalog request | `POST {SN}/api/sn_sc/servicecatalog/items/{catalogItemSysId}/order_now` | Submit an onboarding request after required variables are available. |
+| Read requested item | `GET {SN}/api/now/table/sc_req_item/{ritmSysId}` | Retrieve request state and allowed fields. |
+| Read parent request | `GET {SN}/api/now/table/sc_request/{requestSysId}` | Retrieve the parent request when needed. |
+| Update allowed requested-item fields | `PATCH {SN}/api/now/table/sc_req_item/{ritmSysId}` | Write integration references or completion notes where your ACLs and schema permit. |
+
+The catalog `order_now` endpoint is native. ServiceNow’s Table API supplies record-level CRUD, subject to table configuration and access controls. Catalog variables are not all ordinary `sc_req_item` columns, so do not assume that updating the requested-item record updates every form variable. [servicenow](https://www.servicenow.com/docs/r/api-reference/rest-apis/c_ServiceCatalogAPI.html)
+
+For Path B, I recommend a custom ServiceNow staging table and Scripted REST API:
+
+| Proposed custom ServiceNow endpoint | Purpose |
+|---|---|
+| `POST {SN}/api/{your_scope}/ai_onboarding/v1/drafts` | Create an incomplete discovery draft, including known values and missing-field indicators. |
+| `GET {SN}/api/{your_scope}/ai_onboarding/v1/drafts/{draftSysId}` | Retrieve draft status and portal reference. |
+| `PATCH {SN}/api/{your_scope}/ai_onboarding/v1/drafts/{draftSysId}` | Correct or enrich draft values. |
+| `POST {SN}/api/{your_scope}/ai_onboarding/v1/drafts/{draftSysId}/submit` | Validate completeness and initiate the approval-bearing request. |
+| `POST {SN}/api/{your_scope}/ai_onboarding/v1/requests/{ritmSysId}/provisioning-results` | Record structured factory results and external resource IDs. |
+
+These endpoints must be implemented. ServiceNow supports custom Scripted REST APIs; the paths above are a proposed application contract. [servicenow](https://www.servicenow.com/docs/r/api-reference/rest-api-explorer/c_RESTAPI.html)
+
+This avoids treating an incomplete discovery as an already complete catalog order.
+
+### 3.2 Owners, managers, and approvals
+
+| Operation | REST endpoint | Usage |
+|---|---|---|
+| Find owner | `GET {SN}/api/now/table/sys_user?sysparm_query={encodedQuery}` | Resolve a known owner identifier to a ServiceNow user. |
+| Retrieve manager reference | `GET {SN}/api/now/table/sys_user/{userSysId}?sysparm_fields=sys_id,name,email,manager` | Read the user’s configured manager. |
+| Find approval group | `GET {SN}/api/now/table/sys_user_group?sysparm_query={encodedQuery}` | Resolve a required approval group. |
+| Inspect approval records | `GET {SN}/api/now/table/sysapproval_approver?sysparm_query={encodedQuery}` | Read approval status for the request. |
+
+These use the native Table API. Approval records can relate to the target through `sysapproval` or `document_id`; use the relationship generated by your configured approval workflow. [servicenow](https://www.servicenow.com/docs/r/api-reference/rest-apis/c_TableAPI.html)
+
+If people approve inside ServiceNow, you do not need an external approval-write API. Let the workflow collect approvals and call C3 only after all required approvals succeed.
+
+Avoid having the factory approve requests using a service account; that obscures who actually approved them. [servicenow](https://www.servicenow.com/community/service-management-forum/use-of-rest-api-to-approve-request/m-p/377564)
+
+### 3.3 CMDB registration
+
+| Operation | REST endpoint | Usage |
+|---|---|---|
+| Identify and upsert CI | `POST {SN}/api/now/identifyreconcile` | Create/update the AI agent CI using configured identification and reconciliation rules. |
+| Enhanced IRE, if required | `POST {SN}/api/now/identifyreconcile/enhanced` | Use enhanced IRE options. |
+| Retrieve resulting CI | `GET {SN}/api/now/table/{configuredAgentCiClass}/{ciSysId}` | Confirm stored metadata and references. |
+| Search by enterprise asset identifier | `GET {SN}/api/now/table/{configuredAgentCiClass}?sysparm_query={encodedAssetQuery}` | Reconcile an existing asset. |
+
+ServiceNow explicitly recommends IRE rather than direct CMDB updates because IRE applies identification and reconciliation rules and reduces duplicate CIs. [servicenow](https://www.servicenow.com/docs/r/api-reference/rest-apis/c_IdentifyReconcileAPI.html)
+
+You must select or define the agent CI class, AI Asset ID attribute, relationship types, discovery source, and reconciliation authority. There is no safe universal class name to assume for your instance.
+
+## 4. Azure API Center REST APIs
+
+Use API Center to catalog the agent’s exposed API/interface and governance metadata. Keep the enterprise agent asset model in your registry/CMDB; an agent and an API are related entities, not necessarily the same entity.
+
+The documented `2024-03-01` API resource supports API kinds such as `rest`, `graphql`, and `grpc`; do not invent an `ai-agent` kind for this version. Associate the AI Asset ID through custom metadata. [learn.microsoft](https://learn.microsoft.com/en-us/rest/api/resource-manager/apicenter/apis/create-or-update?view=rest-resource-manager-apicenter-2024-03-01)
+
+Base:
+
+```text
+AC = https://management.azure.com/subscriptions/{subscriptionId}
+     /resourceGroups/{resourceGroupName}
+     /providers/Microsoft.ApiCenter/services/{apiCenterName}
+     /workspaces/{workspaceName}
+```
+
+Append `?api-version=2024-03-01` to these operations.
+
+| Operation | REST endpoint | Needed when |
+|---|---|---|
+| Upsert API catalog entry | `PUT {AC}/apis/{apiName}` | Register an API-facing interface belonging to the agent. |
+| Upsert interface version | `PUT {AC}/apis/{apiName}/versions/{versionName}` | Track a versioned interface. |
+| List interface definitions | `GET {AC}/apis/{apiName}/versions/{versionName}/definitions` | Inspect existing definitions during reconciliation. |
+| Import interface specification | `POST {AC}/apis/{apiName}/versions/{versionName}/definitions/{definitionName}/importSpecification` | Publish an OpenAPI or other supported textual definition to the selected definition resource. |
+
+These are native API Center operations. The API catalog model separates APIs, versions, definitions, and deployments; custom metadata is supported on catalog entities. [learn.microsoft](https://learn.microsoft.com/en-us/rest/api/resource-manager/apicenter/apis/create-or-update?view=rest-resource-manager-apicenter-2024-03-01)
+
+Example catalog-entry payload:
+
+```json
+{
+  "properties": {
+    "title": "Invoice Assistant API",
+    "kind": "rest",
+    "description": "API interface exposed by the invoice assistant",
+    "customProperties": {
+      "ai-asset-id": "AIA-000123",
+      "asset-type": "ai-agent",
+      "environment": "production",
+      "servicenow-ci-id": "<ci-sys-id>"
+    }
+  }
+}
+```
+
+Define the corresponding custom metadata schema in API Center before relying on these fields for consistent governance. The property names shown above are your design, not Microsoft-defined fields. [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-center/metadata)
+
+If the agent only consumes other systems and exposes no interface, explicitly decide what API Center should catalog. Do not create a fictitious REST interface simply to represent the agent.
+
+## 5. Agent gateway APIs — deployment mode matters
+
+For Solo agentgateway, there is no single deployment-independent `POST /agents` endpoint that I can responsibly list.
+
+The documented configuration models differ:
+
+- Standalone: configuration file and an editable UI.
+- Kubernetes: Kubernetes custom resources and Gateway API resources. [docs.solo](https://docs.solo.io/agentgateway/standalone/latest/about/introduction/)
+
+### 5.1 Standalone agentgateway
+
+For a standalone/container deployment, implement a private gateway configuration adapter with proposed endpoints such as:
+
+| Custom adapter endpoint | Purpose |
+|---|---|
+| `PUT /v1/gateway-assets/{aiAssetId}` | Translate approved asset metadata into configuration changes. |
+| `PUT /v1/gateway-assets/{aiAssetId}/entitlements` | Apply allowed tools, destinations, and authorization rules. |
+| `GET /v1/gateway-assets/{aiAssetId}/status` | Return applied configuration version and verification outcome. |
+| `DELETE /v1/gateway-assets/{aiAssetId}/entitlements` | Remove access during suspension or retirement. |
+
+The adapter should use the supported configuration mechanism for your pinned Solo version. Standalone documentation supports JSON/YAML configuration, with most changes dynamically reloaded. An editable UI is not, by itself, proof of a stable public automation REST contract. [docs.solo](https://docs.solo.io/agentgateway/standalone/latest/about/introduction/)
+
+### 5.2 Kubernetes agentgateway
+
+If you deploy the Kubernetes control plane, provision through the Kubernetes REST API:
+
+```text
+K = https://{kubernetes-api-server}
+```
+
+| Resource | Collection endpoint |
+|---|---|
+| Agent backend | `/apis/agentgateway.dev/v1alpha1/namespaces/{namespace}/agentgatewaybackends` |
+| Agent policy | `/apis/agentgateway.dev/v1alpha1/namespaces/{namespace}/agentgatewaypolicies` |
+| HTTP route | `/apis/gateway.networking.k8s.io/v1/namespaces/{namespace}/httproutes` |
+
+For each applicable resource, use:
+
+```text
+POST   {K}{collection}          Create
+GET    {K}{collection}/{name}   Read and inspect status
+PATCH  {K}{collection}/{name}   Apply approved configuration changes
+DELETE {K}{collection}/{name}   Remove when appropriate
+```
+
+The documented agentgateway API group includes `AgentgatewayBackend` and `AgentgatewayPolicy`; backend types include A2A and MCP, and policies provide authorization and traffic settings. Confirm the installed CRDs and served versions before binding your factory to these paths. [agentgateway](https://agentgateway.dev/docs/kubernetes/latest/reference/api/)
+
+Not every onboarding requires a new backend or route. A consumer-only agent may need only identity-based authorization changes against existing routes.
+
+## 6. Azure APIM REST APIs and policies
+
+### 6.1 Management-plane APIs
+
+Base:
+
+```text
+AM = https://management.azure.com/subscriptions/{subscriptionId}
+     /resourceGroups/{resourceGroupName}
+     /providers/Microsoft.ApiManagement/service/{apimServiceName}
+```
+
+Append `?api-version=2024-05-01`.
+
+| Operation | Native REST endpoint | Purpose |
+|---|---|---|
+| Install/update API-level policy | `PUT {AM}/apis/{apiId}/policies/policy` | Configure identity validation, registry lookup, registration callout, denial, and trusted asset-header propagation. |
+| Install/update named value | `PUT {AM}/namedValues/{namedValueId}` | Configure shared registry URL, registration URL, audience, and other policy constants. |
+
+These native endpoints configure APIM policies and named values. Named values are shared configuration values—not a substitute for a full agent registry. [learn.microsoft](https://learn.microsoft.com/en-us/rest/api/apimanagement/api-policy/create-or-update?view=rest-apimanagement-2024-05-01)
+
+You generally configure these policies once per protected API or shared policy structure, rather than rewriting APIM policies every time an agent is onboarded.
+
+### 6.2 Runtime calls made by APIM
+
+| APIM step | Mechanism |
+|---|---|
+| Validate Entra-issued agent credential | `validate-azure-ad-token` policy.  [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-management/validate-azure-ad-token-policy) |
+| Query identity/asset/access state | `send-request` to custom C6/C7.  [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-management/api-management-sample-send-request) |
+| Authenticate APIM to your registry or Registration API | `authentication-managed-identity`, including within `send-request`.  [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-management/authentication-managed-identity-policy) |
+| Initiate missing-registration intake | `send-request` to custom C1, only for the designated unregistered condition.  [learn.microsoft](https://learn.microsoft.com/en-us/azure/api-management/api-management-sample-send-request) |
+
+My proposed decision logic is:
+
+```text
+Invalid credential
+  → reject; do not create onboarding draft
+
+Valid credential + unknown identity
+  → create/retrieve discovery draft
+  → return 403 AGENT_NOT_ONBOARDED
+
+Known identity + pending onboarding
+  → return 403 AGENT_ONBOARDING_PENDING
+
+Known identity + suspended/retired asset
+  → return 403 AGENT_DISABLED
+
+ACTIVE asset + missing entitlement
+  → return 403 AGENT_ACCESS_DENIED
+
+ACTIVE asset + approved entitlement
+  → overwrite trusted AI Asset ID header
+  → forward request
+```
+
+`AGENT_*` codes above are proposed application reason codes, not native APIM error codes.
+
+## 7. How the AI Asset ID should work
+
+Use one enterprise AI Asset ID across systems, while retaining each product’s own identifier.
+
+| Identifier | Role |
+|---|---|
+| `aiAssetId` | Your immutable enterprise identifier for the agent asset. |
+| Authenticated identity binding | Maps validated issuer/tenant/principal identity to the asset. |
+| ServiceNow request/RITM ID | Tracks intake and approval. |
+| ServiceNow CI `sys_id` | Identifies the CMDB record. |
+| Azure API Center resource ID(s) | Identifies cataloged interfaces belonging to the asset. |
+| Gateway resource/configuration references | Identifies applied routes, policies, and entitlements. |
+| Onboarding job ID | Tracks distributed provisioning and retries. |
+
+Recommended runtime relationship:
+
+```text
+Validated workload identity
+  → registry identity binding
+  → AI Asset ID
+  → lifecycle state
+  → requested-resource entitlement
+  → allow / deny
+```
+
+Do not trust a caller-supplied `X-AI-Asset-ID` as proof of identity. APIM should resolve the ID from validated credentials and overwrite any corresponding inbound header before forwarding.
+
+Also avoid registering every instance under a shared credential if you need per-agent accountability: your identity-binding model must distinguish the agents you intend to govern separately.
+
+## 8. Minimum production controls around these APIs
+
+These are implementation requirements for the proposed design:
+
+| Control | Required behavior |
+|---|---|
+| Deduplication | Repeated rejected calls return the existing pending registration instead of opening new requests. |
+| Idempotency | Retrying factory calls does not create duplicate CIs, catalog entries, or gateway resources. |
+| Approval integrity | Factory verifies the approved request version; material edits require reapproval. |
+| Partial-failure handling | Track success/failure for each hop; keep runtime state non-active until required steps complete. |
+| Revocation | Suspension reaches APIM lookup/cache behavior and gateway authorization within a defined deadline. |
+| Trusted discovery | Store verified identity separately from agent-provided descriptive metadata. |
+| Privacy | Do not copy bearer tokens, prompts, request bodies, or secrets into ServiceNow discovery fields. |
+| Runtime resilience | Define timeout, cache, and fail-closed behavior for the access-decision service. |
+| Request correlation | Carry registration ID, job ID, request ID, and AI Asset ID through provisioning and logs. |
+| Reconciliation | Periodically compare registry, CMDB, API Center, and gateway state and repair drift. |
+
+The main product-specific detail still needed to finalize an executable gateway API contract is your Solo deployment mode and version. Everything else above separates the native integration surfaces from the custom services required to make your two paths one governed onboarding workflow.
+--------
 5.2, the pro-code created in Foundry and deployment in Azure Container Apps. The low-code agents are created in Agent 365, The no-code agents are created in Copilot or Claude
 
 
