@@ -1,0 +1,118 @@
+
+5.2, the pro-code created in Foundry and deployment in Azure Container Apps. The low-code agents are created in Agent 365, The no-code agents are created in Copilot or Claude
+
+
+Understood. Your onboarding workflow must support agents from multiple creation platforms and runtimes—not just one type of deployed agent.
+
+The important distinction is that section 5.2 described where the Solo agent gateway runs, whereas your clarification describes where the agents are created and hosted. Those are separate architecture decisions.
+
+1. Your agent landscape
+I would represent your intended categories as follows, with one Microsoft terminology correction:
+
+Agent category	Creation platform	Hosting / runtime	What onboarding should capture
+Pro-code	Microsoft Foundry / code-based development	Azure Container Apps, as you specified	Foundry references where applicable, Container App resource ID, runtime identity, endpoints, owner, requested access.
+Low-code	Actual builder must be identified; Agent 365 is the governance layer rather than the low-code builder	Platform-dependent	Builder/platform agent ID, Agent 365 reference where applicable, authenticated identity, owner, requested access.
+No-code / declarative	Copilot experience you use, or Claude	Platform-dependent; do not assume Azure Container Apps	Source-platform agent reference, available calling identity, owner, requested access, and connection mechanism.
+Microsoft describes Agent 365 as the control plane for observing, governing, and securing agents built across platforms. Copilot Studio is a builder; Foundry is another build path. Therefore, “created in Agent 365” should be split into “created using [builder]” and “governed in Agent 365.”
+
+This matters because an Agent 365 inventory reference, a runtime identity, and your enterprise AI Asset ID serve different purposes.
+
+2. What changes in the onboarding design
+Your two entry paths remain the same. The factory should normalize all agent sources into one enterprise record, then provision only the integrations relevant to that agent.
+
+text
+Manual ServiceNow intake ────────────────┐
+                                        │
+APIM discovery → ServiceNow completion ──┤
+                                        ▼
+                            ServiceNow approvals
+                                        │
+                                        ▼
+                              Onboarding Factory
+                                        │
+                         Normalize agent information
+                                        │
+             ┌──────────────────────────┼────────────────────────┐
+             ▼                          ▼                        ▼
+       Foundry / ACA              Copilot platform            Claude
+       source adapter             source adapter          source adapter
+             └──────────────────────────┼────────────────────────┘
+                                        │
+                      Enterprise AI Asset ID + identity bindings
+                                        │
+                     ┌──────────────────┼─────────────────┐
+                     ▼                  ▼                 ▼
+               API Center       Agent gateway       ServiceNow CMDB
+              where relevant    configuration
+                     └──────────────────┼─────────────────┘
+                                        ▼
+                         Publish ACTIVE access state
+                                        │
+                                        ▼
+                       APIM identity → asset → access lookup
+The source adapters above are proposed integration modules—not claims that every platform exposes the same discovery or registration API.
+
+Recommended normalized record
+Keep creation, hosting, and governance separate:
+
+json
+{
+  "aiAssetId": "AIA-000123",
+  "developmentMode": "pro-code",
+  "sourcePlatform": "microsoft-foundry",
+  "sourceAgentId": "<source-platform-reference>",
+  "runtimePlatform": "azure-container-apps",
+  "runtimeResourceId": "<azure-container-app-resource-id>",
+  "governancePlatform": "microsoft-agent-365",
+  "governanceAgentId": "<reference-if-applicable>",
+  "identityBindings": [
+    {
+      "issuer": "<trusted-issuer>",
+      "tenantId": "<tenant-id>",
+      "principalId": "<authenticated-runtime-principal>"
+    }
+  ],
+  "exposesEndpoint": false,
+  "requestedAccess": [
+    {
+      "systemId": "finance-api",
+      "operationId": "read-invoices"
+    }
+  ],
+  "lifecycleState": "PENDING_APPROVAL"
+}
+This is a proposed schema. Fields should be optional or required according to the platform and your policy; not every agent will have an ACA resource or an Agent 365 reference.
+
+3. Correction to section 5.2
+An agent running in Azure Container Apps does not determine whether the agent gateway uses standalone configuration or Kubernetes resources.
+
+Solo documents two gateway deployment modes:
+
+Gateway deployment	Applicable integration
+Standalone agentgateway, including a container deployment	Standalone configuration mechanism or a configuration adapter you build.
+Kubernetes agentgateway control plane	Kubernetes Gateway API resources and agentgateway custom resources.
+Standalone and Kubernetes are explicitly different control-plane/configuration models in Solo’s documentation.
+
+Therefore:
+
+Keep section 5.2 only if the gateway itself uses the Kubernetes control plane.
+
+If the gateway is also hosted as a standalone container in Azure Container Apps, replace section 5.2 with the standalone configuration-adapter approach.
+
+Your agents can remain in Foundry/ACA, Copilot, or Claude regardless of which gateway deployment model you select.
+
+4. One practical consequence for Path B
+For your proposed design, APIM should discover the identity that actually authenticates the incoming connection—not infer an agent’s identity from its authoring platform.
+
+For each source, your onboarding form therefore needs to establish:
+
+Question	Why it matters
+What platform created this agent?	Selects the source adapter and metadata fields.
+Where does it execute?	Identifies runtime ownership and deployment references.
+What principal authenticates to APIM?	Provides the trusted identity-to-AI-Asset-ID binding.
+Is that principal unique to the agent or shared?	Determines whether APIM can distinguish individual agents.
+Does the agent expose an endpoint, only consume tools, or both?	Determines whether to create catalog interfaces, gateway routes, or only entitlements.
+A shared connector identity should not silently become proof of a particular agent’s identity. If individual attribution is required, the design needs a unique identity or another trusted, verifiable binding.
+
+Is the Solo agent gateway itself also deployed in Azure Container Apps, or is it deployed on Kubernetes?
+
