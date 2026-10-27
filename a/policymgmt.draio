@@ -1,0 +1,325 @@
+<mxGraphModel dx="3025" dy="2474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#17365D;fontColor=#FFFFFF;strokeColor=#17365D;fontSize=23;fontStyle=1;align=left;spacing=18;" value="AGENT POLICY MANAGEMENT — GOVERNANCE, DISTRIBUTION AND RUNTIME ENFORCEMENT&#xa;ServiceNow | SailPoint | Agent 365 | Entra / Active Directory | Azure APIM | In-house AgentGateway | Splunk / Dynatrace" vertex="1">
+      <mxGeometry height="100" width="2220" x="40" y="30" as="geometry" />
+    </mxCell>
+    <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#999999;fontSize=14;align=left;spacing=14;" value="REFERENCE DESIGN — ownership assignments, not a claim that all integrations already exist.&#xa;BLUE: ServiceNow | PURPLE: SailPoint | GREEN: Agent 365 / Entra / AD | ORANGE: APIM / AgentGateway | YELLOW: custom integration or authorization capability | GRAY: telemetry / design notes | RED: deny / emergency controls.&#xa;Solid arrows: primary workflow / execution. Dashed arrows: asynchronous events, policy distribution, reconciliation or evidence. Yellow capabilities may be modules in ONE Agent Lifecycle &amp; Policy Service; runtime checks execute inside AgentGateway." vertex="1">
+      <mxGeometry height="115" width="2220" x="40" y="145" as="geometry" />
+    </mxCell>
+    <mxCell id="bandGovernance" parent="1" style="swimlane;horizontal=1;startSize=40;rounded=0;html=0;fillColor=#EAF0F8;swimlaneFillColor=#F8FAFD;strokeColor=#A6B8CF;fontSize=17;fontStyle=1;align=left;spacingLeft=15;" value="1 — POLICY OWNERSHIP, AUTHORING AND GOVERNANCE" vertex="1">
+      <mxGeometry height="480" width="2220" x="40" y="290" as="geometry" />
+    </mxCell>
+    <mxCell id="bandControl" parent="1" style="swimlane;horizontal=1;startSize=40;rounded=0;html=0;fillColor=#FFF2CC;swimlaneFillColor=#FFFCF2;strokeColor=#D6B656;fontSize=17;fontStyle=1;align=left;spacingLeft=15;" value="2 — CUSTOM CONTROL PLANE: RECONCILE, COMPILE, VERSION AND DISTRIBUTE" vertex="1">
+      <mxGeometry height="570" width="2220" x="40" y="800" as="geometry" />
+    </mxCell>
+    <mxCell id="bandRuntime" parent="1" style="swimlane;horizontal=1;startSize=40;rounded=0;html=0;fillColor=#FCE3CA;swimlaneFillColor=#FFF9F3;strokeColor=#D79B00;fontSize=17;fontStyle=1;align=left;spacingLeft=15;" value="3 — RUNTIME POLICY ENFORCEMENT" vertex="1">
+      <mxGeometry height="680" width="2220" x="40" y="1400" as="geometry" />
+    </mxCell>
+    <mxCell id="bandChange" parent="1" style="swimlane;horizontal=1;startSize=40;rounded=0;html=0;fillColor=#E5E0F0;swimlaneFillColor=#FAF8FC;strokeColor=#9673A6;fontSize=17;fontStyle=1;align=left;spacingLeft=15;" value="4 — POLICY / GROUP CHANGES, EMERGENCY REVOCATION AND ASSURANCE" vertex="1">
+      <mxGeometry height="650" width="2220" x="40" y="2110" as="geometry" />
+    </mxCell>
+    <mxCell id="owners" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;align=left;spacing=12;" value="POLICY OWNERS / APPROVERS&#xa;Business owner: purpose and accountable ownership&#xa;Tool/data owner: allowed actions and resources&#xa;Security: baseline restrictions and emergency authority&#xa;IAM: identity and entitlement model&#xa;Platform owner: executable gateway configuration" vertex="1">
+      <mxGeometry height="180" width="400" x="70" y="360" as="geometry" />
+    </mxCell>
+    <mxCell id="servicenow" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=14;align=left;spacing=12;" value="SERVICENOW — REQUEST / CHANGE AUTHORITY&#xa;Onboarding and access-change request&#xa;Business policy intent and approval references&#xa;Agent owner, purpose, criticality, environment&#xa;Privileged-action approval and exception workflow&#xa;Desired lifecycle state; implementation evidence&#xa;Not a per-request runtime policy database" vertex="1">
+      <mxGeometry height="180" width="440" x="570" y="360" as="geometry" />
+    </mxCell>
+    <mxCell id="sailpoint" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=14;align=left;spacing=12;" value="SAILPOINT — ENTITLEMENT GOVERNANCE&#xa;Requestable access and approval policy&#xa;Least privilege / segregation-of-duties checks&#xa;Provision and revoke through supported connectors&#xa;Certify access and detect governance exceptions&#xa;Machine/agent identity capabilities depend on edition, licensing and configured identity model" vertex="1">
+      <mxGeometry height="180" width="480" x="1110" y="360" as="geometry" />
+    </mxCell>
+    <mxCell id="agent365" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;align=left;spacing=12;" value="AGENT 365 — CONNECTED-AGENT INVENTORY&#xa;Agent registration and Microsoft identity linkage&#xa;Use supported lifecycle / administration interfaces&#xa;Correlate registration with enterprise agentId&#xa;Do not assume its registry exposes every custom tool-level policy needed by AgentGateway&#xa;Confirm integration contracts and coverage" vertex="1">
+      <mxGeometry height="180" width="530" x="1690" y="360" as="geometry" />
+    </mxCell>
+    <mxCell id="policyModel" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="CUSTOM POLICY MODEL — SEPARATE INTENT FROM ENFORCEMENT&#xa;Subject: agentId + tenantId + principalObjectId; user identity when delegated&#xa;Permission: tool + action + resource/data scope + argument constraints&#xa;Conditions: environment, task context, risk restrictions, time window&#xa;Obligations: approval, redaction, audit, maximum execution limits&#xa;Metadata: owner, approvalRef, version, effectiveAt, expiresAt, test evidence" vertex="1">
+      <mxGeometry height="140" width="940" x="70" y="595" as="geometry" />
+    </mxCell>
+    <mxCell id="directory" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;align=left;spacing=12;" value="ENTRA ID / ACTIVE DIRECTORY — ACTUAL IDENTITY AND ACCESS STATE&#xa;Entra: workload identities, direct application app-role assignments, user/group state&#xa;AD: authoritative membership source only for configured AD-sourced groups; account only when a legacy target requires it&#xa;Apply synced-group changes at the authoritative source; verify cloud synchronization&#xa;App-only role assignment and delegated-user group membership are different permission paths" vertex="1">
+      <mxGeometry height="140" width="1110" x="1110" y="595" as="geometry" />
+    </mxCell>
+    <mxCell id="orchestrator" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="LIFECYCLE ORCHESTRATION MODULE [CUSTOM]&#xa;Consume approved ServiceNow requests&#xa;Register/link identity and inventory records&#xa;Coordinate SailPoint fulfillment; do not bypass it&#xa;Idempotency keys, retries and compensating actions&#xa;Keep agent inactive until verification succeeds" vertex="1">
+      <mxGeometry height="180" width="440" x="70" y="875" as="geometry" />
+    </mxCell>
+    <mxCell id="reconciler" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="ENTITLEMENT RECONCILIATION MODULE [CUSTOM]&#xa;Approved access vs actual provisioned access&#xa;Resolve impacted agent/user/resource relationships&#xa;Supported SailPoint callbacks / Entra audit, delta or polling mechanisms as appropriate&#xa;Retry, deduplicate and periodically compare state&#xa;Approval alone does not prove access exists" vertex="1">
+      <mxGeometry height="180" width="450" x="610" y="875" as="geometry" />
+    </mxCell>
+    <mxCell id="compiler" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="POLICY VALIDATION / COMPILATION MODULE [CUSTOM]&#xa;Validate schema, identity references and rule conflicts&#xa;Restrictive baseline + approved permissions&#xa;Explicit deny and expired grant override allow&#xa;Compile separate APIM and AgentGateway artifacts&#xa;Reject malformed or overbroad policy changes" vertex="1">
+      <mxGeometry height="180" width="480" x="1160" y="875" as="geometry" />
+    </mxCell>
+    <mxCell id="policyStore" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="VERSIONED POLICY / STATE STORE [CUSTOM]&#xa;Immutable policy versions + active-version pointer&#xa;Principal-to-agent correlation and effective rights&#xa;Agent Active / Suspended / Retired status&#xa;Deny overrides, grant records, rollout metadata&#xa;Approval reference, author and audit history&#xa;Durable application datastore; not Splunk" vertex="1">
+      <mxGeometry height="190" width="480" x="1740" y="875" as="geometry" />
+    </mxCell>
+    <mxCell id="tests" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="POLICY TEST / RELEASE GATE [CUSTOM + CI/CD]&#xa;Positive and negative authorization tests&#xa;Cross-agent / cross-user isolation tests&#xa;Privilege expiry and emergency-deny tests&#xa;Audience / role / scope and resource-boundary tests&#xa;Approve release only after required tests pass" vertex="1">
+      <mxGeometry height="180" width="440" x="70" y="1145" as="geometry" />
+    </mxCell>
+    <mxCell id="publisher" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="POLICY PUBLISHER [CUSTOM]&#xa;Versioned, authenticated policy distribution&#xa;Target gateway instances and environments&#xa;Atomic activation / staged rollout where supported&#xa;Track version acknowledgments and failures&#xa;Update APIM only for API-boundary changes&#xa;Emergency deny survives normal rollback" vertex="1">
+      <mxGeometry height="180" width="450" x="610" y="1145" as="geometry" />
+    </mxCell>
+    <mxCell id="privilege" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="EXPIRING PRIVILEGE-GRANT MODULE [CUSTOM]&#xa;ServiceNow approval + SailPoint governance where supported&#xa;Bind grant to agent/user, tool/action and resource&#xa;validFrom / expiresAt / revokedAt / approvalRef&#xa;No execution while approval is pending&#xa;Target-side elevation only when separately required&#xa;Not a full PAM vault; not arbitrary-action Entra PIM" vertex="1">
+      <mxGeometry height="180" width="480" x="1160" y="1145" as="geometry" />
+    </mxCell>
+    <mxCell id="releaseState" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="ACTIVATION / PROPAGATION STATE [CUSTOM]&#xa;Requested → Approved → Provisioning → Validating → Active&#xa;Policy: Draft → Approved → Tested → Published → Acknowledged&#xa;Track desired vs effective version per gateway&#xa;Stale / failed instance → alert or remove from service&#xa;Restricted access while provisioning is incomplete" vertex="1">
+      <mxGeometry height="180" width="480" x="1740" y="1145" as="geometry" />
+    </mxCell>
+    <mxCell id="caller" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;align=left;spacing=12;" value="AGENT / USER-DELEGATED CLIENT&#xa;App-only: workload identity&#xa;Delegated: user + client identity&#xa;Acquire token for intended ingress API&#xa;Attach task/request correlation&#xa;Never self-assert privileged identity in headers" vertex="1">
+      <mxGeometry height="180" width="400" x="70" y="1475" as="geometry" />
+    </mxCell>
+    <mxCell id="apim" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=14;align=left;spacing=12;" value="AZURE APIM — INGRESS POLICY ENFORCEMENT&#xa;Validate Entra issuer, audience and token expiry&#xa;Check API-required roles or delegated scopes&#xa;Rate limits, quotas and API routing&#xa;Authenticated/protected gateway connection&#xa;Strip spoofable identity headers&#xa;Not the sole tool-level authorization engine" vertex="1">
+      <mxGeometry height="180" width="440" x="570" y="1475" as="geometry" />
+    </mxCell>
+    <mxCell id="gateway" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=14;align=left;spacing=12;" value="IN-HOUSE AGENTGATEWAY — ENFORCEMENT POINT&#xa;Authenticate APIM/backend connection&#xa;Validate preserved identity context&#xa;Resolve principal → enterprise agentId&#xa;Require Active state; evaluate each tool operation&#xa;Apply argument/resource constraints before dispatch&#xa;Runtime capability to implement or verify" vertex="1">
+      <mxGeometry height="180" width="480" x="1110" y="1475" as="geometry" />
+    </mxCell>
+    <mxCell id="target" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=14;align=left;spacing=12;" value="TOOL / TARGET SYSTEM&#xa;Use token/credential for this target audience&#xa;Narrow workload identity or supported OBO flow&#xa;Target enforces its own authorization&#xa;Gateway never substitutes broad shared rights&#xa;Network/identity controls prevent bypass&#xa;Cancellation only where target/runtime supports it" vertex="1">
+      <mxGeometry height="180" width="530" x="1690" y="1475" as="geometry" />
+    </mxCell>
+    <mxCell id="cache" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="LOCAL POLICY / ENTITLEMENT SNAPSHOT&#xa;Inside AgentGateway deployment&#xa;Versioned and atomically loaded&#xa;Cache key includes relevant identity/context/version&#xa;Invalidate on policy, membership or grant changes&#xa;Maximum staleness defined by risk tier&#xa;No synchronous ServiceNow/SailPoint lookup per call" vertex="1">
+      <mxGeometry height="220" width="440" x="70" y="1765" as="geometry" />
+    </mxCell>
+    <mxCell id="decision" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="RUNTIME DECISION MODULE — INSIDE AGENTGATEWAY&#xa;ALLOW only if ALL applicable checks pass:&#xa;1. Valid authenticated identity and Active agent&#xa;2. Current tool/action/resource/argument policy allows&#xa;3. Effective target entitlements allow&#xa;4. User rights permit delegated operation, if applicable&#xa;5. Required privilege grant is current and matches&#xa;6. No emergency deny or applicable restriction&#xa;Do not treat workload permission as user permission" vertex="1">
+      <mxGeometry height="220" width="620" x="610" y="1765" as="geometry" />
+    </mxCell>
+    <mxCell id="deny" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#B85450;fontSize=14;align=left;spacing=12;" value="DENY / FAIL-CLOSED PATH&#xa;Invalid authentication → reject&#xa;Insufficient permission or expired grant → reject&#xa;Pending approval → no tool execution&#xa;High-risk operation + stale/unavailable policy → deny&#xa;Never fall back to a broader target identity&#xa;Return safe reason code and emit audit event" vertex="1">
+      <mxGeometry height="220" width="430" x="1330" y="1765" as="geometry" />
+    </mxCell>
+    <mxCell id="auditEvent" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;align=left;spacing=12;" value="DECISION / EXECUTION EVENT&#xa;requestId + traceId + taskId&#xa;agentId + principal + delegated user&#xa;tool/action/resource + result&#xa;policyVersion + entitlementVersion&#xa;grantId + approvalRef + reason&#xa;Redact credentials and sensitive data" vertex="1">
+      <mxGeometry height="220" width="360" x="1860" y="1765" as="geometry" />
+    </mxCell>
+    <mxCell id="changes" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#9673A6;fontSize=14;align=left;spacing=12;" value="NORMAL CHANGE SOURCES&#xa;ServiceNow approved policy/access change&#xa;SailPoint fulfillment / revoke / certification result&#xa;Entra user group or direct app-role assignment change&#xa;AD-sourced membership update and sync result&#xa;Agent suspension, owner change or retirement&#xa;Grant expiry is enforced by time, not event delivery" vertex="1">
+      <mxGeometry height="200" width="460" x="70" y="2185" as="geometry" />
+    </mxCell>
+    <mxCell id="changeFlow" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=14;align=left;spacing=12;" value="CHANGE PROPAGATION [CUSTOM]&#xa;Detect → resolve affected identities/resources&#xa;Reconcile effective access → compile new version&#xa;Publish → invalidate caches → collect ACKs&#xa;Next operation uses current restriction&#xa;Relaxations require approval + verified fulfillment&#xa;Periodic reconciliation covers missed events" vertex="1">
+      <mxGeometry height="200" width="500" x="630" y="2185" as="geometry" />
+    </mxCell>
+    <mxCell id="emergency" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#B85450;fontSize=14;align=left;spacing=12;" value="EMERGENCY DENY / KILL SWITCH&#xa;Authorized security operator / controlled automation&#xa;Record actor, reason, scope and incident reference&#xa;Write durable high-priority deny override&#xa;Push to enforcement instances; measure ACKs&#xa;Block new operations even with valid old token&#xa;Clear only through authorized recovery workflow" vertex="1">
+      <mxGeometry height="200" width="470" x="1230" y="2185" as="geometry" />
+    </mxCell>
+    <mxCell id="tokenNote" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#B85450;fontSize=14;align=left;spacing=12;" value="TOKEN / GROUP SEMANTICS&#xa;Issued JWT claims do not change in place&#xa;Do not promise instant workload-token invalidation&#xa;App-only service principal: use direct app-role assignment; group-based app-role inheritance does not produce its roles&#xa;User groups and custom agent-group mappings require their own live authorization projection" vertex="1">
+      <mxGeometry height="200" width="420" x="1800" y="2185" as="geometry" />
+    </mxCell>
+    <mxCell id="splunk" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;align=left;spacing=12;" value="SPLUNK — SECURITY EVIDENCE / DETECTION&#xa;Policy changes, approvals, denies and grant usage&#xa;Cross-agent/user access and suspicious actions&#xa;Emergency block and stale-policy alerts&#xa;Correlate request → approval → grant → execution&#xa;Alert-driven remediation must use authorized control APIs" vertex="1">
+      <mxGeometry height="190" width="460" x="70" y="2480" as="geometry" />
+    </mxCell>
+    <mxCell id="dynatrace" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;align=left;spacing=12;" value="DYNATRACE — OPERATIONAL ASSURANCE&#xa;Lifecycle/policy service and gateway health&#xa;Distributed traces and dependency failures&#xa;Policy publish-to-ACK latency and failed instances&#xa;Authorization latency and stale snapshot age&#xa;Monitor pipeline without making telemetry the policy authority" vertex="1">
+      <mxGeometry height="190" width="500" x="630" y="2480" as="geometry" />
+    </mxCell>
+    <mxCell id="closure" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=14;align=left;spacing=12;" value="SERVICENOW / SAILPOINT — CLOSE THE LOOP&#xa;Record implemented version and gateway ACK evidence&#xa;Close change only after required verification&#xa;Open exceptions for drift or failed revocation&#xa;Recertify access; review ownership and unused rights&#xa;Retirement: deny first, revoke access, disable identity as appropriate" vertex="1">
+      <mxGeometry height="190" width="470" x="1230" y="2480" as="geometry" />
+    </mxCell>
+    <mxCell id="slo" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;align=left;spacing=12;" value="DEFINE AND TEST YOUR CONTROL SLOs&#xa;Emergency deny propagation budget&#xa;Normal entitlement freshness budget&#xa;Maximum gateway policy staleness&#xa;Privilege-expiry enforcement accuracy&#xa;Drift reconciliation interval&#xa;No assumed numerical guarantee" vertex="1">
+      <mxGeometry height="190" width="420" x="1800" y="2480" as="geometry" />
+    </mxCell>
+    <mxCell id="footer" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#17365D;fontColor=#FFFFFF;strokeColor=#17365D;fontSize=15;align=left;spacing=16;" value="IMPLEMENTATION BOUNDARY&#xa;ONE custom Agent Lifecycle &amp; Policy Service may host orchestration, reconciliation, compilation, grant state and publication modules, backed by a durable datastore and reliable asynchronous delivery. AgentGateway hosts runtime policy evaluation and cache enforcement. ServiceNow/SailPoint stay out of the synchronous tool-call path.&#xa;Secure all control-plane APIs with narrowly scoped identities, administrative authorization and audit. Protect policy artifacts and acknowledgments against tampering. Separate policy authors, approvers and deployers where required. A policy rollback must never silently restore explicitly revoked access." vertex="1">
+      <mxGeometry height="150" width="2220" x="40" y="2800" as="geometry" />
+    </mxCell>
+    <mxCell id="e01" edge="1" parent="1" source="owners" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#6C8EBF;fontSize=12;labelBackgroundColor=#FFFFFF;" target="servicenow" value="1. Request / policy intent">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e02" edge="1" parent="1" source="servicenow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#9673A6;fontSize=12;labelBackgroundColor=#FFFFFF;" target="sailpoint" value="2. Govern requested access">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e03" edge="1" parent="1" source="sailpoint" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#82B366;fontSize=12;labelBackgroundColor=#FFFFFF;" target="directory" value="3. Provision / revoke supported entitlements">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e04" edge="1" parent="1" source="servicenow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="policyModel" value="Approved business constraints">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e05" edge="1" parent="1" source="servicenow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#6C8EBF;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.8;entryX=0.5;entryY=0;" target="orchestrator" value="4. Approved lifecycle command">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e06" edge="1" parent="1" source="orchestrator" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.3;entryX=0;entryY=0.5;" target="agent365" value="Register / link through supported interfaces">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="55" y="780" />
+          <mxPoint x="1665" y="780" />
+          <mxPoint x="1665" y="450" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e07" edge="1" parent="1" source="agent365" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="directory" value="Identity correlation">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e08" edge="1" parent="1" source="orchestrator" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="reconciler" value="5. Verify fulfillment">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e09" edge="1" parent="1" source="directory" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#82B366;fontSize=12;labelBackgroundColor=#FFFFFF;" target="reconciler" value="Actual access / change observation">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e10" edge="1" parent="1" source="sailpoint" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#9673A6;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.75;entryX=1;entryY=0;" target="reconciler" value="Approval / fulfillment events">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e11" edge="1" parent="1" source="policyModel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="compiler" value="Approved policy structure">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e12" edge="1" parent="1" source="reconciler" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="compiler" value="6. Effective entitlement projection">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e13" edge="1" parent="1" source="compiler" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="policyStore" value="7. Candidate version">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e14" edge="1" parent="1" source="compiler" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" target="tests" value="8. Validate candidate">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1304" y="1090" />
+          <mxPoint x="290" y="1090" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e15" edge="1" parent="1" source="tests" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="publisher" value="9. Passed release gate">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e16" edge="1" parent="1" source="policyStore" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="publisher" value="Read approved immutable artifact">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1980" y="1110" />
+          <mxPoint x="835" y="1110" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e17" edge="1" parent="1" source="privilege" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="policyStore" value="Persist scoped grant / revocation">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e18" edge="1" parent="1" source="publisher" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" target="releaseState" value="Deployment status">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="835" y="1350" />
+          <mxPoint x="1980" y="1350" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e19" edge="1" parent="1" source="publisher" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#D79B00;fontSize=12;labelBackgroundColor=#FFFFFF;" target="apim" value="10a. API-boundary policy only">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e20" edge="1" parent="1" source="publisher" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#D79B00;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.7;entryX=0;entryY=0.3;" target="cache" value="10b. Policy / entitlement / deny / grant snapshot">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="545" y="1271" />
+          <mxPoint x="545" y="1715" />
+          <mxPoint x="55" y="1715" />
+          <mxPoint x="55" y="1831" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e21" edge="1" parent="1" source="caller" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeWidth=2;strokeColor=#D79B00;fontSize=12;labelBackgroundColor=#FFFFFF;" target="apim" value="R1. Ingress token + request">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e22" edge="1" parent="1" source="apim" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeWidth=2;strokeColor=#D79B00;fontSize=12;labelBackgroundColor=#FFFFFF;" target="gateway" value="R2. Trusted caller context">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e23" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeWidth=2;strokeColor=#D79B00;fontSize=12;labelBackgroundColor=#FFFFFF;" target="decision" value="R3. Evaluate operation">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e24" edge="1" parent="1" source="cache" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#FFFFFF;" target="decision" value="Current versioned state">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e25" edge="1" parent="1" source="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeWidth=2;strokeColor=#82B366;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.8;exitY=0;entryX=0.3;entryY=1;" target="target" value="R4. ALLOW → dispatch with target authorization">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1106" y="1715" />
+          <mxPoint x="1849" y="1715" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e26" edge="1" parent="1" source="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;strokeColor=#B85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#FFFFFF;" target="deny" value="DENY">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e27" edge="1" parent="1" source="decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" target="auditEvent" value="Decision evidence">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="920" y="2035" />
+          <mxPoint x="2040" y="2035" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e28" edge="1" parent="1" source="deny" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="auditEvent" value="Rejection reason">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e29" edge="1" parent="1" source="target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="auditEvent" value="Execution result">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e30" edge="1" parent="1" source="changes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#9673A6;fontSize=12;labelBackgroundColor=#FFFFFF;" target="changeFlow" value="C1. Observed / approved change">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e31" edge="1" parent="1" source="changeFlow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#9673A6;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.25;entryX=0;entryY=0.7;" target="reconciler" value="C2. Reconcile and republish">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="20" y="2235" />
+          <mxPoint x="20" y="1080" />
+          <mxPoint x="590" y="1080" />
+          <mxPoint x="590" y="1001" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e32" edge="1" parent="1" source="emergency" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#B85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.25;entryX=1;entryY=0.6;" target="policyStore" value="E1. Durable emergency override">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2280" y="2235" />
+          <mxPoint x="2280" y="989" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e33" edge="1" parent="1" source="emergency" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#B85450;strokeWidth=2;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.1;entryX=0.5;entryY=1;" target="cache" value="E2. Priority deny distribution">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1180" y="2205" />
+          <mxPoint x="1180" y="2055" />
+          <mxPoint x="290" y="2055" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e34" edge="1" parent="1" source="changeFlow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;fontSize=12;labelBackgroundColor=#FFFFFF;" target="closure" value="C3. Completion / exception evidence">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e35" edge="1" parent="1" source="emergency" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#B85450;fontSize=12;labelBackgroundColor=#FFFFFF;" target="closure" value="Incident and recovery evidence">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="e36" edge="1" parent="1" source="auditEvent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#666666;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.8;entryX=0.5;entryY=1;" target="splunk" value="Security events">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2240" y="1941" />
+          <mxPoint x="2240" y="2720" />
+          <mxPoint x="300" y="2720" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e37" edge="1" parent="1" source="auditEvent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#666666;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.6;entryX=0.5;entryY=1;" target="dynatrace" value="Traces / metrics">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2250" y="1897" />
+          <mxPoint x="2250" y="2740" />
+          <mxPoint x="880" y="2740" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e38" edge="1" parent="1" source="slo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#666666;fontSize=12;labelBackgroundColor=#FFFFFF;" target="dynatrace" value="Measure propagation / freshness">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1760" y="2695" />
+          <mxPoint x="1160" y="2695" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e39" edge="1" parent="1" source="releaseState" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#666666;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.8;entryX=1;entryY=0.75;" target="closure" value="Version ACK / activation evidence">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2290" y="1289" />
+          <mxPoint x="2290" y="2700" />
+          <mxPoint x="1720" y="2700" />
+          <mxPoint x="1720" y="2622" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="e40" edge="1" parent="1" source="servicenow" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;dashed=1;strokeColor=#6C8EBF;fontSize=12;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.2;entryX=0.75;entryY=0;" target="privilege" value="Required approval before grant issuance">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1050" y="396" />
+          <mxPoint x="1050" y="565" />
+          <mxPoint x="1670" y="565" />
+          <mxPoint x="1670" y="1125" />
+          <mxPoint x="1520" y="1125" />
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
