@@ -1,0 +1,433 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device" version="24.7.17">
+  <diagram id="page1" name="01 - Enterprise control architecture">
+    <mxGraphModel dx="1700" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="01 - Enterprise control architecture&#10;Reference design | Agents propose; external policy authorizes; scoped controllers execute | UC01-UC56" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17365d;strokeColor=#17365d;fontSize=13;spacing=10;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="30" y="15" width="1640" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="rm" value="Release Management / Change Manager&#10;Calendar, coordination, change policy" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="owners" value="Specialist owners&#10;AppSec | QA | SRE | DBA | FinOps | Product" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="470" y="120" width="520" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="approval" value="Independent approvers&#10;Service owner / change authority / risk owner" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="120" width="550" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="portal" value="Release portal / ITSM&#10;Change records, release calendar, approvals" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="workflow" value="Durable release workflow&#10;State machine, retries, timeouts, idempotency&#10;Manifest-bound transitions; reconciliation" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="470" y="300" width="520" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="policy" value="External authorization / policy engine&#10;Mandatory gates; separation of duties&#10;Exact action + target + manifest + expiry" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="300" width="510" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="agents" value="Logical agent workers A01-A09&#10;Read evidence; analyze; propose PRs/plans&#10;Model/prompt versions; bounded task budget&#10;No independent production authority" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="520" width="400" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="Tool execution boundary&#10;Identity + per-tool/action/resource authorization&#10;Schema validation, scope/expiry, argument hash&#10;Approval verified outside model" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="530" y="520" width="470" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="controllers" value="Authoritative executors&#10;CI/CD | IaC | deployment/traffic/flag controllers&#10;Artifact verifier | scanner | deterministic analytics&#10;No arbitrary model-generated prod shell" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="520" width="540" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="identity" value="Identity and governance&#10;Owned NHI; short-lived credentials&#10;Environment separation; least privilege&#10;Example: Entra / SailPoint where configured" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="790" width="400" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="evidence" value="Release manifest + evidence index&#10;Digests; control states; source run IDs&#10;Versioned approvals; immutable evidence&#10;States: pass / fail / unknown / waived" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="530" y="790" width="470" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="systems" value="Systems of record and runtime&#10;SCM / CI / registry / ITSM / CMDB&#10;Cloud/Kubernetes / databases / feature flags&#10;Observability and cost/usage data" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="790" width="540" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="audit" value="Audit, evaluations and operations&#10;Tool traces + policy decisions + source evidence | prompt-injection/permission tests | kill switch | event bus + outbox + reconciliation" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1060" width="1600" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="coordinate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="rm" target="portal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="own control evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="owners" target="workflow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="exact-scope decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="approval" target="policy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="release request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="portal" target="workflow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="authorize transitions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="workflow" target="policy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="bounded tasks" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="workflow" target="agents">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" value="proposed tool action" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="agents" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="verify authorization" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="gateway" target="policy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="only permitted calls" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="gateway" target="controllers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" value="authenticate + scope" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="identity" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" value="execute / verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="controllers" target="systems">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" value="observed state and results" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="systems" target="evidence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" value="fresh control evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="evidence" target="workflow">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" value="grounded context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="evidence" target="agents">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" value="state/events" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="workflow" target="audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" value="tool trace" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="gateway" target="audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" value="telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="systems" target="audit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="Legend: blue = agents | orange = deterministic control | green = executors | purple = records/evidence | yellow = people | dashed = context/audit&#10;Product names are integration examples, not verified installed capabilities. Sources: workbook S01-S10. Architecture is proposed synthesis." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1190" width="1600" height="75" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page2" name="02 - Release lifecycle and gates">
+    <mxGraphModel dx="1700" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="02 - Release lifecycle and gates&#10;Normal path + explicit hold/recovery branches | workflow owns state, not LLM memory" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17365d;strokeColor=#17365d;fontSize=13;spacing=10;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="30" y="15" width="1740" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" value="1. PLAN / DRAFT&#10;UC01-UC08 | A03&#10;Scope, dependencies, calendar&#10;Versioned release manifest" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" value="2. BUILD&#10;UC09-UC15 | A01&#10;Approved pipeline; bounded fix PR&#10;Immutable candidate digest" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="490" y="150" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" value="3. VERIFY&#10;UC24-UC33 | A04/A09&#10;Tests, compatibility, SBOM&#10;Signature/provenance verification" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="150" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" value="4. ENVIRONMENT READY&#10;UC16-UC23 | A02/A08&#10;IaC, compliance, capacity&#10;Admission allocation + lease" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="150" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s5" value="5. READINESS&#10;UC34-UC37 | A03/A05&#10;Evidence freshness, SLO, recovery&#10;Pass / fail / unknown / waived" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="470" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s6" value="6. AUTHORIZE&#10;UC38 | external policy + humans&#10;Bind manifest, target, action&#10;Window + policy version + expiry" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="470" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s7" value="7. DEPLOY / OBSERVE&#10;UC39-UC43 | controller + A05&#10;Canary / blue-green / flags&#10;Samples, dwell, regression checks" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="490" y="470" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s8" value="8. ACCEPT AND CLOSE&#10;UC46-UC49 | A06 + owners&#10;Validate actual service outcome&#10;Notes, CMDB, evidence, closure" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="470" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s1" target="s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s2" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s3" target="s4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s4" target="s5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s5" target="s6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s6" target="s7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="pass / authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s7" target="s8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="hold" value="HELD: failed / missing / stale evidence&#10;Route to accountable owner; remediate via PR&#10;Required tests and verification rerun&#10;Material scope change invalidates authorization" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="790" width="810" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="recover" value="RECOVERY: UC36 / UC44 / UC45&#10;Pause or abort only under approved policy&#10;Check config/schema/data compatibility&#10;Irreversible action -&gt; incident commander + DBA" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="490" y="790" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="learn" value="CONTINUOUS IMPROVEMENT&#10;UC50-UC55 | A07/A08&#10;Five DORA measures; waiting time&#10;Cost/unit; lessons and improvement PRs" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="790" width="370" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="assurance" value="CROSS-CUTTING ASSURANCE: UC56&#10;Scoped identity; untrusted logs/PR content; no own approval; external gates; retry/cost bounds; immutable audit; kill switch" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1080" width="1690" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" value="fail / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="s3" target="hold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="fail / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="s4" target="hold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="fail / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="s5" target="hold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" value="fail / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="s6" target="hold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" value="new material scope" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="hold" target="s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" value="fix + rebuild" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="hold" target="s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" value="regression" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s7" target="recover">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" value="reconcile Git + new authorized release" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="recover" target="s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" value="outcomes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="s8" target="learn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" value="incident evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="recover" target="learn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e32" value="improve policy/templates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="learn" target="s1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page3" name="03 - Logical agent ownership and tool mapping">
+    <mxGraphModel dx="1700" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1350" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="03 - Logical agent ownership and tool mapping&#10;Nine logical roles, not nine mandatory microservices | ownership stays with specialist teams" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17365d;strokeColor=#17365d;fontSize=13;spacing=10;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="30" y="15" width="1740" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="A01" value="A01 - Pipeline Engineering&#10;UC09-15&#10;PR self-fix / pipeline generation&#10;Build DAG + cache + runners&#10;Owner: CI/CD platform" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A02" value="A02 - Environment &amp; Platform&#10;UC16-23&#10;IaC plan/provision; drift; leases&#10;Compliance; secret readiness&#10;Owner: Platform" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="150" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A03" value="A03 - Release Intelligence &amp; Coordination&#10;UC01-08 / UC34-38&#10;Scope drift; risk; release calendar&#10;Readiness; approval coordination&#10;Owner: Release Management" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="150" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A04" value="A04 - Security &amp; Supply Chain&#10;UC24-29&#10;Finding triage; SBOM/provenance&#10;Waiver lifecycle; exposure map&#10;Owner: AppSec" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="440" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A05" value="A05 - Progressive Delivery &amp; Recovery&#10;UC36 / UC39-45&#10;Canary / blue-green / flags&#10;Health; recovery; Git reconcile&#10;Owner: SRE / service owner" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="440" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A06" value="A06 - Release Communications &amp; Evidence&#10;UC46-49 / UC56*&#10;Notes, notifications, evidence&#10;Closure; agent assurance coordination&#10;Owner: Release Mgmt / platform*" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="440" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A07" value="A07 - Delivery Analytics&#10;UC50-53&#10;Deterministic DORA analytics&#10;Bottlenecks and learning&#10;Owner: Engineering productivity" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="730" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A08" value="A08 - FinOps &amp; Capacity Advisor&#10;UC21-22 / UC54-55&#10;Capacity/cost forecast; right-sizing&#10;Admission cap recommendation&#10;Owner: FinOps + Platform" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="730" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="A09" value="A09 - Test &amp; Compatibility Advisor&#10;UC30-33&#10;Test planning; flake diagnosis&#10;API/event contracts; migrations&#10;Owner: QA; API/DB specialists" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="730" width="520" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="tools" value="Shared tool boundary: approved adapters + schema validation + target-side IAM + durable workflow + external approval/policy&#10;SCM / CI / registry / scanners / IaC / ITSM / CMDB / deployment controllers / observability / cost exports / event warehouse" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1030" width="1680" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A01" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A02" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A03" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A04" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A05" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A06" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A07" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A08" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="scoped tools" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="A09" target="tools">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mapping" value="Optional enterprise mapping (validate API/licensing): ServiceNow -&gt; change/approval/CMDB; Entra/SailPoint -&gt; identity/access governance; Azure APIM/AgentGateway -&gt; appropriate API/tool enforcement; Splunk/Dynatrace -&gt; evidence telemetry. Reuse existing CI/CD and deployment controllers.&#10;*UC56 is owned by Agent Platform, with A06 assembling evidence; agents cannot self-certify. Same shared runtime may host several logical roles." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1190" width="1680" height="115" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page4" name="04 - Bounded self-fix and recovery safety">
+    <mxGraphModel dx="1700" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="04 - Bounded self-fix and recovery safety&#10;Two separate automation loops: PR repair is not production recovery" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17365d;strokeColor=#17365d;fontSize=13;spacing=10;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="30" y="15" width="1740" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" value="CI fails at exact commit/job ID&#10;A01 reads sanitized logs" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="140" width="690" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="Classify: code/template fix within allowed paths?&#10;No policy/security gate weakening" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="330" width="690" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="Patch in isolated branch + sandbox&#10;Bound attempts / runtime / token cost" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="520" width="690" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" value="Lint + required tests + security scans&#10;Open evidence-backed PR" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="710" width="690" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" value="Independent code-owner review + merge&#10;Rebuild verified artifact and new evidence" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="900" width="690" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" value="Canary controller detects regression&#10;Fresh metrics + sufficient cohort samples" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="990" y="140" width="740" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" value="Pause exposure; evaluate authorized recovery&#10;Known stable digest + config/data compatibility" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="990" y="330" width="740" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" value="Safe preauthorized traffic abort/rollback?&#10;Controller executes; agent only diagnoses" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="990" y="520" width="740" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" value="Unsafe / uncertain / destructive data recovery&#10;Incident commander + DBA authorize plan" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="990" y="710" width="740" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" value="Verify service health; preserve incident evidence&#10;Approved Git revert/fix PR + ITSM reconciliation" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="990" y="900" width="740" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="l1" target="l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="l2" target="l3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="l3" target="l4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="l4" target="l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="r1" target="r2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="r2" target="r3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="r3" target="r4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="next" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="r4" target="r5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" value="failed: retry only within bound" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="l4" target="l3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="stop" value="STOP / ESCALATE&#10;Unknown issue; exhausted attempts; prohibited diff&#10;No self-merge or broad production credentials" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1100" width="690" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="e23" value="not allowed" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="l2" target="stop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" value="limit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="l3" target="stop">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" value="unsafe / unknown" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="r2" target="r4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" value="safe recovery verified" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;dashed=1;" edge="1" parent="1" source="r3" target="r5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note" value="Key distinctions: app rollback does not undo schema/data changes. Argo Rollouts runtime rollback does not modify Git (S05). Stable and desired state must be reconciled.&#10;Self-fix code review and independent release authorization remain separate. Preauthorized recovery must name scope, target, allowed actions and expiry." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1270" width="1680" height="95" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page5" name="05 - Cost admission and risk evidence">
+    <mxGraphModel dx="1700" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1350" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="05 - Cost admission and risk evidence&#10;Hard limits on admitted allocation are not guaranteed hard limits on the cloud invoice" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#17365d;strokeColor=#17365d;fontSize=13;spacing=10;align=center;verticalAlign=middle;fontColor=#ffffff;fontStyle=1;fontSize=19;" vertex="1" parent="1">
+          <mxGeometry x="30" y="15" width="1740" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="costreq" value="IaC / runner / environment request&#10;Owner + SKU + region + quantity + TTL" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="430" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="estimate" value="Deterministic resource/cost estimate&#10;A08 explains forecast and uncertainty&#10;Check approved SKU/resource policies" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="150" width="480" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="ledger" value="Atomic allocation reservation ledger&#10;Used + reserved + requested &lt;= policy limit&#10;Concurrency-safe; expire/release leases" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="150" width="480" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="deny" value="DENY NEW ALLOCATION&#10;Over cap or invalid request&#10;Budget owner may approve scoped exception" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="450" width="480" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="provision" value="ALLOW via scoped IaC/runner controller&#10;Enforce resource quotas + TTL + ownership&#10;Observed usage reconciled with reservation" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="630" y="450" width="480" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="actual" value="Actual billing + usage observations&#10;Azure budget alerts do not stop resources&#10;Cost data typically 8-24h; budgets daily (S09)" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="430" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="evidence" value="Release evidence aggregator&#10;Tests + trust + change scope + environment&#10;SLO + data compatibility + cost admission&#10;Each result bound to candidate and timestamp" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="830" width="520" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="score" value="A03 readiness / risk recommendation&#10;Per-control pass / fail / unknown / waived&#10;Explain reasons, lineage and freshness&#10;No opaque score as authorization" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="650" y="830" width="500" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="gate" value="External policy gate + authorized humans&#10;Mandatory fail/unknown blocks&#10;Waivers scoped, approved, expiring&#10;Exact manifest/action/target/window binding" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="830" width="510" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="plan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="costreq" target="estimate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="request reservation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="estimate" target="ledger">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="exceeds policy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ledger" target="deny">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="within limit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ledger" target="provision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" value="usage / resource state" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="provision" target="actual">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" value="forecast calibration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="actual" target="estimate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" value="admission evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ledger" target="evidence">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" value="grounded context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="evidence" target="score">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" value="recommendation only" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="score" target="gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" value="Cost control limitations: ongoing resources, shared charges, pricing changes, delayed telemetry and unmodeled usage prevent an absolute invoice-cap promise.&#10;Prefer bounds on admitted resource units/rates, duration, concurrency and service-specific quotas. Do not blindly shut down critical production services on a budget alert.&#10;Research: S09 Microsoft budgets tutorial; S07 artifact verification; S06 validate metrics before automation. Thresholds are enterprise policy decisions." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;spacing=10;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1130" width="1690" height="155" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
