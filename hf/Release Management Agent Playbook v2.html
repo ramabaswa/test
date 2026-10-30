@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Release Management Agent Playbook v2</title>
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--tx:#1b2330;--mut:#5d6b7e;--bd:#dde2ea;--ac:#2f5fd0;--s:#0f8a6a;--n:#2f5fd0;--l:#b9560e;--a:#7a3fc4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151d;--card:#18202b;--tx:#e6ebf2;--mut:#9aa7b8;--bd:#2c3746;--ac:#7ea2ff;--s:#4cc9a3;--n:#7ea2ff;--l:#f0a060;--a:#c39bff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10151d;--card:#18202b;--tx:#e6ebf2;--mut:#9aa7b8;--bd:#2c3746;--ac:#7ea2ff;--s:#4cc9a3;--n:#7ea2ff;--l:#f0a060;--a:#c39bff;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header,main{max-width:1100px;margin:auto;padding:0 20px}header{padding-top:24px}
+h1{margin:0 0 4px;font-size:25px}h2{font-size:19px;margin:22px 0 8px}h3{font-size:15px;margin:0 0 4px}.sub{color:var(--mut);margin:0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--bd);margin-top:10px}
+nav div{max-width:1100px;margin:auto;display:flex;gap:6px;overflow-x:auto;padding:8px 20px}
+button{font:inherit;font-size:14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:5px 12px;border-radius:16px;cursor:pointer;white-space:nowrap}
+button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+section{display:none;padding-bottom:40px}section.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px}.card ul{margin:6px 0 0;padding-left:18px;color:var(--mut)}
+.scroll{overflow-x:auto;border:1px solid var(--bd);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13.5px}th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}th{background:var(--bg)}
+.tag{display:inline-block;font-size:12px;padding:0 8px;border-radius:10px;border:1px solid currentColor;white-space:nowrap}
+.s{color:var(--s)}.n{color:var(--n)}.l{color:var(--l)}.a{color:var(--a)}
+.note{background:var(--card);border-left:4px solid var(--ac);padding:10px 14px;border-radius:6px;margin:12px 0}.warn{border-color:var(--l)}
+.f{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+svg text{fill:var(--tx);font-family:system-ui,sans-serif}
+#pn{position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:var(--card);border-left:1px solid var(--bd);box-shadow:-6px 0 24px rgba(0,0,0,.18);padding:calc(16px + env(safe-area-inset-top,0px)) 18px calc(16px + env(safe-area-inset-bottom,0px));overflow-y:auto;transform:translateX(105%);transition:transform .2s;z-index:20;box-sizing:border-box}
+#pn.on{transform:none}#pn h3{margin:14px 0 4px}#pn p{margin:4px 0}#pn ul{margin:4px 0;padding-left:18px}
+#px{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:12px;padding:2px 10px}
+.cl{fill:transparent;stroke:transparent;cursor:pointer}.cl:hover,.cl:focus{stroke:var(--ac);stroke-width:2;outline:none}.cl.hl{stroke:var(--ac);stroke-width:3;fill:rgba(47,95,208,.12)}.cl.nb{stroke:var(--ac);stroke-width:2;stroke-dasharray:5 3;fill:rgba(47,95,208,.07)}
+.chip{margin:2px 4px 2px 0;font-size:13px}
+</style></head><body>
+<header><h1>Release Management Agent Playbook v2</h1>
+<p class="sub">Control architecture first, agents second. Merges your uploaded implementation playbook (spine) with the use-case catalog and SDLC agent map (front chapter).</p></header>
+<nav><div id="tabs"></div></nav>
+<main>
+<section id="about"><h2>About this document (read first)</h2>
+<div class="note warn"><b>What this is:</b> a condensed merge. The architecture, component IDs (C01–C12), authority model, onboarding tracks, build order and test intents come from the playbook you uploaded; I read all 17 chapters. I redrew the diagram and re-mapped my use-case catalog onto its components. The use-case mapping is my own judgment and has not been validated by any of your teams.</div>
+<div class="grid">
+<div class="card"><h3>Not verified</h3><ul><li>I ran no web research for this page. The uploaded playbook’s external citations (Microsoft, OWASP, NIST, Argo) are not independently checked by me.</li><li>ServiceNow, Entra, SailPoint, APIM, AgentGateway and Splunk/Dynatrace are assumed integration targets, not confirmed installs. SCM, CI/CD, runtime and databases are still undecided.</li><li>All thresholds, freshness windows and limits are owner decisions, not recommendations.</li></ul></div>
+<div class="card"><h3>Left out here (see the uploaded file)</h3><ul><li>Internal API route table, record schemas, event and agent-envelope JSON, service-profile YAML</li><li>Suggested repo layout, worked REL-0042 example, full 18-test table, dashboard views and runbook list</li></ul></div>
+<div class="card"><h3>Corrected from my first page</h3><ul><li>Risk signals are reason-coded and advisory, not a score that auto-approves. My “≥85% agreement” promotion gate was invented and is removed.</li><li>“Hard budget cap” is admission control with atomic reservation; Azure budget alerts do not stop spend, so it is not an absolute invoice cap.</li><li>Agents were shown as acting; they now propose, and policy plus target IAM enforce.</li></ul></div>
+</div></section>
+
+<section id="arch"><h2>1. Control architecture</h2>
+<p>Build one Release Control Service around your existing delivery tools. Agents are bounded workers inside it, not a replacement for CI/CD, change approval or SRE.</p>
+<div class="scroll"><svg id="d1" role="img" aria-label="Release control architecture"></svg></div>
+<p class="sub">Two execution paths: agent tool requests go through the governed agent-tool boundary; trusted workflow activities call narrowly scoped adapters. Both need authorization and audit.</p>
+<h2>Five responsibilities that must stay separate</h2>
+<div class="scroll"><table><tr><th>Piece</th><th>Does</th><th>Never does</th></tr>
+<tr><td>Agent</td><td>Explains evidence, proposes a next action</td><td>Approve, waive, change policy, deploy</td></tr>
+<tr><td>Workflow</td><td>Holds state, timers, retries, escalation</td><td>Decide policy</td></tr>
+<tr><td>Policy module</td><td>Deterministic allow / deny / hold on trusted facts</td><td>Rely on a model’s opinion</td></tr>
+<tr><td>Human authority</td><td>Accepts risk for an exact manifest, target, window</td><td>Give a generic “yes”</td></tr>
+<tr><td>Executor</td><td>Runs the permitted operation with a scoped identity</td><td>Accept arbitrary digest, target or branch</td></tr></table></div>
+<div class="note">Ready ≠ approved ≠ deployed ≠ healthy. Evidence must match the exact artifact digest; an approval covers one manifest, so any material change needs a new revision and new approval. This binding is also the strongest control against change drift.</div></section>
+
+<section id="comp"><h2>2. Components and ownership</h2>
+<div class="scroll"><table id="ct"><tr><th>ID</th><th>Component</th><th>Reuse / build</th><th>Owner</th><th>Proof it works</th></tr></table></div>
+<p class="sub">Start C01–C07 and C11 as modules in one application plus a durable workflow engine. C08 is separate because it handles untrusted text and must not hold deploy credentials. C12 is deferred.</p></section>
+
+<section id="uc"><h2>3. Use cases mapped to components</h2>
+<p>Phase comes from the uploaded playbook’s Start / Next / Later guidance where it covers the item. <span class="tag a">Added</span> means my addition, not specified there.</p>
+<div class="f" id="flt"></div>
+<div class="scroll"><table id="ut"><thead><tr><th>Use case</th><th>SDLC stage</th><th>Components</th><th>Stakeholders</th><th>What to do (authority)</th><th>Outcome</th><th>Phase</th></tr></thead><tbody></tbody></table></div>
+<h2>Agent and automation map across the SDLC</h2>
+<div class="scroll"><svg id="d2" role="img" aria-label="Use cases by SDLC stage"></svg></div>
+<p class="sub">Color = phase. Many items are deterministic controls, not LLM agents; the agent part is usually explanation or a proposed pull request.</p></section>
+
+<section id="onb"><h2>4. Onboarding: three tracks</h2>
+<div class="grid">
+<div class="card"><h3>A. Platform and connectors (once)</h3><ul><li>Confirm real products and boundaries</li><li>Separate identities: read, nonprod dispatch, prod dispatch, agent tools</li><li>Typed adapters with retry and dedup</li><li>Verified event ingress (never trust payload alone)</li><li>Persistence, outbox, audit, restore test</li><li>Certify duplicate, timeout-after-success, forbidden target, revoked identity</li></ul></div>
+<div class="card"><h3>B. Each service</h3><ul><li>Profile: owners, repos, targets, required controls, approvers, health, recovery, agents, lifecycle</li><li>Owners approve their own sections; IAM approves target access</li><li>Shadow run, then one nonprod release plus a failure exercise</li><li>Production is a separate permission and sign-off</li></ul></div>
+<div class="card"><h3>C. Each agent</h3><ul><li>Register purpose, owner, model, prompt version, data class</li><li>Constrain tools, targets, limits, output schema</li><li>Evaluate: grounding, injection, forbidden calls, secret leakage</li><li>Shadow with no write tools, then activate with a review date and kill-switch owner</li></ul></div></div>
+<div class="note">A service counts as onboarded only when a nonproduction release proves evidence linkage, scope-bound approval, target permissions, observed outcome and safe failure, not when a form is approved.</div></section>
+
+<section id="fw"><h2>5. Implementation framework</h2>
+<p>Contracts before prompts. Build vertically: one service, one target, one complete failure path.</p>
+<div class="scroll"><table id="ft"><tr><th>Stage</th><th>Implement</th><th>Do not advance until</th></tr></table></div>
+<h2>Work packages (order, not a calendar)</h2>
+<div class="card"><p class="sub">WP01 pilot and architecture · WP02 identity and ingress · WP03 profiles and contracts · WP04 read integrations · WP05 workflow foundation · WP06 readiness and dashboard · WP07 read-only agents · WP08 approval bridge · WP09 nonprod executor · WP10 production certification · WP11 optional expansion (PR-fix loop, IaC leases, canary, cost admission, analytics)</p></div>
+<h2>First working release does only this</h2>
+<div class="card"><ul><li>One application, one nonproduction target; candidate from an existing successful CI build</li><li>Collect evidence for that exact candidate; show ready, held or unknown with linked reasons</li><li>Read-only agents explain blockers and draft notes; approval recorded in the existing authorized workflow</li><li>Dispatch the existing deployment job via a scoped adapter; observe the result and attach evidence to the change</li></ul></div></section>
+
+<section id="rules"><h2>6. Rules and failure behavior</h2>
+<div class="scroll"><table id="rt"><tr><th>Condition</th><th>Required behavior</th></tr></table></div>
+<div class="note warn"><b>Budget control:</b> limit admitted resource units, SKUs, concurrency and duration with an atomic reservation before provisioning. Budget alerts remain a monitoring input. Per the uploaded playbook’s reading of Microsoft documentation, which I did not verify, Azure budgets do not stop consumption and cost data lags, so this is not a guaranteed invoice cap.</div>
+<h2>Acceptance tests (specifications, not results)</h2>
+<div class="card"><ul id="tt"></ul></div>
+<h2>Decisions to settle before coding</h2>
+<div class="card"><ul><li>Actual SCM, CI/CD, registry and runtime; reuse one current pipeline</li><li>Approval stays in the existing ServiceNow process, with explicit manifest-scope linkage</li><li>Workflow runtime: an existing durable engine if suitable</li><li>Required controls and freshness per service, owner-approved; no universal risk score</li><li>Which recovery actions may be autonomous (only preauthorized, tested; never destructive data recovery)</li><li>Baseline metrics before rollout; no promised ROI</li></ul></div></section>
+<section id="contracts"><h2>7. Contracts: routes, records, events</h2>
+<div class="note warn"><b>Source:</b> condensed from chapter 10 of your uploaded playbook. These are <b>proposed internal Release Control APIs</b>, not native ServiceNow, Entra or deployment-tool endpoints; adapters must map them to your products’ supported APIs.</div>
+<div class="scroll"><table><tr><th>Route</th><th>Caller</th><th>Invariant</th></tr>
+<tr><td>POST /v1/service-onboardings</td><td>Authenticated intake</td><td>Starts review; submission does not activate execution</td></tr>
+<tr><td>POST /v1/releases</td><td>Trusted CI or authorized user</td><td>Validates service, repo, pipeline, target; idempotency key required</td></tr>
+<tr><td>GET /v1/releases/{id}</td><td>Authorized user</td><td>State, manifest revision, controls, blockers, source links</td></tr>
+<tr><td>POST /v1/releases/{id}/evaluations</td><td>Workflow or operator</td><td>Refreshes evidence for one manifest revision; no deployment</td></tr>
+<tr><td>POST /v1/releases/{id}/approval-requests</td><td>Workflow</td><td>Requests exact-scope approval via ITSM adapter; cannot approve</td></tr>
+<tr><td>POST /v1/integrations/approval-events</td><td>Verified integration</td><td>Notification only; look up the authoritative decision, role and scope</td></tr>
+<tr><td>POST /v1/releases/{id}/commands/deploy</td><td>Executor identity</td><td>Needs current manifest digest, target, decision reference, idempotency key; rechecked before dispatch</td></tr>
+<tr><td>POST /v1/releases/{id}/commands/hold</td><td>Operator or policy</td><td>Stops future steps; in-flight cancellation reconciled separately</td></tr>
+<tr><td>POST /v1/releases/{id}/commands/recover</td><td>Workflow or incident role</td><td>Named preauthorized operation or fresh approval; no arbitrary shell</td></tr>
+<tr><td>GET /v1/operations/{id}</td><td>Workflow or UI</td><td>Resolves async result after retries or uncertainty</td></tr></table></div>
+<h2>Four records to implement first</h2>
+<div class="scroll"><table><tr><th>Record</th><th>Minimum fields</th><th>Invariant</th></tr>
+<tr><td>Manifest</td><td>release_id, revision, manifest_digest, service_id, profile_version, commit SHA, build run, artifact digests, config/IaC revisions, target_id, change_id, rollout/recovery refs</td><td>Hash a canonical, versioned material-scope payload; evidence and approval reference that digest</td></tr>
+<tr><td>Evidence</td><td>evidence_id, release_id, subject_digest, control_id, applicability, result, source run and URI, collected/produced/expires times, source identity, content hash</td><td>Matching release ID alone is not enough: check subject, source trust, applicability, freshness</td></tr>
+<tr><td>Authorization</td><td>decision_id, manifest_digest, action, target, window, policy version, approver and role, approved/expires times, revocation reference</td><td>Revalidate scope, authority, expiry, revocation and required controls at privileged boundaries</td></tr>
+<tr><td>Command / operation</td><td>command_id, release_id, manifest_digest, decision_id, action, fixed inputs, request_hash, idempotency_key, status, external_operation_id</td><td>Same key with a different request hash is rejected; uncertain outcome triggers lookup, not blind retry</td></tr></table></div>
+<h2>Event-handling rules</h2>
+<div class="card"><ul><li>Assume at-least-once delivery; deduplicate by source and event ID</li><li>Commit metadata and an outbox entry in one transaction; publish asynchronously</li><li>Use version checks to stop conflicting transitions</li><li>Quarantine malformed or untrusted events; dead-letter persistent failures</li><li>Re-fetch authoritative state when a late event conflicts</li><li>An event such as approval.granted is never sufficient authority on its own</li></ul></div>
+<h2>8. Who decides vs who builds (from your playbook)</h2>
+<div class="scroll"><table><tr><th>Decision / artifact</th><th>Accountable</th><th>Responsible</th><th>Consulted</th></tr>
+<tr><td>Release process, approval, freeze policy</td><td>Change Manager</td><td>ITSM + release workflow teams</td><td>Service owners, audit</td></tr>
+<tr><td>Release Control software and operations</td><td>Platform Engineering owner</td><td>API, workflow, integration engineers</td><td>SRE, architect, AppSec</td></tr>
+<tr><td>Required tests and applicability</td><td>QA owner</td><td>Test platform + service engineering</td><td>DBA/API owners, AppSec</td></tr>
+<tr><td>Security gate and waiver policy</td><td>AppSec / designated risk authority</td><td>Security tooling + policy engineer</td><td>Service owner, legal as needed</td></tr>
+<tr><td>Runtime health and recovery authority</td><td>Service owner / incident command</td><td>SRE + platform + DBA</td><td>Release Mgr, business owner</td></tr>
+<tr><td>Agent permissions and promotion</td><td>Agent Platform owner with target owner approval</td><td>Agent engineers + IAM</td><td>AppSec, domain owner</td></tr>
+<tr><td>Cost allocation rules and exceptions</td><td>FinOps / budget owner</td><td>Platform + FinOps engineer</td><td>SRE, service owner</td></tr></table></div>
+<h2>9. RACI per use case (my proposal, confirm with owners)</h2>
+<p class="sub">Derived by me from the table above and the use-case catalog. Your playbook does not assign owners at this level, and your org may differ.</p>
+<div class="scroll"><table><tr><th>Use case</th><th>Accountable</th><th>Responsible</th><th>Consulted</th></tr>
+<tr><td>Readiness verdict and explainer</td><td>Change Manager (rules: control owners)</td><td>Platform Eng; Agent Platform for the explainer</td><td>QA, AppSec, SRE</td></tr>
+<tr><td>Release notes</td><td>Release Manager</td><td>Agent Platform</td><td>Product, Support</td></tr>
+<tr><td>Approval bridge</td><td>Change Manager</td><td>ITSM / integration team</td><td>Service owner, audit</td></tr>
+<tr><td>Artifact trust verification</td><td>AppSec</td><td>Security tooling team</td><td>Platform</td></tr>
+<tr><td>Post-deploy observation</td><td>Service owner</td><td>SRE</td><td>Release Manager</td></tr>
+<tr><td>Pipeline fix loop and generator</td><td>CI/CD platform owner</td><td>Platform + Agent Platform</td><td>AppSec, Dev leads</td></tr>
+<tr><td>Environment provisioning and cost admission</td><td>FinOps (allocation); Platform (controller)</td><td>Platform + FinOps engineer</td><td>SRE, service owner</td></tr>
+<tr><td>Canary and rollback advisors</td><td>Service owner / incident command</td><td>SRE</td><td>DBA, Release Manager</td></tr>
+<tr><td>Change-drift detector</td><td>Change Manager</td><td>Platform Eng</td><td>Compliance, SRE</td></tr>
+<tr><td>Release risk signals</td><td>Release Manager with control owners</td><td>Platform + analytics</td><td>AppSec, QA</td></tr>
+<tr><td>Velocity and capacity</td><td>Engineering analytics owner</td><td>Analytics engineers</td><td>Release Manager, FinOps</td></tr></table></div></section>
+</main>
+<aside id="pn" aria-live="polite"><button id="px" aria-label="Close">×</button><div id="pc"></div></aside>
+<script>
+const $=id=>document.getElementById(id),P={S:['Start','s'],N:['Next','n'],L:['Later','l'],A:['Added','a']};
+const C=[['C01','Release intake API','Build/extend','Platform Eng','Duplicate candidate returns the existing release'],['C02','Service-profile registry','Build module','Release Mgmt + service owner','Unknown service or target rejected'],['C03','Manifest / metadata store','Build module','Platform Eng','Material change makes a new revision and voids old approval'],['C04','Evidence collectors and index','Build adapters','Platform + QA/AppSec/SRE','Wrong-subject evidence cannot satisfy a gate'],['C05','Readiness and policy module','Build or reuse engine','Change Mgr + control owners','Unknown or failed mandatory control holds'],['C06','Durable release workflow','Reuse engine','Platform Eng','Restart while awaiting approval loses nothing, no duplicate deploy'],['C07','Tool adapter / execution boundary','Reuse + wrappers','Integration + target owners','Arbitrary branch, target or artifact denied'],['C08','Agent runtime and profiles','Reuse + task workers','Agent Platform + domain owners','Injected log text cannot grant privilege'],['C09','Identity and secrets','Reuse / configure','IAM + target owners','Test identity cannot dispatch production'],['C10','Audit / dashboard / operations','Reuse + release views','SRE + Release Mgmt','Candidate-to-runtime lineage reconstructable'],['C11','Queue / outbox / reconciliation','Reuse broker','Platform Eng','Timeout after dispatch is reconciled, not resent'],['C12','Cost allocation ledger','Defer','FinOps + Platform','Concurrent requests cannot spend the same allocation']];
+C.forEach(r=>$('ct').insertAdjacentHTML('beforeend','<tr>'+r.map((x,i)=>'<td>'+(i==0?'<b>'+x+'</b>':x)+'</td>').join('')+'</tr>'));
+[['F1 Inventory / contracts','Service and target IDs, schemas, authority boundaries','Each record has an authoritative source and owner'],['F2 Trusted integration','Read-only adapters, identity, verified ingress','Forged events, forbidden targets, duplicates tested'],['F3 State / evidence','Manifest revisions, evidence index, workflow, outbox','Restart and timeout-after-success exercises pass'],['F4 Rules / readiness','Versioned controls, applicability, freshness, exceptions','Missing or wrong-subject evidence never yields READY'],['F5 Read-only agents','Evidence-grounded explanations and note drafts','Injected content cannot alter gates'],['F6 Approval bridge','Scoped request, role check, expiry, escalation','Replayed or wrong-scope approval rejected'],['F7 Controlled execution','Fixed deployment adapter, operation reconciliation','Uncertain dispatch cannot create a second release'],['F8 Operational acceptance','Health, recovery exercise, runbooks, support','On-call can hold, kill and recover without the agent']].forEach(r=>$('ft').insertAdjacentHTML('beforeend','<tr>'+r.map(x=>'<td>'+x+'</td>').join('')+'</tr>'));
+[['Mandatory control has no evidence','HELD / UNKNOWN with named owner'],['Test passed for another digest','Rejected as wrong-subject evidence'],['Approval expires while waiting','Hold; request fresh approval'],['Approval covers a different target or config','Deny dispatch; new manifest and review'],['Control waived','Show waiver, authority, scope, expiry; never silently PASS'],['Agent says “safe to proceed”','A proposal only; the deterministic gate wins'],['Dispatch times out','Mark UNKNOWN; look up the target operation before resending'],['Deploy job green but health fails','Not success; pause, recover via authorized path or escalate'],['Canary has too little traffic or broken telemetry','Pause promotion; missing data is not healthy data'],['Runtime rollback succeeds','Reconcile desired Git/config so the failed revision is not re-promoted'],['Schema or data recovery needed','Block autonomous destructive action; DBA and incident commander decide'],['Identity revoked mid-release','Deny next privileged action; reconcile in-flight work']].forEach(r=>$('rt').insertAdjacentHTML('beforeend','<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>'));
+['Wrong artifact evidence','Forged or replayed events','Approval binding (M1 vs M2)','Separation of duties','Restart during wait','Ambiguous dispatch','Stale evidence','Prompt injection','Invented evidence IDs','Telemetry uncertainty','Revocation','Recovery limits','Git reconciliation','Cost concurrency','Agent outage','Offboarding','Job green but runtime wrong','Restore and retention'].forEach((t,i)=>$('tt').insertAdjacentHTML('beforeend','<li>T'+String(i+1).padStart(2,'0')+' '+t+'</li>'));
+// [name,stage,components,who,what,outcome,phase]
+const U=[
+['Release readiness verdict + explainer',5,'C04 C05 C08','Release Mgr, QA, AppSec, SRE','Deterministic rules decide; agent only explains blockers with evidence IDs (no waiver or approval)','Faster, consistent hold/ready with reasons','S'],
+['Release note drafting',6,'C08 C10','Release Mgr, Product, Support','Draft from approved scope with source links; no auto-publishing, no sensitive findings','Less manual effort','S'],
+['Change approval bridge',0,'C05 C06 C01','Change Mgr, ServiceNow owner','Request and verify exact-scope approval at the source; agent cannot approve','Approval tied to one manifest','S'],
+['Artifact trust / supply-chain verification',2,'C04 C07','AppSec, Platform','Use a real verifier (signature, provenance, builder); an LLM explanation is not verification','Trusted artifacts only','S'],
+['Post-deploy observation and acceptance',7,'C04 C06 C10','SRE, service owner','Compare observed digest and health policy; job success is not health','Accurate close-out or incident','S'],
+['Evidence packet for audit',7,'C04 C10','Compliance, Audit','Attach source-linked evidence index to the change','Faster audit retrieval','S'],
+['Pipeline fix loop',1,'C08 C07','Dev leads, CI/CD Platform','Propose a bounded fix PR on a repair branch; cannot merge or disable gates','Less pipeline toil','N'],
+['Pipeline-as-code generator',1,'C08 C07','Platform, AppSec','Propose pipeline YAML as a PR; owners review','Consistent pipelines','N'],
+['Environment provisioning assistant',5,'C08 C07 C12','Platform, FinOps','Propose IaC PR or bounded nonprod lease request; controller provisions','Less environment contention','N'],
+['Platform compliance and drift advice',4,'C04 C08','Security, Platform, Compliance','Existing scanners produce results; agent explains and proposes IaC fixes','Fewer unexplained findings','N'],
+['Test and security advisors',3,'C04 C08','QA, AppSec','Explain failures, propose tests or fixes; cannot declare scanner success or approve own exception','Faster remediation','N'],
+['Progressive delivery (canary) advisor',6,'C06 C07','SRE, service owner','Recommend pause or abort; controller runs only preauthorized actions','Smaller blast radius','L'],
+['Rollback / recovery advisor',7,'C06 C07','SRE, DBA, incident cmd','Recommend; only preauthorized, tested actions execute; destructive data recovery stays human','Lower recovery time','L'],
+['Velocity measurement',7,'C04 C10','Eng leads, Release Mgr','Deterministic code computes metrics; agent explains bottlenecks','Evidence-based improvement','L'],
+['Capacity forecast',3,'C10','SRE, FinOps','Forecast with stated uncertainty; no blind shutdown','Fewer capacity surprises','L'],
+['Cloud cost admission control',2,'C12 C07','FinOps, Platform','Atomic reservation before provisioning; deny over allocation (optional, deferred)','Bounded admitted spend','L'],
+['Change-management drift detector',7,'C03 C04 C10','Change Mgr, Compliance, SRE','Read-only compare of approved manifest vs observed digest and config vs change record; open a ticket','Fewer unnoticed deviations','A'],
+['Release risk signals',4,'C04 C05 C10','Release Mgr, AppSec, QA','Reason-coded advisory signals (diff, ownership, coverage, CVEs, service history); owner-set rules, no auto-approval','Better human prioritization','A'],
+['Release calendar and conflict check',0,'C02 C06','Release Mgr, Change Mgr','Detect overlapping changes and freezes; target locks stop concurrent deploys','Fewer collisions','A'],
+['Build optimization',2,'C10 C08','DevOps, Dev leads','Analyze build data; propose changes as PRs','Shorter lead time','A'],
+['Dependency cache management',2,'C07 C04','DevOps, AppSec','Deterministic prune and warm with integrity checks; agents only advise','Faster, safer builds','A'],
+['Incident-to-change correlation',7,'C10 C04','SRE, Change Mgr','Link incidents to recent releases as evidence for human review','Better learning','A']];
+let cur='all';const fl=$('flt');
+function draw(){document.querySelector('#ut tbody').innerHTML=U.filter(u=>cur=='all'||u[6]==cur).map(u=>'<tr><td><b>'+u[0]+'</b></td><td>'+['Plan','Code','Build','Test','Security','Stage','Release','Operate'][u[1]]+'</td><td>'+u[2]+'</td><td>'+u[3]+'</td><td>'+u[4]+'</td><td>'+u[5]+'</td><td><span class="tag '+P[u[6]][1]+'">'+P[u[6]][0]+'</span></td></tr>').join('');[...fl.children].forEach(b=>b.classList.toggle('on',b.dataset.k==cur))}
+[['all','All'],...Object.entries(P).map(([k,v])=>[k,v[0]])].forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.dataset.k=k;b.onclick=()=>{cur=k;draw()};fl.appendChild(b)});draw();
+function box(x,y,w,h,t,c,sz){let s='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="7" fill="var(--card)" stroke="'+(c||'var(--bd)')+'" stroke-width="1.5"/>';t.split('|').forEach((l,i,a)=>s+='<text x="'+(x+w/2)+'" y="'+(y+h/2+4+(i-(a.length-1)/2)*15)+'" text-anchor="middle" font-size="'+(sz||12)+'" fill="'+(c&&i==0&&a.length>1?c:'var(--tx)')+'">'+l+'</text>');return s}
+function ar(x1,y1,x2,y2){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--mut)" stroke-width="1.4" marker-end="url(#m)"/>'}
+(function(){const s=$('d1');s.setAttribute('viewBox','0 0 900 470');s.setAttribute('width',900);s.setAttribute('height',470);
+let h='<defs><marker id="m" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--mut)"/></marker></defs>';
+h+=box(20,10,260,50,'Owners and ServiceNow|intake, change, approval')+box(320,10,260,50,'Delivery tools|SCM, CI, registry, scanners')+box(620,10,260,50,'Runtime and telemetry|cluster, metrics, incidents');
+h+=ar(150,60,150,100)+ar(450,60,450,100)+ar(750,60,750,100)+box(20,100,860,44,'Release API + service profiles (C01, C02): authenticated, verified ingress');
+h+=ar(300,144,300,172)+'<rect x="20" y="172" width="590" height="140" rx="9" fill="none" stroke="var(--ac)" stroke-width="2"/><text x="34" y="192" font-size="13" font-weight="600">Release Control Service (deterministic)</text>';
+[['Manifest C03',34],['Evidence C04',150],['Policy C05',266],['Workflow C06',382],['Outbox C11',498]].forEach(([t,x])=>h+=box(x,206,102,44,t,'var(--n)'));
+h+=box(34,262,552,38,'Authoritative approvals, evidence and policy checked at the source; verdict is reason-coded','','11');
+h+=box(660,172,220,140,'Agent workers C08|bounded tasks, sanitized snapshot|propose only|no deploy credentials','var(--a)');
+h+=ar(610,240,660,240);
+h+=ar(770,312,770,352)+ar(300,312,300,352);
+h+=box(20,352,400,50,'Controlled adapters C07|ITSM, SCM, CI/CD, verifier, observability','var(--s)')+box(460,352,420,50,'Identity and tool boundary C09|Entra/IAM, agent gateway; target IAM stays authoritative','var(--l)');
+h+=ar(420,377,460,377);
+h+=box(20,424,860,38,'Audit, traces, dashboards C10: candidate-to-runtime lineage, redaction, retention','','12');
+s.innerHTML=h})();
+(function(){const st=['Plan','Code','Build','Test','Security','Stage','Release','Operate'],cw=125,cnt={},s=$('d2');let h='';
+st.forEach((t,i)=>h+='<polygon points="'+(i*cw+10)+',8 '+(i*cw+cw)+',8 '+(i*cw+cw+10)+',26 '+(i*cw+cw)+',44 '+(i*cw+10)+',44 '+(i*cw+20)+',26" fill="var(--card)" stroke="var(--bd)"/><text x="'+(i*cw+cw/2+5)+'" y="31" text-anchor="middle" font-size="13" font-weight="600">'+t+'</text>');
+let mx=0;U.forEach(u=>{const r=cnt[u[1]]=(cnt[u[1]]??-1)+1;mx=Math.max(mx,r);const x=u[1]*cw+14,y=54+r*56,c='var(--'+P[u[6]][1]+')',w=u[0].split(' '),a=['',''];w.forEach(x=>{(a[0].length+x.length<16?a[0]+=x+' ':a[1]+=x+' ')});
+h+='<rect x="'+x+'" y="'+y+'" width="'+(cw-10)+'" height="48" rx="7" fill="var(--card)" stroke="'+c+'" stroke-width="1.5"/>';a.filter(Boolean).forEach((l,k,arr)=>h+='<text x="'+(x+(cw-10)/2)+'" y="'+(y+(arr.length>1?20+k*14:28))+'" text-anchor="middle" font-size="10.5" fill="'+c+'">'+l.trim().slice(0,22)+'</text>')});
+const H=54+(mx+1)*56+10;s.setAttribute('viewBox','0 0 1010 '+H);s.setAttribute('width',1010);s.setAttribute('height',H);s.innerHTML=h})();
+(function(){
+const K={
+RCS:{t:'Release Control Service',s:'Deterministic core',d:'The single application that owns release state: manifests, evidence, policy decisions, workflow and the outbox. Agents and delivery tools plug into it; it does not replace CI/CD, change approval or SRE.',in:['C03','C04','C05','C06','C11'],f:'Typical flow (my reading): manifest, then evidence, then policy, then workflow, then outbox and adapters.',cn:['C01','C02','C08','C07','C10'],no:'Does not accept agent output or event payloads as authority.'},
+ext1:{t:'Owners and ServiceNow',s:'External system',d:'Service owners, intake, and change and approval records. ServiceNow is an assumed target from your playbook, not a confirmed install.',cn:['C01','C07'],no:'Approval stays authoritative here; notifications from it are verified against the source.'},
+ext2:{t:'Delivery tools',s:'External systems',d:'SCM, CI, artifact registry and scanners. Your playbook leaves the specific products undecided.',cn:['C04','C07'],no:'Release Control reads evidence and dispatches your existing job; it does not replace the pipeline.'},
+ext3:{t:'Runtime and telemetry',s:'External systems',d:'Clusters, metrics and incidents: the source of truth for what is actually running and whether it is healthy.',cn:['C07','C04'],no:'Observed state, not deploy-job status, decides whether a release succeeded.'},
+C01:{d:'Authenticated front door for release candidates and onboarding requests. Verifies ingress and requires an idempotency key.',parts:['Verified ingress and authn','Idempotency check','Validation against the service profile','Creates release and manifest revision'],cn:['C02','C03','C06'],no:'Never starts a deployment on its own.'},
+C02:{d:'Registry of per-service facts the rest of the system reads: owners, repos, targets, required controls, approvers, health and recovery rules, allowed agents, lifecycle.',parts:['Owners and approvers','Targets and required controls','Health and recovery policy','Allowed agents and lifecycle'],cn:['C01','C05','C08'],no:'Owners approve their own sections; unknown service or target is rejected.'},
+C03:{d:'Stores each release’s manifest as numbered revisions with a digest over the material scope (artifacts, configs, target, change). Evidence and approvals reference that digest.',parts:['Canonical manifest','Revision history','Manifest digest'],cn:['C04','C05','C06'],no:'A material change never edits a revision in place; it makes a new one that voids old approval.'},
+C04:{d:'Collects evidence from CI, test, security and ITSM sources through read adapters and indexes it by subject digest, control, applicability and freshness.',parts:['Read collectors','Evidence index','Subject and freshness checks'],cn:['C03','C05','C07','ext2'],no:'Wrong-subject or stale evidence cannot satisfy a gate.'},
+C05:{d:'Versioned control rules produce a reason-coded verdict (ready, held or unknown) from trusted facts. Deterministic, not model-based.',parts:['Control rules and applicability','Freshness windows','Exceptions and waivers','Reason-coded verdict'],cn:['C02','C03','C04','C06'],no:'A missing or failed mandatory control never yields READY; there is no universal risk score.'},
+C06:{d:'Durable workflow that holds release state through approvals, timers, retries and escalation, and requests dispatch only when policy allows.',parts:['State machine','Approval wait and expiry','Retries and escalation','Dispatch request'],cn:['C05','C11','C07','ext1'],no:'Does not decide policy and does not lose state on restart.'},
+C07:{d:'Typed adapters and fixed operations toward ITSM, SCM, CI/CD, the artifact verifier and observability. Deployment is a narrowly scoped call into your existing job.',parts:['ITSM adapter','SCM and CI/CD adapters','Artifact verifier','Observability reader'],cn:['C06','C09','ext1','ext2','ext3'],no:'Accepts no arbitrary branch, target, artifact or shell.'},
+C08:{d:'Separate runtime for bounded agent tasks: explain blockers, draft notes, propose PRs. It handles untrusted text, so it holds no deploy credentials.',parts:['Agent profiles','Sanitized snapshots','Output schema and evals','Tool requests via the gateway'],cn:['C09','C04','C10'],no:'Never approves, waives, changes policy or deploys; injected text cannot grant privilege.'},
+C09:{d:'Separate identities for read, nonproduction dispatch, production dispatch and agent tools, plus secrets handling. Target-side IAM stays authoritative.',parts:['Per-function identities','Secrets','Agent gateway','Revocation'],cn:['C07','C08'],no:'A test identity cannot dispatch production.'},
+C10:{d:'Audit trail, traces and dashboards that can reconstruct candidate-to-runtime lineage, with redaction and retention.',parts:['Audit log','Traces','Release dashboard','Retention and redaction'],cn:['C04','C06','C08'],no:'Does not control execution.'},
+C11:{d:'Transactional outbox, queue and reconciliation: a state change and its outgoing message commit together; uncertain operations are looked up, not resent.',parts:['Outbox','Broker','Reconciliation job'],cn:['C06','C07'],no:'A timeout after dispatch is never blindly retried.'}};
+const nm=k=>K[k].t||(C.find(r=>r[0]==k)[1]+' ('+k+')');
+const R=[['RCS',20,172,590,140],['ext1',20,10,260,50],['ext2',320,10,260,50],['ext3',620,10,260,50],['C01',20,100,430,44],['C02',450,100,430,44],['C03',34,206,102,44],['C04',150,206,102,44],['C05',266,206,102,44],['C06',382,206,102,44],['C11',498,206,102,44],['C08',660,172,220,140],['C07',20,352,400,50],['C09',460,352,420,50],['C10',20,424,860,38]];
+const s=$('d1'),pn=$('pn'),chip=x=>'<button class="chip" data-g="'+x+'">'+nm(x)+'</button>';
+s.insertAdjacentHTML('beforeend','<g>'+R.map(([k,x,y,w,h])=>'<rect class="cl" data-k="'+k+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="7" tabindex="0" role="button" aria-label="'+nm(k)+'"/>').join('')+'</g>');
+s.parentElement.insertAdjacentHTML('beforebegin','<p class="sub">Click any box for a description, its internal parts and the components it connects to. Click Release Control Service to open its internals.</p>');
+function clr(){s.querySelectorAll('.cl').forEach(e=>e.classList.remove('hl','nb'))}
+function open1(k){const e=K[k],c=C.find(r=>r[0]==k),u=U.filter(x=>x[2].split(' ').includes(k)).map(x=>x[0]),rel=(e.in||[]).concat(e.cn);
+clr();s.querySelectorAll('.cl').forEach(r=>{if(r.dataset.k==k)r.classList.add('hl');else if(rel.includes(r.dataset.k))r.classList.add('nb')});
+$('pc').innerHTML='<h3>'+nm(k)+'</h3>'+(e.s?'<p class="sub">'+e.s+'</p>':'')+'<p>'+e.d+'</p>'+(e.in?'<h3>Inside (click to open)</h3>'+e.in.map(chip).join('')+'<p class="sub">'+e.f+'</p>':'')+(e.parts?'<h3>Inside (proposed modules)</h3><ul>'+e.parts.map(p=>'<li>'+p+'</li>').join('')+'</ul>':'')+'<h3>Boundary</h3><p>'+e.no+'</p>'+(c?'<h3>Owner</h3><p>'+c[3]+'</p><h3>Proof it works</h3><p>'+c[4]+'</p>':'')+'<h3>Connected to</h3>'+e.cn.map(chip).join('')+(u.length?'<h3>Use cases that rely on it</h3><ul>'+u.map(n=>'<li>'+n+'</li>').join('')+'</ul>':'')+'<p class="sub">Condensed from your playbook. Internal modules and use-case links are my interpretation.</p>';
+pn.classList.add('on')}
+function close1(){pn.classList.remove('on');clr()}
+s.addEventListener('click',ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(k)open1(k)});
+s.addEventListener('keydown',ev=>{const k=ev.target.dataset&&ev.target.dataset.k;if(k&&(ev.key=='Enter'||ev.key==' ')){ev.preventDefault();open1(k)}});
+$('pc').addEventListener('click',ev=>{const g=ev.target.dataset.g;if(g)open1(g)});
+$('px').onclick=close1;addEventListener('keydown',ev=>{if(ev.key=='Escape')close1()});$('tabs').addEventListener('click',close1);
+})();
+const T=[['about','Read first'],['arch','Architecture'],['comp','Components'],['uc','Use cases'],['onb','Onboarding'],['fw','Framework'],['rules','Rules & tests'],['contracts','Contracts & RACI']];
+function show(id){T.forEach(([k])=>$(k).classList.toggle('on',k==id));[...$('tabs').children].forEach((b,i)=>b.classList.toggle('on',T[i][0]==id))}
+T.forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.onclick=()=>{show(k);try{history.replaceState(null,'','#'+k)}catch(e){}};$('tabs').appendChild(b)});
+show(T.some(t=>t[0]==location.hash.slice(1))?location.hash.slice(1):'about');
+addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(T.some(t=>t[0]==h))show(h)});
+</script></body></html>
