@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Enterprise MCP Architecture</title>
+<style>
+:root{--bg:#f7f7f5;--sf:#fff;--tx:#1d1d1b;--mu:#6b6b66;--bd:#dcdcd6;--ac:#1f5fbf;--l1:#e8eefb;--l2:#e6f4ee;--l3:#fdf1e0;--l4:#f3e9fa;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--sf:#222221;--tx:#ececE8;--mu:#a0a09a;--bd:#3a3a37;--ac:#7fb0ff;--l1:#1c2638;--l2:#1a2b24;--l3:#302618;--l4:#2a2133}}
+:root[data-theme="dark"]{--bg:#161615;--sf:#222221;--tx:#ececE8;--mu:#a0a09a;--bd:#3a3a37;--ac:#7fb0ff;--l1:#1c2638;--l2:#1a2b24;--l3:#302618;--l4:#2a2133}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:0 16px 40px}
+h1{font-size:22px;margin:18px 0 2px}h2{font-size:18px;margin:6px 0 10px}h3{font-size:15px;margin:0 0 6px}
+.sub{color:var(--mu);margin:0 0 14px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--bd);margin-bottom:16px}
+.tabs.s{margin:0 0 14px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;color:var(--mu);padding:9px 12px;font:inherit;cursor:pointer;white-space:nowrap}
+.tabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
+.p{display:none}.p.on{display:block}
+.layer{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px}
+.layer>h3{display:flex;justify-content:space-between;gap:8px}
+.L1{background:var(--l1)}.L2{background:var(--l2)}.L3{background:var(--l3)}.L4{background:var(--l4)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.c{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:9px 10px}
+.c b{display:block;margin-bottom:3px}.c small,.mu{color:var(--mu)}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;font-weight:600;margin:2px 3px 0 0;border:1px solid}
+.live{color:#146c43;background:#d9f2e4;border-color:#9fd9b9}.builds{color:#0b5a8a;background:#d8ecf8;border-color:#9bcbe8}
+.mvp{color:#8a4b00;background:#ffe8c7;border-color:#f0c27d}.sug{color:#5b3a8c;background:#eadcf8;border-color:#c7aee8}
+.poc{color:#8a1f4a;background:#fbdce8;border-color:#eca9c4}.later{color:#555;background:#e8e8e4;border-color:#c8c8c2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{filter:brightness(.85) saturate(.9)}}
+.leg{margin-bottom:12px}
+.w{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;background:var(--sf)}
+th,td{border:1px solid var(--bd);padding:7px 9px;text-align:left;vertical-align:top;font-size:14px}
+th{background:var(--l1)}
+.lane{display:grid;grid-template-columns:140px repeat(6,minmax(110px,1fr));gap:6px;align-items:stretch;margin-bottom:6px;min-width:860px}
+.ln{background:var(--l1);border:1px solid var(--bd);border-radius:8px;padding:8px;font-weight:600;font-size:13px}
+.st{background:var(--sf);border:1px solid var(--ac);border-radius:8px;padding:6px 8px;font-size:12.5px}
+.st i{font-style:normal;font-weight:700;color:var(--ac);margin-right:4px}
+.ar{display:flex;align-items:center;justify-content:center;color:var(--mu)}
+.q{border-left:3px solid var(--ac);padding:8px 14px;background:var(--sf);border-radius:0 8px 8px 0;margin:10px 0}
+ul{margin:4px 0;padding-left:20px}li{margin:2px 0}
+.t0{background:#d9f2e4}.t1{background:#e3f0d0}.t2{background:#fff0c2}.t3{background:#ffd9b8}.t4{background:#f9c4c4}
+.t0,.t1,.t2,.t3,.t4{color:#1d1d1b}
+.vw{display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:12px}.vw button{background:var(--sf);color:var(--mu);border:0;padding:6px 14px;font:inherit;cursor:pointer}.vw button.on{background:var(--ac);color:#fff}
+body[data-v=tech] .ex{display:none}
+body[data-v=exec] :is(#eco,#cp,#sec,#flow,#tech,#dd,#vis)>*:not(.ex):not(.dg):not(.layer):not(.leg):not(.sub){display:none}
+.ex{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.dg{border:1px solid var(--bd);border-radius:10px;padding:10px;margin:0 0 14px;background:var(--sf);overflow-x:auto}.dg h3{margin:0 0 8px}
+.rw{display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:6px;min-width:520px}
+.bx{border:1px solid var(--bd);border-radius:7px;padding:6px 8px;font-size:12.5px;background:var(--bg);text-align:center}
+.bx.a{background:var(--l1);border-color:var(--ac)}.bx.b{background:var(--l2)}.bx.c2{background:var(--l3)}.bx.d{background:var(--l4)}
+.dn{text-align:center;color:var(--mu);margin:2px 0;font-size:13px;min-width:520px}
+.pt{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;min-width:520px}.pt .bx{text-align:left}.pl{font-weight:600;width:100%;font-size:13px}
+.deny{border-color:#c0392b;color:#c0392b}
+</style></head><body data-v="exec">
+<h1>Enterprise MCP Architecture</h1>
+<p class="sub">Data Platform · controlled creation and access of MCP servers · working draft for review</p>
+<div class="vw" id="vw"><button data-v="exec" class="on">Executive view</button><button data-v="tech">Technical view</button></div>
+<div class="tabs" id="main">
+<button data-t="eco" class="on">1 Ecosystem</button><button data-t="cp">2 Control plane</button><button data-t="sec">3 Security</button><button data-t="flow">4 Flows</button><button data-t="tech">5 Tech stack</button><button data-t="dd">6 Data dictionary</button><button data-t="vis">7 Vision &amp; requirements</button><button data-t="ldr">8 Leaders</button>
+</div>
+
+<!-- 1 ECOSYSTEM -->
+<div class="p on" id="eco">
+<div class="ex"><h2>Executive summary</h2><ul><li><b>One governed ecosystem</b> so teams build and use MCP servers quickly without creating security or PHI risk.</li><li><b>Four layers:</b> a control plane everything runs through, shared services, a use case factory, and the use cases themselves (dbt, data catalog, Kafka).</li><li><b>Where we are:</b> identity is live; gateway, guardrails and intake are the MVP; registry is a proof of concept.</li></ul></div>
+<h2>Four layers, one ecosystem</h2>
+<div class="leg"><span class="tag live">live today</span><span class="tag builds">builds on existing</span><span class="tag mvp">mvp</span><span class="tag sug">suggested</span><span class="tag poc">poc</span><span class="tag later">later phase</span></div>
+<div class="layer L4"><h3><span>Layer 4 · Use cases</span></h3><div class="g">
+<div class="c"><b>dbt</b><ul><li>Model and lineage Q&amp;A <span class="tag builds">builds on existing</span></li><li>Test failure triage <span class="tag poc">poc</span></li><li>Auto-generated model docs <span class="tag sug">suggested</span></li></ul></div>
+<div class="c"><b>Data catalog</b><ul><li>Asset discovery and search <span class="tag live">live today</span></li><li>Glossary and PHI classification lookup <span class="tag mvp">mvp</span></li><li>Owner and steward lookup <span class="tag builds">builds on existing</span></li></ul></div>
+<div class="c"><b>MSK Kafka</b><ul><li>Topic and schema discovery <span class="tag mvp">mvp</span></li><li>Consumer lag and health checks <span class="tag poc">poc</span></li><li>Governance checklist validation <span class="tag sug">suggested</span></li></ul></div>
+</div></div>
+<div class="layer L3"><h3><span>Layer 3 · AI use case factory</span></h3><div class="g">
+<div class="c"><b>Intake &amp; value use case</b><span class="tag mvp">mvp</span></div>
+<div class="c"><b>Risk tier &amp; approval</b><span class="tag mvp">mvp</span></div>
+<div class="c"><b>Asset onboarding</b><span class="tag sug">suggested</span></div>
+<div class="c"><b>Build paths</b> <small>no / low / pro code</small><br><span class="tag later">later phase</span></div>
+</div></div>
+<div class="layer L2"><h3><span>Layer 2 · Common services</span></h3><div class="g">
+<div class="c"><b>MCP tool catalog</b><span class="tag builds">builds on existing</span></div>
+<div class="c"><b>Guardrails &amp; PHI protection</b><span class="tag mvp">mvp</span></div>
+<div class="c"><b>Token management</b><span class="tag sug">suggested</span></div>
+</div></div>
+<div class="layer L1"><h3><span>Layer 1 · Control plane</span></h3><div class="g">
+<div class="c"><b>Identity &amp; access</b><span class="tag live">live today</span></div>
+<div class="c"><b>Entry point</b><span class="tag mvp">mvp</span></div>
+<div class="c"><b>Gateway &amp; policy</b><span class="tag mvp">mvp</span></div>
+<div class="c"><b>Registry &amp; discovery</b><span class="tag poc">poc</span></div>
+<div class="c"><b>Telemetry &amp; audit</b><span class="tag builds">builds on existing</span></div>
+<div class="c"><b>Cost &amp; usage capture</b><span class="tag later">later phase</span></div>
+</div></div>
+<p class="mu">Status tags are starting assumptions. Adjust to match what is actually in place.</p>
+</div>
+
+<!-- 2 CONTROL PLANE -->
+<div class="p" id="cp">
+<h2>Control plane capabilities for the platform team</h2>
+<p class="sub">What the platform team builds once so every use case team can create MCP servers safely.</p>
+<div class="ex"><h2>Executive summary</h2><ul><li>The platform team builds the shared foundation <b>once</b>: one front door, identity, policy, registry, audit and cost tracking.</li><li>Use case teams then create servers from templates in days, not months.</li><li><b>Outcome:</b> speed with control; every call is traceable and every cost is visible.</li></ul></div>
+<div class="dg"><h3>Comprehensive MCP architecture</h3>
+<div class="rw"><div class="bx">Cursor / Copilot</div><div class="bx">Agents: Strands, LangGraph, CrewAI</div><div class="bx">Workato / Bedrock</div><div class="bx">Enterprise apps &amp; chat</div></div>
+<div class="dn">▼ MCP over HTTPS with user-bound token</div>
+<div class="rw"><div class="bx a" style="grid-column:1/-1"><b>Layer 1 · Control plane</b><br>Entry point · Identity &amp; access · Gateway &amp; policy · Registry &amp; discovery · Telemetry &amp; audit · Cost &amp; usage</div></div>
+<div class="rw"><div class="bx b" style="grid-column:1/-1"><b>Layer 2 · Common services</b><br>MCP tool catalog · Guardrails &amp; PHI protection · Token management</div></div>
+<div class="dn">▼ multiplexed routing</div>
+<div class="rw"><div class="bx c2"><b>Experience servers</b><br>task and persona based</div><div class="bx c2"><b>Core tool servers</b><br>dbt · Catalog · Kafka · eGain</div><div class="bx c2"><b>External servers</b><br>via egress proxy</div></div>
+<div class="dn">▼ governed access</div>
+<div class="rw"><div class="bx">dbt</div><div class="bx">Data catalog</div><div class="bx">Lakehouse</div><div class="bx">MSK Kafka</div><div class="bx">eGain</div></div>
+<div class="rw"><div class="bx d" style="grid-column:1/-1"><b>Layer 3 · AI use case factory</b> (feeds registry): Intake · Risk tier &amp; approval · Asset onboarding · Build paths</div></div>
+<div class="rw"><div class="bx">SIEM / audit store</div><div class="bx">FinOps / chargeback</div><div class="bx">Secrets vault</div><div class="bx">Policy repo</div></div></div>
+<div class="w"><table><tr><th>Capability</th><th>What the platform team provides</th><th>Used by</th></tr>
+<tr><td>Server templates</td><td>Golden-path scaffolds (Python/TypeScript) with auth, logging, and PHI hooks pre-wired</td><td>dbt, catalog, Kafka servers</td></tr>
+<tr><td>Tool manifest standard</td><td>Naming, description, input/output schema, owner, data classification, risk tier per tool</td><td>All servers</td></tr>
+<tr><td>Identity &amp; token exchange</td><td>SSO/OIDC, on-behalf-of user tokens, service identities, least-privilege scopes</td><td>Gateway, all servers</td></tr>
+<tr><td>Gateway &amp; routing</td><td>Single entry point, MCP multiplexing, routing to internal and external servers, rate limits</td><td>Agents, IDEs, apps</td></tr>
+<tr><td>Policy as code</td><td>Allow/deny by user, role, tool, tier, data class; approvals enforced at runtime</td><td>Gateway</td></tr>
+<tr><td>Registry &amp; discovery</td><td>Approved server and tool inventory, versions, status, owners, search</td><td>Builders, agents</td></tr>
+<tr><td>Guardrails &amp; PHI protection</td><td>Input/output filtering, redaction, masking, prompt-injection and exfiltration checks</td><td>All servers</td></tr>
+<tr><td>Telemetry &amp; audit</td><td>Per-call trace: who, which agent, which tool, which data, outcome; immutable audit log</td><td>Security, compliance</td></tr>
+<tr><td>Cost &amp; usage capture</td><td>Token and call metering, chargeback by team and use case, budgets and alerts</td><td>Finance, leaders</td></tr>
+<tr><td>Secrets &amp; connectivity</td><td>Vault-managed credentials, private networking to MSK, lakehouse, catalog</td><td>All servers</td></tr>
+<tr><td>CI/CD &amp; testing</td><td>Contract tests, security scans, evals, promotion gates dev → test → prod</td><td>Builders</td></tr>
+<tr><td>Lifecycle management</td><td>Versioning, deprecation, recertification, kill switch</td><td>Platform, owners</td></tr>
+</table></div></div>
+
+<!-- 3 SECURITY -->
+<div class="p" id="sec">
+<h2>Risk tiers</h2>
+<p class="sub">Tier assigned at intake; it decides approval path, controls, and who can invoke.</p>
+<div class="ex"><h2>Executive summary</h2><ul><li><b>Five risk tiers</b> from public metadata (auto-approved) to autonomous or regulated actions (ARB, CISO and compliance).</li><li>PHI access and any write action always require human sign-off and extra controls.</li><li>A central gateway enforces this at runtime, so approvals are not just paperwork.</li></ul></div>
+<div class="dg"><h3>MCP gateway architecture</h3>
+<div class="pt"><span class="pl">Request path</span><div class="bx">Client</div>→<div class="bx a">1 TLS / WAF</div>→<div class="bx a">2 AuthN (SSO/OIDC)</div>→<div class="bx a">3 Token exchange (on-behalf-of, audience-bound)</div>→<div class="bx a">4 Registry check</div>→<div class="bx a">5 Policy: tier, role, tool</div>→<div class="bx b">6 Input guardrails (injection, PHI redaction)</div>→<div class="bx c2">7 Router / multiplexer</div>→<div class="bx">MCP server</div></div>
+<div class="pt"><span class="pl">Return path</span><div class="bx">MCP server</div>→<div class="bx b">8 Output guardrails (DLP, PHI masking)</div>→<div class="bx a">9 Audit and cost log</div>→<div class="bx">Client</div></div>
+<div class="rw"><div class="bx">IdP / SSO</div><div class="bx">Policy store (policy as code)</div><div class="bx">Registry DB</div><div class="bx">Secrets vault</div><div class="bx">Egress proxy to external servers</div><div class="bx">SIEM</div></div>
+<div class="rw"><div class="bx d"><b>Central gateway</b><br>MVP pattern: one enforcement point</div><div class="bx d"><b>Federated domain gateways</b><br>later: per domain, shared policy</div><div class="bx d"><b>Local IDE proxy</b><br>blocks unregistered servers</div></div></div>
+<div class="w"><table><tr><th>Tier</th><th>Description</th><th>Examples</th><th>Approval</th><th>Required controls</th></tr>
+<tr class="t0"><td><b>Tier 0</b></td><td>Read-only, public or metadata only</td><td>Catalog search, glossary lookup</td><td>Auto-approved via intake</td><td>SSO, audit log</td></tr>
+<tr class="t1"><td><b>Tier 1</b></td><td>Read-only internal, non-PHI</td><td>dbt lineage, Kafka topic and schema discovery</td><td>Platform team review</td><td>Scoped tokens, rate limits, telemetry</td></tr>
+<tr class="t2"><td><b>Tier 2</b></td><td>Reads PHI/PII or sensitive data</td><td>Claims-related dataset queries</td><td>Data owner + security + privacy</td><td>PHI redaction/masking, row/column policy, minimum-necessary, full audit</td></tr>
+<tr class="t3"><td><b>Tier 3</b></td><td>Write or change actions in systems</td><td>Create Kafka topic, trigger dbt job, update catalog entries</td><td>Architecture Review Board + system owner</td><td>Human-in-the-loop confirmation, dry run, rollback, change ticket link</td></tr>
+<tr class="t4"><td><b>Tier 4</b></td><td>Autonomous, member/provider-impacting, regulated, or external exposure</td><td>Agent acts on member data or calls external MCP servers with sensitive context</td><td>ARB + CISO + compliance; periodic recertification</td><td>All above plus kill switch, continuous monitoring, external-server allowlist, legal review</td></tr>
+</table></div>
+<div class="g" style="margin-top:12px">
+<div class="c"><b>Cross-cutting risks</b><ul><li>Prompt injection via tool output</li><li>Over-broad tool scopes</li><li>PHI leakage to external models or servers</li><li>Shadow MCP servers in IDEs</li></ul></div>
+<div class="c"><b>Cross-cutting controls</b><ul><li>Registry-only connections</li><li>Token audience binding</li><li>Egress allowlist</li><li>Tool description review</li></ul></div>
+</div></div>
+
+<!-- 4 FLOWS -->
+<div class="p" id="flow">
+<h2>Swim lanes: centralized MCP server architecture</h2>
+<div class="ex"><h2>Executive summary</h2><ul><li><b>Every path leads through one front door</b>, whether the user is in an IDE, a low-code tool, a custom agent or an app.</li><li>Direct access to servers is blocked; external servers are reachable only through an allowlist.</li></ul></div>
+<div class="dg"><h3>Access paths to MCP servers</h3>
+<div class="pt"><span class="pl">A · No code: IDE users</span><div class="bx">Cursor / Copilot</div>→<div class="bx a">Gateway (registered servers only)</div>→<div class="bx c2">Internal MCP server</div>→<div class="bx">dbt / Catalog</div></div>
+<div class="pt"><span class="pl">B · Low code: integration and Bedrock agents</span><div class="bx">Workato / Bedrock</div>→<div class="bx a">Gateway connector</div>→<div class="bx c2">Internal MCP server</div>→<div class="bx">Kafka / eGain</div></div>
+<div class="pt"><span class="pl">C · Pro code: custom agents</span><div class="bx">Strands / LangGraph / CrewAI / LangChain</div>→<div class="bx a">Gateway multiplexer</div>→<div class="bx c2">Several servers (fan-out)</div>→<div class="bx">Semantic layer</div></div>
+<div class="pt"><span class="pl">D · Experience: apps and chat</span><div class="bx">Enterprise app / chat</div>→<div class="bx a">Gateway</div>→<div class="bx c2">Experience MCP server</div>→<div class="bx c2">Core tool servers</div></div>
+<div class="pt"><span class="pl">E · External servers</span><div class="bx">Internal agent</div>→<div class="bx a">Gateway + policy</div>→<div class="bx b">Egress proxy + allowlist</div>→<div class="bx">External MCP server (no PHI by default)</div></div>
+<div class="pt"><span class="pl">F · Direct access (blocked)</span><div class="bx">Any client</div><span>✕</span><div class="bx deny">MCP server directly: denied by network policy</div></div></div>
+<p class="sub">Request path from experience layer through multiplexing gateway to internal, external, and core tools. Scroll sideways on small screens.</p>
+<div class="w">
+<div class="lane"><div class="ln">Experience<br><span class="mu">Cursor, Copilot, agents, apps</span></div>
+<div class="st"><i>1</i>User or agent issues tool request</div><div class="ar">→</div><div></div><div></div><div></div><div class="st"><i>9</i>Response rendered to user</div></div>
+<div class="lane"><div class="ln">Control plane<br><span class="mu">Identity, gateway, policy</span></div>
+<div></div><div class="st"><i>2</i>Authenticate (SSO), exchange token</div><div class="st"><i>3</i>Registry lookup + policy and tier check</div><div></div><div class="st"><i>8</i>Guardrails, PHI redaction, audit, cost log</div><div class="ar">←</div></div>
+<div class="lane"><div class="ln">MCP multiplexer<br><span class="mu">Single endpoint</span></div>
+<div></div><div></div><div class="st"><i>4</i>Route to target server(s); fan-out if multi-tool</div><div></div><div class="st"><i>7</i>Aggregate results</div><div></div></div>
+<div class="lane"><div class="ln">Internal MCP servers<br><span class="mu">dbt, catalog, Kafka</span></div>
+<div></div><div></div><div></div><div class="st"><i>5a</i>Execute scoped tool call</div><div class="ar">→</div><div></div></div>
+<div class="lane"><div class="ln">External MCP servers<br><span class="mu">Vendor / SaaS, allowlisted</span></div>
+<div></div><div></div><div></div><div class="st"><i>5b</i>Call via egress proxy, no PHI by default</div><div class="ar">→</div><div></div></div>
+<div class="lane"><div class="ln">Core tools &amp; data<br><span class="mu">Semantic layer, systems of record</span></div>
+<div></div><div></div><div></div><div></div><div class="st"><i>6</i>dbt, catalog, lakehouse, MSK, eGain return data</div><div></div></div>
+</div>
+<div class="q"><b>Key design points:</b> one endpoint for clients; servers are never called directly; every hop carries a user-bound token; external servers are reachable only through the gateway.</div>
+</div>
+
+<!-- 5 TECH STACK -->
+<div class="p" id="tech">
+<div class="ex"><h2>Executive summary</h2><ul><li><b>Three build paths</b> match skill level: no code (Cursor, Copilot), low code (Workato, Bedrock), pro code (Strands, CrewAI, LangGraph, LangChain).</li><li>All paths reuse one governed data layer: dbt, data catalog, lakehouse, Kafka and eGain.</li><li>Higher risk tiers are limited to the paths with stronger engineering controls.</li></ul></div>
+<h2>Tech stack by build path</h2>
+<div class="g">
+<div class="c"><h3>No code</h3><span class="mu">Citizen builders, personal productivity</span><ul><li>MCP server creation in Cursor</li><li>MCP server creation in GitHub Copilot</li></ul><b>Guard:</b> Tier 0–1 only; registry-approved servers only</div>
+<div class="c"><h3>Low code</h3><span class="mu">Integration and automation teams</span><ul><li>Workato</li><li>AWS Bedrock (agents, knowledge bases)</li></ul><b>Guard:</b> up to Tier 2 with platform review</div>
+<div class="c"><h3>Pro code</h3><span class="mu">Engineering teams, complex agents</span><ul><li>AWS Strands</li><li>CrewAI</li><li>LangGraph</li><li>LangChain</li></ul><b>Guard:</b> Tier 2–4 with ARB path</div>
+</div>
+<h2 style="margin-top:18px">Enterprise semantic layer</h2>
+<div class="g">
+<div class="c"><b>dbt</b>Governed models, metrics, lineage</div>
+<div class="c"><b>Data catalog</b>Assets, glossary, ownership, classification</div>
+<div class="c"><b>Lakehouse</b>Curated, governed datasets</div>
+<div class="c"><b>Kafka (MSK)</b>Event streams, schemas, topics</div>
+<div class="c"><b>eGain</b>Knowledge and service content</div>
+</div></div>
+
+<!-- 6 DATA DICTIONARY -->
+<div class="p" id="dd">
+<div class="ex"><h2>Key terms in plain language</h2><ul><li><b>MCP:</b> a standard way for AI tools to use company systems.</li><li><b>Gateway:</b> the single front door that checks who is asking and what they may do.</li><li><b>Registry:</b> the approved list of servers and tools.</li><li><b>Risk tier:</b> a 0 to 4 rating that decides the approvals needed.</li><li><b>PHI:</b> protected health information; it is masked or blocked by default.</li></ul></div>
+<h2>Data dictionary</h2>
+<div class="w"><table><tr><th>Term</th><th>Definition</th></tr>
+<tr><td>MCP (Model Context Protocol)</td><td>Open protocol for exposing tools, resources, and prompts to AI clients</td></tr>
+<tr><td>MCP server</td><td>Service exposing tools over MCP to a client or agent</td></tr>
+<tr><td>MCP gateway</td><td>Single controlled entry point that authenticates, authorizes, routes, and logs MCP traffic</td></tr>
+<tr><td>Multiplexing</td><td>Presenting many backend MCP servers behind one endpoint</td></tr>
+<tr><td>Tool</td><td>A callable function on an MCP server, with a schema and a risk tier</td></tr>
+<tr><td>Tool catalog</td><td>Curated list of approved tools with owners, schemas, and classification</td></tr>
+<tr><td>Registry</td><td>Inventory of approved MCP servers, versions, and status</td></tr>
+<tr><td>Risk tier</td><td>Level 0–4 classification that sets approvals and controls</td></tr>
+<tr><td>PHI</td><td>Protected health information governed by HIPAA</td></tr>
+<tr><td>Guardrails</td><td>Runtime checks on inputs and outputs (redaction, injection, policy)</td></tr>
+<tr><td>On-behalf-of token</td><td>Token that carries the end user identity through the agent to the server</td></tr>
+<tr><td>Use case factory</td><td>Repeatable intake → tier → onboard → build process for AI use cases</td></tr>
+<tr><td>Internal / external server</td><td>Built and run by the enterprise vs. provided by a vendor or third party</td></tr>
+<tr><td>Semantic layer</td><td>Governed business definitions over data (dbt, catalog, lakehouse)</td></tr>
+<tr><td>MSK</td><td>Amazon Managed Streaming for Apache Kafka</td></tr>
+<tr><td>ARB</td><td>Architecture Review Board</td></tr>
+<tr><td>Chargeback</td><td>Allocating token and call costs to consuming teams</td></tr>
+</table></div></div>
+
+<!-- 7 VISION -->
+<div class="p" id="vis">
+<div class="ex"><h2>Vision and outcomes</h2><p>Any approved team can create and use MCP servers quickly on any platform we own, through one governed path.</p><ul><li><b>Faster:</b> new servers ship in days from templates.</li><li><b>Safer:</b> PHI protected, every call audited.</li><li><b>Visible:</b> usage and cost tracked per team.</li></ul><p class="mu">Switch to Technical view for the full requirements list (R1 to R11).</p></div>
+<h2>Vision</h2>
+<div class="q"><b>Draft for Sr Director review.</b> Any approved team can create and use MCP servers quickly, on any platform we own, through one governed path: every server registered, every call authenticated and audited, every PHI interaction protected, and every cost visible.</div>
+<h3>Principles</h3>
+<ul><li>Controlled by default, fast by design</li><li>One front door, many servers</li><li>Risk-tiered approvals, not one-size-fits-all</li><li>Reuse the semantic layer; do not copy data into agents</li><li>Platform team builds the paved road; use case teams drive on it</li></ul>
+<h2 style="margin-top:16px">Requirements</h2>
+<div class="w"><table><tr><th>ID</th><th>Requirement</th><th>Type</th></tr>
+<tr><td>R1</td><td>All MCP access flows through the central gateway; direct server access blocked</td><td>Security</td></tr>
+<tr><td>R2</td><td>Every server and tool registered with owner, tier, data classification</td><td>Governance</td></tr>
+<tr><td>R3</td><td>User identity propagated end to end; least-privilege scopes</td><td>Security</td></tr>
+<tr><td>R4</td><td>PHI redaction and minimum-necessary enforced at runtime</td><td>Compliance</td></tr>
+<tr><td>R5</td><td>Risk tier assigned at intake; approvals routed by tier</td><td>Process</td></tr>
+<tr><td>R6</td><td>No, low, and pro code build paths supported with tier limits</td><td>Platform</td></tr>
+<tr><td>R7</td><td>Full audit trail per call, retained per policy</td><td>Compliance</td></tr>
+<tr><td>R8</td><td>Token and cost metering with chargeback by team</td><td>Finance</td></tr>
+<tr><td>R9</td><td>External MCP servers only via allowlist and egress proxy</td><td>Security</td></tr>
+<tr><td>R10</td><td>Templates, CI/CD gates, and tests so a new server ships in days</td><td>Platform</td></tr>
+<tr><td>R11</td><td>Kill switch and deprecation workflow per server</td><td>Operations</td></tr>
+</table></div></div>
+
+<!-- 8 LEADERS -->
+<div class="p" id="ldr">
+<h2>Leaders</h2>
+<div class="tabs s" id="sub">
+<button data-t="sc" class="on">Steerco report</button><button data-t="cto">CTO view</button><button data-t="plan">Plan</button><button data-t="dec">Decisions</button></div>
+
+<div class="p on" id="sc">
+<div class="g">
+<div class="c"><b>Status</b>Architecture defined; control plane MVP in design. <span class="tag mvp">mvp</span></div>
+<div class="c"><b>Delivered</b><ul><li>Four-layer reference architecture</li><li>Risk tier model</li><li>Build path options</li></ul></div>
+<div class="c"><b>Next</b><ul><li>Gateway and registry decisions</li><li>First three use cases (dbt, catalog, Kafka)</li></ul></div>
+</div>
+<h3 style="margin-top:12px">Risks and asks</h3>
+<ul><li>Shadow MCP servers already appearing in IDEs: need policy to block unregistered servers</li><li>Privacy and security sign-off needed for Tier 2 pattern</li><li>Platform team capacity for gateway build</li></ul></div>
+
+<div class="p" id="cto"><div class="g">
+<div class="c"><b>Why now</b>MCP adoption is outpacing governance; central control avoids sprawl and PHI exposure.</div>
+<div class="c"><b>Architecture</b>One gateway, registry, policy engine; servers built from templates; semantic layer reused.</div>
+<div class="c"><b>Buy vs build</b>Gateway and registry options to evaluate; template and policy layers built in-house.</div>
+<div class="c"><b>Outcomes</b>Faster server delivery, auditable access, visible cost, lower breach risk.</div>
+</div></div>
+
+<div class="p" id="plan"><div class="w"><table><tr><th>Phase</th><th>Scope</th><th>Exit criteria</th></tr>
+<tr><td>Phase 0 · Foundations</td><td>Identity, entry point, registry PoC, intake and risk tier process</td><td>Tier model approved</td></tr>
+<tr><td>Phase 1 · MVP</td><td>Gateway and policy, guardrails and PHI protection, 3 use cases (dbt, catalog, Kafka read-only)</td><td>Tier 0–2 live with audit</td></tr>
+<tr><td>Phase 2 · Scale</td><td>Tool catalog, asset onboarding, templates, low-code path, token management</td><td>Self-service onboarding</td></tr>
+<tr><td>Phase 3 · Expand</td><td>Cost and usage capture, pro-code path, Tier 3 write actions, external servers</td><td>Chargeback running</td></tr>
+</table></div><p class="mu">Dates deliberately omitted; add once capacity is confirmed.</p></div>
+
+<div class="p" id="dec"><div class="w"><table><tr><th>#</th><th>Decision needed</th><th>Options</th><th>Owner</th></tr>
+<tr><td>D1</td><td>Gateway approach</td><td>Buy vs build vs extend existing API gateway</td><td>CTO / Platform</td></tr>
+<tr><td>D2</td><td>Mandate central registry for all MCP servers</td><td>Mandatory vs advisory</td><td>Sr Director</td></tr>
+<tr><td>D3</td><td>Policy on IDE-created (no-code) servers</td><td>Block, allow Tier 0–1, allow with registration</td><td>Security</td></tr>
+<tr><td>D4</td><td>External MCP server stance</td><td>Allowlist only vs prohibit for PHI contexts</td><td>CISO / Privacy</td></tr>
+<tr><td>D5</td><td>First three use cases</td><td>dbt, catalog, Kafka confirmed?</td><td>Steerco</td></tr>
+<tr><td>D6</td><td>Chargeback model</td><td>Showback first vs full chargeback</td><td>Finance</td></tr>
+</table></div></div>
+</div>
+
+<script>
+function wire(id){var bar=document.getElementById(id),bs=bar.querySelectorAll('button');
+bs.forEach(function(b){b.onclick=function(){bs.forEach(function(x){x.classList.remove('on');var p=document.getElementById(x.dataset.t);if(p)p.classList.remove('on')});b.classList.add('on');document.getElementById(b.dataset.t).classList.add('on')}})}
+wire('main');wire('sub');
+document.querySelectorAll('#vw button').forEach(function(b){b.onclick=function(){document.body.dataset.v=b.dataset.v;document.querySelectorAll('#vw button').forEach(function(x){x.classList.toggle('on',x===b)})}});
+</script>
+</body></html>
