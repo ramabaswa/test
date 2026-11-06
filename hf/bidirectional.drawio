@@ -1,0 +1,364 @@
+<mxGraphModel dx="2100" dy="1900" grid="1" gridSize="10"
+  guides="1" tooltips="1" connect="1" arrows="1" fold="1"
+  page="1" pageScale="1" pageWidth="2200" pageHeight="1900"
+  math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- TITLE -->
+    <mxCell id="title" parent="1" vertex="1"
+      style="text;html=1;align=left;verticalAlign=middle;fontSize=27;fontStyle=1;fontColor=#102A43;"
+      value="PATTERN 4 — BIDIRECTIONAL — Scenario A: Enterprise Push / Vendor Result / Enterprise Pull">
+      <mxGeometry x="40" y="15" width="2110" height="50" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="subtitle" parent="1" vertex="1"
+      style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=14;fontColor=#536B7D;"
+      value="Enterprise pushes authorized data. Vendor processes and durably publishes results, then notifies availability. Enterprise pulls results and applies its workflow. Each direction has independent identity, retention, checkpoints and recovery.">
+      <mxGeometry x="42" y="70" width="2100" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- LANE 1: ENTERPRISE DOMAIN / OUTBOUND INTEGRATION -->
+    <mxCell id="L1" parent="1" vertex="1"
+      style="swimlane;html=1;horizontal=1;startSize=36;fillColor=#0798B5;swimlaneFillColor=#F3FAFB;fontColor=#FFFFFF;fontStyle=1;fontSize=14;collapsible=0;strokeColor=#A8C6D0;"
+      value="YOUR COMPANY — DOMAIN / SOURCE SYSTEMS / OUTBOUND INTEGRATION">
+      <mxGeometry x="40" y="140" width="2110" height="220" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n1" parent="L1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0798B5;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;1. Commit business trigger&lt;/b&gt;&lt;br&gt;Authoritative source transaction&lt;br&gt;Workflow / correlation identity&lt;br&gt;Source version and requested action">
+      <mxGeometry x="30" y="65" width="280" height="115" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n2" parent="L1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0798B5;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;2. Capture and build authorized event&lt;/b&gt;&lt;br&gt;CDC / transactional outbox&lt;br&gt;Schema validation and PHI projection&lt;br&gt;Event ID, entity version and causation">
+      <mxGeometry x="390" y="65" width="310" height="115" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n3" parent="L1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0798B5;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;3. Publish outbound event&lt;/b&gt;&lt;br&gt;Enterprise producer writes approved topic&lt;br&gt;Persist publication evidence&lt;br&gt;Track expected workflow response">
+      <mxGeometry x="780" y="65" width="310" height="115" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="conversation" parent="L1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E4F6F8;strokeColor=#9BD9E2;fontColor=#24515A;fontSize=12;spacing=10;"
+      value="&lt;b&gt;Conversation contract&lt;/b&gt;&lt;br&gt;workflowId / correlationId; eventId; causationId&lt;br&gt;entityId; sourceVersion; resultId / resultVersion&lt;br&gt;Accepted / processing / applied / rejected are distinct states&lt;br&gt;Define permitted transitions, timeout and authoritative fields">
+      <mxGeometry x="1180" y="55" width="890" height="135" as="geometry"/>
+    </mxCell>
+
+    <!-- LANE 2: ENTERPRISE MSK -->
+    <mxCell id="L2" parent="1" vertex="1"
+      style="swimlane;html=1;horizontal=1;startSize=36;fillColor=#1E293B;swimlaneFillColor=#F4F7FA;fontColor=#FFFFFF;fontStyle=1;fontSize=14;collapsible=0;strokeColor=#A8C6D0;"
+      value="YOUR COMPANY — MSK PLATFORM / OUTBOUND AND INBOUND TOPICS">
+      <mxGeometry x="40" y="385" width="2110" height="220" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="outTopic" parent="L2" vertex="1"
+      style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#FFFFFF;strokeColor=#0798B5;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=12;"
+      value="&lt;b&gt;Outbound delivery topic&lt;/b&gt;&lt;br&gt;Authorized event contract&lt;br&gt;Enterprise relay consumer group&lt;br&gt;Finite retained history">
+      <mxGeometry x="390" y="55" width="310" height="135" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="inTopic" parent="L2" vertex="1"
+      style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=12;"
+      value="&lt;b&gt;Inbound vendor-result topic&lt;/b&gt;&lt;br&gt;Separate schema, permissions and retention&lt;br&gt;Enterprise result-application group&lt;br&gt;Preserve vendor result identity">
+      <mxGeometry x="1180" y="55" width="330" height="135" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="platformControls" parent="L2" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF3FC;strokeColor=#2867BB;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;Provision and govern before runtime&lt;/b&gt;&lt;br&gt;Separate producer / consumer identities and permissions&lt;br&gt;Encryption, partition strategy, retention and capacity&lt;br&gt;Topic/group scope; schema distribution; monitoring&lt;br&gt;Platform team owns MSK; integration owns adapters">
+      <mxGeometry x="1590" y="50" width="480" height="145" as="geometry"/>
+    </mxCell>
+
+    <!-- LANE 3: ENTERPRISE DELIVERY AND RETURN ADAPTERS -->
+    <mxCell id="L3" parent="1" vertex="1"
+      style="swimlane;html=1;horizontal=1;startSize=36;fillColor=#EA580C;swimlaneFillColor=#FFF8F2;fontColor=#FFFFFF;fontStyle=1;fontSize=14;collapsible=0;strokeColor=#D8B99E;"
+      value="YOUR COMPANY — OUTBOUND RELAY / NOTIFICATION INGRESS / RESULT PULL ADAPTER">
+      <mxGeometry x="40" y="630" width="2110" height="270" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n4" parent="L3" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA580C;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;4. Enterprise relay pushes data&lt;/b&gt;&lt;br&gt;Consume outbound topic&lt;br&gt;Call vendor-confirmed intake API&lt;br&gt;Idempotency key, retries and delivery ledger">
+      <mxGeometry x="30" y="80" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n6" parent="L3" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;6. Record acceptance / commit outbound&lt;/b&gt;&lt;br&gt;After verified durable vendor intake&lt;br&gt;Persist receipt and commit safe relay offsets&lt;br&gt;Acceptance is not vendor processing completion">
+      <mxGeometry x="390" y="80" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n10" parent="L3" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2867BB;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;10. Receive availability notification&lt;/b&gt;&lt;br&gt;Authenticate, validate and deduplicate&lt;br&gt;Persist pull work / trigger pull adapter&lt;br&gt;Notification is a hint, not result data">
+      <mxGeometry x="780" y="80" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n11" parent="L3" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;11. Enterprise pulls vendor results&lt;/b&gt;&lt;br&gt;Read saved source cursor / positions&lt;br&gt;Fetch vendor feed pages or records&lt;br&gt;Periodic catch-up also detects missed notifications">
+      <mxGeometry x="1180" y="80" width="330" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n12" parent="L3" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;12. Validate and publish inbound results&lt;/b&gt;&lt;br&gt;Authorization, schema, correlation and identity&lt;br&gt;Normalize while preserving result ID/version&lt;br&gt;Quarantine invalid data without silent loss">
+      <mxGeometry x="1590" y="80" width="330" height="140" as="geometry"/>
+    </mxCell>
+
+    <!-- LANE 4: VENDOR -->
+    <mxCell id="L4" parent="1" vertex="1"
+      style="swimlane;html=1;horizontal=1;startSize=36;fillColor=#7C3AED;swimlaneFillColor=#F8F5FD;fontColor=#FFFFFF;fontStyle=1;fontSize=14;collapsible=0;strokeColor=#A8C6D0;"
+      value="COHERE HEALTH / OTHER VENDOR — INTAKE / PROCESSING / DURABLE RESULT FEED">
+      <mxGeometry x="40" y="925" width="2110" height="250" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n5" parent="L4" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;5. Validate and durably accept&lt;/b&gt;&lt;br&gt;Authenticate enterprise request&lt;br&gt;Schema / event ID / duplicate checks&lt;br&gt;Persist accepted work before receipt">
+      <mxGeometry x="30" y="70" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n7" parent="L4" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;7. Process and persist outcome&lt;/b&gt;&lt;br&gt;Vendor-owned business workflow&lt;br&gt;Idempotent effects and source-version rules&lt;br&gt;Persist outcome and result outbox atomically where feasible">
+      <mxGeometry x="390" y="70" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n8" parent="L4" vertex="1"
+      style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#FFFFFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=12;"
+      value="&lt;b&gt;8. Publish durable vendor results&lt;/b&gt;&lt;br&gt;Vendor-side result feed / changelog&lt;br&gt;Result ID/version and workflow correlation&lt;br&gt;Contracted retention and replay">
+      <mxGeometry x="1180" y="65" width="330" height="150" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n9" parent="L4" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2867BB;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;9. Notify result availability&lt;/b&gt;&lt;br&gt;Only after result is durably retrievable&lt;br&gt;Use confirmed notification interface&lt;br&gt;Retry safely; minimize notification PHI">
+      <mxGeometry x="780" y="70" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="vendorRecovery" parent="L4" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F0;strokeColor=#B42318;fontColor=#7A271A;fontSize=12;spacing=10;"
+      value="&lt;b&gt;Vendor recovery responsibility&lt;/b&gt;&lt;br&gt;Accepted-but-unprocessed backlog&lt;br&gt;Result outbox publication retry&lt;br&gt;Feed retention / replay and notification retry&lt;br&gt;Separate processing failure from delivery failure">
+      <mxGeometry x="1590" y="65" width="480" height="150" as="geometry"/>
+    </mxCell>
+
+    <!-- LANE 5: ENTERPRISE INBOUND STATE AND APPLICATION -->
+    <mxCell id="L5" parent="1" vertex="1"
+      style="swimlane;html=1;horizontal=1;startSize=36;fillColor=#2867BB;swimlaneFillColor=#F3F7FD;fontColor=#FFFFFF;fontStyle=1;fontSize=14;collapsible=0;strokeColor=#A8C6D0;"
+      value="YOUR COMPANY — INBOUND CHECKPOINT / RESULT ETL / DOMAIN APPLICATION">
+      <mxGeometry x="40" y="1200" width="2110" height="250" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n13" parent="L5" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;13. Advance vendor-source cursor&lt;/b&gt;&lt;br&gt;Only after complete fetched range is durably published to inbound MSK&lt;br&gt;Independent of enterprise target application">
+      <mxGeometry x="1590" y="65" width="330" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n14" parent="L5" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2867BB;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;14. Consume and validate business result&lt;/b&gt;&lt;br&gt;Enterprise inbound consumer group&lt;br&gt;Deduplicate result ID/version&lt;br&gt;Validate workflow transition and authority">
+      <mxGeometry x="1180" y="65" width="330" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n15" parent="L5" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2867BB;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;15. Apply enterprise workflow / target&lt;/b&gt;&lt;br&gt;Transform / ETL / application adapter&lt;br&gt;Idempotent merge and permitted state change&lt;br&gt;Persist applied result and entity version">
+      <mxGeometry x="780" y="65" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n16" parent="L5" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;strokeWidth=2;fontColor=#102A43;fontSize=12;spacing=10;"
+      value="&lt;b&gt;16. Commit inbound delivery position&lt;/b&gt;&lt;br&gt;After successful enterprise target application in this design&lt;br&gt;Commit safe contiguous partition offsets">
+      <mxGeometry x="390" y="65" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="reconcile" parent="L5" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E4F6F8;strokeColor=#0798B5;fontColor=#24515A;fontSize=12;spacing=10;"
+      value="&lt;b&gt;Reconcile lifecycle and repair&lt;/b&gt;&lt;br&gt;Expected vs accepted vs completed results&lt;br&gt;Detect missing / stale / conflicting outcomes&lt;br&gt;Controlled replay, timeout and escalation">
+      <mxGeometry x="30" y="65" width="310" height="140" as="geometry"/>
+    </mxCell>
+
+    <!-- OUTBOUND EVENT FLOW -->
+    <mxCell id="e1" parent="1" edge="1" source="n1" target="n2"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0798B5;strokeWidth=2;endArrow=block;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e2" parent="1" edge="1" source="n2" target="n3"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0798B5;strokeWidth=2;endArrow=block;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e3" parent="1" edge="1" source="n3" target="outTopic"
+      value="Outbound event data"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0798B5;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e4" parent="1" edge="1" source="outTopic" target="n4"
+      value="Enterprise relay consumes"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0798B5;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e5" parent="1" edge="1" source="n4" target="n5"
+      value="Enterprise-initiated push"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#EA580C;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="acceptance" parent="1" edge="1" source="n5" target="n6"
+      value="Durable intake receipt"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#16A34A;strokeWidth=2;dashed=1;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- VENDOR PROCESSING AND RESULT PUBLICATION -->
+    <mxCell id="e6" parent="1" edge="1" source="n5" target="n7"
+      value="Accepted work"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e7" parent="1" edge="1" source="n7" target="n8"
+      value="Publish correlated outcome"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=1;">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="585" y="1160"/>
+          <mxPoint x="1385" y="1160"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="e8" parent="1" edge="1" source="n8" target="n9"
+      value="Result durably available"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- NOTIFICATION PATH -->
+    <mxCell id="notification" parent="1" edge="1" source="n9" target="n10"
+      value="Availability notification — not result payload"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2867BB;strokeWidth=2;dashed=1;endArrow=open;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="triggerPull" parent="1" edge="1" source="n10" target="n11"
+      value="Durable pull trigger"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2867BB;strokeWidth=1.5;dashed=1;endArrow=open;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- ENTERPRISE PULL REQUEST / RESULT RESPONSE -->
+    <mxCell id="pullRequest" parent="1" edge="1" source="n11" target="n8"
+      value="Enterprise-initiated fetch from saved position"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2867BB;strokeWidth=1.5;dashed=1;endArrow=open;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.25;exitY=1;entryX=0.25;entryY=0;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="pullResponse" parent="1" edge="1" source="n8" target="n11"
+      value="Durable result records + continuation position"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.8;exitY=0;entryX=0.8;entryY=1;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e9" parent="1" edge="1" source="n11" target="n12"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e10" parent="1" edge="1" source="n12" target="inTopic"
+      value="Validated inbound event data"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- EXTRACTION CHECKPOINT -->
+    <mxCell id="publicationAck" parent="1" edge="1" source="inTopic" target="n13"
+      value="Durable publication confirmed for fetched range"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#16A34A;strokeWidth=1.5;dashed=1;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="2130" y="507"/>
+          <mxPoint x="2130" y="1335"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <!-- ENTERPRISE TARGET APPLICATION -->
+    <mxCell id="e11" parent="1" edge="1" source="inTopic" target="n14"
+      value="Enterprise result consumer polls inbound topic"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.7;entryX=0;entryY=0.3;">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="1170" y="535"/>
+          <mxPoint x="1170" y="1307"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+
+    <mxCell id="e12" parent="1" edge="1" source="n14" target="n15"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;strokeWidth=2;endArrow=block;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e13" parent="1" edge="1" source="n15" target="n16"
+      value="Durable enterprise applied outcome"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#16A34A;strokeWidth=2;endArrow=block;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e14" parent="1" edge="1" source="n16" target="reconcile"
+      value="Application / checkpoint evidence"
+      style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0798B5;strokeWidth=1.5;dashed=1;endArrow=open;fontSize=11;labelBackgroundColor=#FFFFFF;">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <!-- IMPLEMENTATION NOTES -->
+    <mxCell id="note1" parent="1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E4F6F8;strokeColor=#9BD9E2;fontColor=#24515A;fontSize=12;align=left;spacing=12;"
+      value="&lt;b&gt;Scenario A boundary&lt;/b&gt;&lt;br&gt;Outbound is enterprise-managed push, not vendor Kafka pull. Return is enterprise-initiated pull from a durable vendor result source, not vendor push to enterprise S3. Notification is a separate availability signal. No S3 route or automatic enterprise republish loop is included.">
+      <mxGeometry x="40" y="1480" width="1030" height="100" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="note2" parent="1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=#CA8A04;fontColor=#795C21;fontSize=12;align=left;spacing=12;"
+      value="&lt;b&gt;Independent positions&lt;/b&gt;&lt;br&gt;Enterprise capture/publication → outbound relay offsets → vendor accepted/applied state → vendor result publication → enterprise extraction cursor → inbound consumer offsets → enterprise applied state. None is a substitute for another. Extraction can advance independently of downstream application after safe publication.">
+      <mxGeometry x="1100" y="1480" width="1050" height="100" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="note3" parent="1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0EBFA;strokeColor=#CBBCE7;fontColor=#554376;fontSize=12;align=left;spacing=12;"
+      value="&lt;b&gt;Failure / replay controls&lt;/b&gt;&lt;br&gt;Use bounded retries, backpressure, restricted quarantine and approved replay at each boundary. Preserve event/result IDs across retries. A crash after applying but before committing can replay work. Advance only safe contiguous positions. Retained-history loss requires controlled repair or baseline, never silent skipping.">
+      <mxGeometry x="40" y="1600" width="1030" height="110" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="note4" parent="1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1F0;strokeColor=#E7B7B3;fontColor=#7A271A;fontSize=12;align=left;spacing=12;"
+      value="&lt;b&gt;Notification and source-cursor safety&lt;/b&gt;&lt;br&gt;Periodic catch-up protects against lost notifications. Never advance the vendor-source cursor past unpersisted results. Invalid records require a defined durable disposition before advancing a fetched range. Result feed retention and notification retention are separate. Timestamp-only resume is not a general correctness guarantee.">
+      <mxGeometry x="1100" y="1600" width="1050" height="110" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="note5" parent="1" vertex="1"
+      style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF3FC;strokeColor=#B8CDEA;fontColor=#24466E;fontSize=12;align=left;spacing=12;"
+      value="&lt;b&gt;Vendor capability / identity / authority confirmation&lt;/b&gt;&lt;br&gt;Confirm intake API, durable result-feed access, notification transport, authentication, idempotency and recovery support. A vendor Kafka result topic is one possible feed implementation only if certified; otherwise use an agreed pull API/changelog. Separate human OIDC/CIAM from workload credentials. Enforce PHI scope, field authority, origin/causation and version rules to prevent unauthorized updates and feedback loops.">
+      <mxGeometry x="40" y="1730" width="2110" height="100" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="legend" parent="1" vertex="1"
+      style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontColor=#536B7D;"
+      value="Legend: solid teal = outbound event flow; solid purple = vendor processing / returned result data; dashed blue = notification or pull control; dashed green = durable acceptance / publication confirmation. Numbering reflects logical milestones; vendor processing and enterprise delivery checkpointing may proceed independently after durable acceptance.">
+      <mxGeometry x="45" y="1840" width="2100" height="50" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>
