@@ -1,0 +1,439 @@
+<mxfile host="app.diagrams.net" pages="5">
+  <diagram id="1" name="01 | Registration and lifecycle process">
+    <mxGraphModel dx="1704" dy="1938" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="01 | Registration and lifecycle process&#xa;Two entry paths converge on a governed enterprise agent record; discovery does not imply approval. All workflow steps below are proposed implementation." vertex="1">
+          <mxGeometry height="90" width="2120" x="35" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="plan" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="A. Planned agent creation&#xa;ServiceNow request: purpose, owners, risk&#xa;Authoring platform and intended deployment&#xa;Define required tools/data and access" vertex="1">
+          <mxGeometry height="190" width="440" x="55" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="discover" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="B. Existing / shadow agent discovery&#xa;Native ServiceNow / SailPoint connector where supported&#xa;Platform API or future NHI discovery&#xa;Record source IDs, evidence and timestamps" vertex="1">
+          <mxGeometry height="190" width="440" x="1145" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="id" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Assign enterpriseAgentId&#xa;ServiceNow-supported record / extension&#xa;Opaque, immutable enterprise reference&#xa;Keep ServiceNow record ID separately" vertex="1">
+          <mxGeometry height="190" width="440" x="55" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="observe" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Observe native objects&#xa;Agent definition ≠ deployment ≠ security principal&#xa;Capture tenant/account/org + native object ID&#xa;Do not import credentials into the catalog" vertex="1">
+          <mxGeometry height="190" width="440" x="1145" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="correlate" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Correlate and verify identity relationships&#xa;Existing verified match → link to enterprise record&#xa;No match → provisional record; ambiguous → review&#xa;Never merge by display name or shared credential alone" vertex="1">
+          <mxGeometry height="190" width="440" x="600" y="725" as="geometry" />
+        </mxCell>
+        <mxCell id="review" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Owner and sanction review&#xa;Resolve business owner and technical owner&#xa;Approve purpose, risk tier and required access&#xa;Unapproved discovery remains provisional/restricted" vertex="1">
+          <mxGeometry height="190" width="440" x="55" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="provision" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Provision and govern access&#xa;SailPoint-supported access workflow / connector&#xa;Native issuer remains authority for identity&#xa;Capture actual permission and fulfillment evidence" vertex="1">
+          <mxGeometry height="190" width="440" x="600" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="validate" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Validate and activate&#xa;Verify principal/deployment binding and target rights&#xa;Deploy enforcement; test allow AND deny&#xa;Activate only after required acknowledgments" vertex="1">
+          <mxGeometry height="190" width="440" x="1145" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="maintain" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Ongoing governance&#xa;Certify access; reconcile drift and ownership&#xa;Version changes and preserve merge/split history&#xa;Retirement: deny, revoke, verify, retain evidence" vertex="1">
+          <mxGeometry height="190" width="440" x="1690" y="1005" as="geometry" />
+        </mxCell>
+        <mxCell id="exception" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="Exception / failure path&#xa;Keep inactive or apply supported restrictions&#xa;Retry safely; track partial provisioning&#xa;Open ServiceNow exception and retain evidence" vertex="1">
+          <mxGeometry height="190" width="440" x="600" y="1295" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="plan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="id" value="Approve registration">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="discover" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="observe" value="Collect actual state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="id" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="correlate" value="Register / deploy; capture native IDs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="observe" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="correlate" value="Match with provenance">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="correlate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="review" value="Verified or provisional mapping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="provision" value="Approved access intent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="provision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="validate" value="Fulfillment verified">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="validate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="maintain" value="Active">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="correlate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="exception" value="Ambiguous identity">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1090" y="820.0000000000005" />
+              <mxPoint x="1090" y="1390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="exception" value="Denied / orphaned">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="275" y="1390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="validate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="exception" value="Test / propagation failure">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1365" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="maintain" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="correlate" value="Change / periodic reconciliation">
+          <mxGeometry relative="1" x="-0.2993" as="geometry">
+            <Array as="points">
+              <mxPoint x="1910" y="680" />
+              <mxPoint x="910" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="READING KEY: blue = ServiceNow; purple = SailPoint; green = native identity / platform state; orange = enforcement; yellow = custom integration gap; red = exception; gray = notes. Solid arrows = primary lifecycle; dashed = asynchronous or recurring flow. No new Entra identity is mandatory for an AWS-only or SaaS-only agent." vertex="1">
+          <mxGeometry height="115" width="2080" x="55" y="1550" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="2" name="02 | Enterprise architecture">
+    <mxGraphModel dx="1878" dy="2136" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="02 | Enterprise architecture&#xa;Centralized governance over distributed identities—not one universal authentication provider. Assign authority by information domain." vertex="1">
+          <mxGeometry height="90" width="2120" x="35" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="AUTHORING / HOSTING ECOSYSTEM&#xa;AWS Bedrock + AgentCore: custom-built agents&#xa;Workato AI Studio; Salesforce Agentforce&#xa;Microsoft ecosystem; other SaaS agents&#xa;Cursor/developer endpoint use is a separate boundary&#xa;Tool used to author code is not deployment identity" vertex="1">
+          <mxGeometry height="235" width="550" x="55" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="catalog" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SERVICENOW AI CONTROL TOWER&#xa;Recommended enterprise catalog authority&#xa;Enterprise agent ID, business purpose, owner&#xa;Criticality, sanction status, desired lifecycle&#xa;Reuse native schema / relationships first&#xa;Extend only after checking installed capabilities" vertex="1">
+          <mxGeometry height="235" width="550" x="745" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="govern" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SAILPOINT AGENTIC FABRIC&#xa;Agent / NHI registry and access relationships&#xa;Discovery, ownership correlation and certification&#xa;Supported governance / fulfillment workflows&#xa;Retain native SailPoint records; link enterprise ID&#xa;Connector, object and license coverage must be tested" vertex="1">
+          <mxGeometry height="235" width="650" x="1435" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="issuer" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="DISTRIBUTED IDENTITY AUTHORITIES&#xa;Entra Agent ID / other Entra principals&#xa;AgentCore workload identities + AWS IAM&#xa;Okta / Cognito user and machine-client identities&#xa;SaaS integration / technical identities&#xa;Each authority owns its issued principals and grants" vertex="1">
+          <mxGeometry height="235" width="550" x="55" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="integration" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="CORRELATION AND LIFECYCLE INTEGRATION&#xa;Native connectors first; custom gap adapters only&#xa;enterpriseAgentId ↔ platform ↔ deployment ↔ principal&#xa;Binding verification, provenance, reconciliation&#xa;No duplicate business catalog or new IdP&#xa;Possible thin integration service, not mandatory new suite" vertex="1">
+          <mxGeometry height="235" width="550" x="745" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="nhi" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="FUTURE NHI PLATFORM — OPTIONAL&#xa;Oasis Security / SlashID / Microsoft candidate evaluation&#xa;Discovery, credential risk and remediation as verified&#xa;Link findings to native principal and enterprise agent&#xa;Not assumed interchangeable products&#xa;Do not silently overwrite approved business ownership" vertex="1">
+          <mxGeometry height="235" width="650" x="1435" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="enforce" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ENFORCEMENT — MULTIPLE CONTROL POINTS&#xa;Azure APIM: API ingress controls&#xa;In-house AgentGateway: operation-level policy&#xa;AWS / SaaS native controls and target authorization&#xa;Validated native identity → verified agent mapping&#xa;Enterprise ID alone is never authentication evidence" vertex="1">
+          <mxGeometry height="235" width="550" x="55" y="945" as="geometry" />
+        </mxCell>
+        <mxCell id="users" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="HUMAN / CUSTOMER CONTEXT&#xa;Okta / Cognito / Entra user identities&#xa;User initiates; agent executes; workload accesses target&#xa;Preserve delegated authority where supported&#xa;Do not merge user identity into agent identity&#xa;Shared principal ≠ same business agent" vertex="1">
+          <mxGeometry height="235" width="550" x="745" y="945" as="geometry" />
+        </mxCell>
+        <mxCell id="telemetry" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="EVIDENCE AND OPERATIONAL ASSURANCE&#xa;Splunk: security events / investigation / audit&#xa;Dynatrace: traces, service health, propagation latency&#xa;Correlate enterprise ID + native IDs + request/trace ID&#xa;ServiceNow / SailPoint receive closure evidence&#xa;Telemetry is not the authoritative policy store" vertex="1">
+          <mxGeometry height="235" width="650" x="1435" y="945" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="sources" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="catalog" value="Register / discover">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="govern" value="Business context / enterprise reference">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="sources" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="issuer" value="Platform-specific identity relationships">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="integration" value="Approved intent / catalog references">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="900" y="460" />
+              <mxPoint x="900" y="460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="issuer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="integration" value="Observed identity / access state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="govern" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="integration" value="Review decisions / governed rights">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1760" y="490" />
+              <mxPoint x="1020" y="490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="nhi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="integration" value="Findings / supported remediation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="integration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;" target="enforce" value="Verified mappings / lifecycle restrictions">
+          <mxGeometry relative="1" x="-0.1917" as="geometry">
+            <Array as="points">
+              <mxPoint x="882.5" y="850" />
+              <mxPoint x="330" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="users" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="enforce" value="Delegated context where supported">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="enforce" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="telemetry" value="Decision / execution evidence">
+          <mxGeometry relative="1" x="-0.4512" as="geometry">
+            <Array as="points">
+              <mxPoint x="330" y="1300" />
+              <mxPoint x="1760" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="integration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="telemetry" value="Reconciliation / failure evidence">
+          <mxGeometry relative="1" x="-0.0833" as="geometry">
+            <Array as="points">
+              <mxPoint x="1090" y="850" />
+              <mxPoint x="1760" y="850" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="limits" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="TRUST / COVERAGE BOUNDARIES&#xa;Enterprise governance boundary: catalog + access governance + correlation. Identity boundaries: Microsoft tenant, AWS account, Okta/Cognito issuer, SaaS organization. Runtime boundaries: enterprise gateway versus platform-native paths. SaaS-internal calls may not traverse your gateway; explicitly record platform-native controls and gaps. Retirement must verify actual target revocation, not only change catalog status." vertex="1">
+          <mxGeometry height="155" width="2030" x="55" y="1350" as="geometry" />
+        </mxCell>
+        <mxCell id="key" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="CAPABILITY STATUS: product roles are supported by the documented categories cited on page 5; exact deployed version, license, API availability, connector objects, write-back, enforcement and event freshness remain acceptance-test items. Yellow = proposed custom gap; gray future NHI = optional, unevaluated. All lines show proposed integrations, not existing verified deployments." vertex="1">
+          <mxGeometry height="115" width="2030" x="55" y="1540" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="3" name="03 | Solution architecture and integration">
+    <mxGraphModel dx="2175" dy="2474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="03 | Solution architecture and integration&#xa;Implementable components and contracts. Proposed API/module labels are logical design names, not asserted vendor endpoint names." vertex="1">
+          <mxGeometry height="90" width="2120" x="35" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="sn" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SERVICENOW CONTROL TOWER&#xa;Native agent / AI asset record&#xa;Registration and lifecycle workflows&#xa;enterpriseAgentId + approved business metadata" vertex="1">
+          <mxGeometry height="180" width="450" x="55" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="sp" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SAILPOINT AGENTIC FABRIC&#xa;Native agent / machine identity records&#xa;Supported connector aggregation / review&#xa;Certification and fulfillment evidence" vertex="1">
+          <mxGeometry height="180" width="450" x="605" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="platform" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="PLATFORM / IDENTITY SOURCE APIS&#xa;AgentCore / IAM; Agent 365 / Entra&#xa;Workato; Agentforce; Okta / Cognito&#xa;Other platforms + optional NHI findings" vertex="1">
+          <mxGeometry height="180" width="450" x="1155" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="adapter" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="NATIVE CONNECTORS + GAP ADAPTERS&#xa;Read/normalize supported source objects&#xa;Least-privilege per-source credentials&#xa;Events where supported; polling otherwise&#xa;No universal event or connector assumed" vertex="1">
+          <mxGeometry height="180" width="440" x="1705" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="ingest" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="RELIABLE INGEST / JOB COORDINATION&#xa;Durable delivery or equivalent job tracking&#xa;Deduplication, idempotency, retries&#xa;Dead-letter / exception handling&#xa;Record event time and observation freshness" vertex="1">
+          <mxGeometry height="220" width="450" x="55" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="correlator" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="CORRELATION MODULE&#xa;Resolve native object → enterprise record&#xa;Exact qualified IDs and source evidence&#xa;Ambiguous match → human review&#xa;Verify binding before runtime use&#xa;Preserve history; never merge by name alone" vertex="1">
+          <mxGeometry height="220" width="450" x="605" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="store" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="MAPPING / RELATIONSHIP PERSISTENCE&#xa;Supported ServiceNow relationships first&#xa;Extension table or separate store only if needed&#xa;Agent ↔ platform ↔ deployment ↔ principal&#xa;Source provenance, validity and verification&#xa;Not credential storage or new business master" vertex="1">
+          <mxGeometry height="220" width="450" x="1155" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="recon" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="LIFECYCLE / ACCESS RECONCILER&#xa;Compare desired and observed states&#xa;Trigger approved supported fulfillment&#xa;Verify revoke / disable / retirement&#xa;Periodic full reconciliation for missed events&#xa;Return exceptions and completion evidence" vertex="1">
+          <mxGeometry height="220" width="440" x="1705" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="runtimeMap" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="RUNTIME MAPPING / POLICY PROJECTION&#xa;Read API or distributed snapshots [CUSTOM GAP]&#xa;Verified bindings + status + version&#xa;Authentication context mapped to deployment&#xa;Bounded freshness; deny ambiguous mappings&#xa;No user-supplied enterprise ID as proof" vertex="1">
+          <mxGeometry height="220" width="450" x="55" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="APIM + IN-HOUSE AGENTGATEWAY&#xa;Authenticate native token / trusted context&#xa;Resolve verified principal and deployment&#xa;Apply current operation-level restrictions&#xa;Target-specific credentials and permissions&#xa;Protect against direct bypass" vertex="1">
+          <mxGeometry height="220" width="450" x="605" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="native" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFE6CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="PLATFORM-NATIVE / TARGET CONTROLS&#xa;AWS IAM and resource permissions&#xa;Supported AgentCore / SaaS controls&#xa;Target enforces its authorization&#xa;Explicitly inventory paths outside gateway&#xa;No assumed universal token exchange" vertex="1">
+          <mxGeometry height="220" width="450" x="1155" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="obs" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SPLUNK / DYNATRACE&#xa;Identity binding and change audit&#xa;Provision/revoke evidence; failed updates&#xa;Policy/mapping staleness and coverage gaps&#xa;Trace enterprise + native + deployment IDs&#xa;Secure, authorized remediation only" vertex="1">
+          <mxGeometry height="220" width="440" x="1705" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="platform" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="adapter" value="Supported read / event interfaces">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="sn" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="ingest" value="Approved lifecycle command">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="180" y="440" />
+              <mxPoint x="180" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="sp" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="ingest" value="Decision / aggregation evidence">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="390" />
+              <mxPoint x="280" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="adapter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="ingest" value="Normalized observed objects">
+          <mxGeometry relative="1" x="0.0651" as="geometry">
+            <Array as="points">
+              <mxPoint x="1925" y="420" />
+              <mxPoint x="392.5" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="ingest" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="correlator" value="Process / deduplicate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="correlator" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="store" value="Verified or provisional mapping">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="store" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="recon" value="Relations + desired state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="recon" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="adapter" value="Supported fulfillment + re-read">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2000" y="430" />
+              <mxPoint x="2000" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e23" edge="1" parent="1" source="store" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="runtimeMap" value="Verified active projection">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1380" y="870" />
+              <mxPoint x="280" y="870" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="runtimeMap" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="gateway" value="Versioned mapping / cache invalidation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="native" value="Authorized request where routed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="native" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="obs" value="Actual target result">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" edge="1" parent="1" source="recon" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="obs" value="Drift and completion events">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" edge="1" parent="1" source="recon" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;dashed=1;" target="sp" value="Review / fulfillment result">
+          <mxGeometry relative="1" x="0.1292" as="geometry">
+            <Array as="points">
+              <mxPoint x="1925" y="480" />
+              <mxPoint x="1110" y="480" />
+              <mxPoint x="1110" y="255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sec" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SECURITY AND FAILURE CONTRACTS&#xa;Per-connector identities with least privilege; protect mapping-write/admin APIs; no secrets in catalog records. Discovery is untrusted input until verified. Track desired state separately from observed/effective state. Define stale-cache limits by risk; fail closed for high-risk operations. Revoke/retire is incomplete until required target actions are verified. Store timestamps and retain old identifier mappings after merge, migration and retirement." vertex="1">
+          <mxGeometry height="150" width="2090" x="55" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="scale" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="DEPLOYMENT CHOICE: custom yellow modules may share ONE integration service and its job infrastructure. Keep ServiceNow/SailPoint out of the synchronous tool-call path. Prefer existing native integrations and schema before custom implementation. Runtime projection is separate from enterprise business authority; use measured freshness budgets, not claims of instant cross-cloud consistency." vertex="1">
+          <mxGeometry height="110" width="2090" x="55" y="1560" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="4" name="04 | Canonical identity and relationship model">
+    <mxGraphModel dx="4375" dy="2474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="04 | Canonical identity and relationship model&#xa;Proposed logical schema—not vendor table or API names. Centralized repository means governed linked records, not a universal security principal." vertex="1">
+          <mxGeometry height="90" width="2120" x="35" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="agent" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ENTERPRISE AGENT&#xa;PK enterpriseAgentId (opaque, immutable)&#xa;ServiceNow record reference; displayName&#xa;Business purpose; accountable/technical owners&#xa;Criticality; sanction status; desired lifecycle&#xa;Stable across approved ownership/platform changes" vertex="1">
+          <mxGeometry height="230" width="590" x="55" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="plat" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="PLATFORM AGENT RECORD&#xa;PK platformRecordId; FK enterpriseAgentId&#xa;platformType + authorityScope + nativeAgentId&#xa;Native object type; source evidence; lastObservedAt&#xa;Observed state; original identifiers retained&#xa;One enterprise agent may have multiple records" vertex="1">
+          <mxGeometry height="230" width="590" x="805" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="dep" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="DEPLOYMENT&#xa;PK deploymentId; FK platformRecordId&#xa;Environment; account/tenant/org; region&#xa;Endpoint reference and version reference&#xa;Observed deployment state&#xa;Dev/prod permissions remain separate" vertex="1">
+          <mxGeometry height="230" width="590" x="1555" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="binding" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="VERIFIED IDENTITY BINDING&#xa;PK bindingId; FK deploymentId&#xa;identityProvider + authorityScope + principalId&#xa;principalType + relationshipType&#xa;Verification status, evidence and verifier&#xa;validFrom / validTo; shared identity flag" vertex="1">
+          <mxGeometry height="250" width="590" x="805" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="principal" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="NATIVE PRINCIPAL / CLIENT REFERENCE&#xa;Entra tenant + object ID; AgentCore workload ARN&#xa;AWS IAM role ARN; OIDC issuer + subject&#xa;SaaS org + native identity ID&#xa;OAuth client may serve multiple agents&#xa;Native issuer remains authority" vertex="1">
+          <mxGeometry height="250" width="590" x="1555" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="access" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ACCESS / GOVERNANCE RELATIONSHIP&#xa;enterpriseAgentId + bindingId + target reference&#xa;Approved entitlement vs observed entitlement&#xa;SailPoint review reference and decision&#xa;Fulfillment status; last verified state/time&#xa;Gateways/targets enforce actual access" vertex="1">
+          <mxGeometry height="250" width="590" x="55" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="history" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="PROVENANCE / MERGE / LIFECYCLE HISTORY&#xa;Who asserted or verified a relationship?&#xa;Which source and observation supported it?&#xa;Prior identifiers; merge redirects; split review&#xa;Never reuse retired enterprise IDs&#xa;Preserve evidence without retaining credentials" vertex="1">
+          <mxGeometry height="250" width="590" x="55" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="USER / CUSTOMER CONTEXT&#xa;Separate entity: identity authority + subject&#xa;Initiator / approver / delegated user relationships&#xa;Do not collapse user and workload identity&#xa;Applicable user rights constrain delegated access&#xa;Session/run references live in execution evidence" vertex="1">
+          <mxGeometry height="250" width="590" x="805" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="rule" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="CORRELATION AND CARDINALITY RULES&#xa;Agent → platform records: one-to-many&#xa;Platform record → deployments: one-to-many&#xa;Deployment ↔ principal: through verified bindings&#xa;Shared principal: model ambiguity, do not merge agents&#xa;Names/tags are hints; qualified IDs are keys&#xa;enterpriseAgentId is correlation, not a bearer credential" vertex="1">
+          <mxGeometry height="250" width="590" x="1555" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="agent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="plat" value="1 → many">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="plat" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="dep" value="1 → many">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="dep" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="binding" value="1 → many bindings">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1850" y="530" />
+              <mxPoint x="1100" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="binding" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="principal" value="many bindings → referenced principal">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="binding" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="access" value="Governed entitlement linkage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="agent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="access" value="Business accountability">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="agent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="history" value="Retained history">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="285" />
+              <mxPoint x="30" y="1285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=12;labelBackgroundColor=#ffffff;" target="binding" value="Delegation / interaction relationship">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="example" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F5F5F5;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ILLUSTRATIVE EXAMPLE: Customer Refund Assistant = one enterprise agent; production/test = separate deployments; AgentCore workload IDs and IAM roles = identity references; optional Microsoft integration = another verified identity binding. A customer OIDC subject is user context, not the agent ID. Two unrelated agents sharing a technical account remain distinct enterprise agents and generate a shared-identity risk/ambiguity finding." vertex="1">
+          <mxGeometry height="130" width="2090" x="55" y="1510" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="5" name="05 | Evidence, scope and implementation acceptance">
+    <mxGraphModel dx="2175" dy="2474" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="05 | Evidence, scope and implementation acceptance&#xa;Source pointers support capability categories; they do not prove installed configuration, connector completeness, write-back or runtime enforcement." vertex="1">
+          <mxGeometry height="90" width="2120" x="35" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#DAE8FC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SERVICENOW — NATIVE INVENTORY / DISCOVERY CATEGORY&#xa;AI Control Tower discovery and external platform connections. Verify release, licensed features, supported record classes, writable external-ID fields and extension contracts.&#xa;https://www.servicenow.com/docs/r/australia/intelligent-experiences/aict-exploring.html&#xa;https://learning.servicenow.com/lxp/en/servicenow-ai-platform/ai-control-tower-aict-discover?id=learning_path_prev&amp;path_id=5947e5304765cfd495898641026d43bf" vertex="1">
+          <mxGeometry height="230" width="1030" x="55" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#E1D5E7;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="SAILPOINT — REGISTRY / RELATIONSHIPS / CONNECTOR CATEGORY&#xa;Agentic Fabric registry, agent relationships and governance. Validate exact certification scope, connector object types and fulfillment support.&#xa;https://documentation.sailpoint.com/saas/help/agentic_fabric/nhi/agent_registry.html&#xa;https://documentation.sailpoint.com/saas/help/agentic_fabric/index.html&#xa;https://documentation.sailpoint.com/connectors/saas/msentraid/help/saas_connectivity/microsoft_entra_id/microsoft_agent_365_catalog.html" vertex="1">
+          <mxGeometry height="230" width="1010" x="1135" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="AWS — ACCOUNT-SCOPED WORKLOAD IDENTITIES&#xa;AgentCore workload identity directory and identity management; not assumed universal enterprise identity.&#xa;https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity-manage-agent-ids.html&#xa;https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agent-identity-directory.html&#xa;https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/understanding-agent-identities.html" vertex="1">
+          <mxGeometry height="220" width="1030" x="55" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="s4" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#D5E8D4;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="MICROSOFT — AGENT IDENTITY VS BLUEPRINT&#xa;Entra agent identity is a specialized principal; blueprint and agent are separate objects. Agent 365 catalog reference is modeled separately.&#xa;https://learn.microsoft.com/en-us/entra/agent-id/agent-identities&#xa;https://learn.microsoft.com/en-us/entra/agent-id/agent-blueprint" vertex="1">
+          <mxGeometry height="220" width="1010" x="1135" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ACCEPTANCE TESTS — REGISTRATION / CORRELATION&#xa;1. Planned and discovered objects converge without duplicate approved agents.&#xa;2. Same display name in two tenants does not merge.&#xa;3. Shared IAM role/client does not collapse separate agents.&#xa;4. Binding is verified before use in runtime authorization.&#xa;5. Ownership changes and platform migration retain enterprise ID.&#xa;6. Unsupported connector path is visible, not silently treated as covered." vertex="1">
+          <mxGeometry height="250" width="1030" x="55" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#FFF2CC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="ACCEPTANCE TESTS — GOVERNANCE / REVOCATION&#xa;7. Review decision reaches the actual target and is verified.&#xa;8. SaaS paths bypassing gateway are mapped to native controls or gaps.&#xa;9. Failed/partial revoke remains an open exception.&#xa;10. Stale mapping and policy versions alert and enforce risk-specific failure rules.&#xa;11. Logs join enterprise ID, deployment, principal and trace.&#xa;12. Retirement retains history and verifies required disable/revoke actions." vertex="1">
+          <mxGeometry height="250" width="1010" x="1135" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="limit" parent="1" style="rounded=0;whiteSpace=wrap;html=0;fillColor=#F8CECC;strokeColor=#666666;fontSize=15;align=left;verticalAlign=middle;spacing=14;" value="EXPLICIT LIMITATIONS / DECISIONS&#xa;Oasis Security, SlashID and Microsoft are candidates, not verified interchangeable NHI products. Workato, Agentforce, Okta, Cognito and Cursor-specific API/connector coverage is not established by these diagrams. Product authoring categories are not identity contracts. Existing native integrations must be tested before sizing custom development. No specific cloud database, message bus, universal token exchange, SCIM-for-agents contract or instant revocation SLA is assumed.&#xa;&#xa;Agree who owns enterprise ID issuance, catalog schema, binding verification, ambiguous-match review, synchronization conflicts, per-platform revoke authority and emergency response. Set measurable discovery, mapping-freshness and revocation budgets." vertex="1">
+          <mxGeometry height="250" width="2090" x="55" y="1160" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
