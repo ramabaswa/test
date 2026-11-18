@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Iggy gets an identity at Healthfirst: Working session 2026-11-05</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#15213a;--ink2:#4a5873;--line:#cfd8e6;--blue:#1d5fc4;--blueS:#e3edfb;--onblue:#fff;--pur:#7a3fc2;--purS:#f0e8fb;--ok:#1b7a3d;--warn:#8f5a00;--bad:#b3261e;--cur:#e2ecfb;--serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;--sans:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1522;--card:#162033;--ink:#e8eef9;--ink2:#a6b4cc;--line:#2c3a54;--blue:#7fb2ff;--blueS:#1c2e4d;--onblue:#0e1522;--pur:#b995f2;--purS:#2a2142;--ok:#6fd08c;--warn:#e8b34f;--bad:#ff8d85;--cur:#1b2c4a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans)}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.25;margin:0}
+h1{font-size:clamp(1.7rem,3.4vw,2.4rem)}h2{font-size:1.45rem;margin-bottom:.4rem}h3{font-size:1.3rem}
+p{margin:.5rem 0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header.top{padding:34px 0 8px}
+.stamp{color:var(--ink2);margin:.4rem 0 0}
+.intro{max-width:70ch;font-size:1.05rem}
+.oneline{max-width:70ch;border-left:5px solid var(--blue);background:var(--blueS);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.oneline strong{font-family:var(--serif)}
+section{padding:22px 0}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+.term{border-bottom:1.5px dotted var(--blue);cursor:help}
+#tip{position:fixed;z-index:50;max-width:260px;background:var(--ink);color:var(--bg);padding:8px 10px;border-radius:8px;font-size:.85rem;line-height:1.4;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#tip[hidden]{display:none}
+/* journey layout */
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.mapbox{grid-column:1;grid-row:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;overflow-x:auto}
+.mapbox svg{display:block;width:100%;min-width:680px;height:auto}
+.wallet{grid-column:2;grid-row:1/3;position:sticky;top:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.detailbox{grid-column:1;grid-row:2}
+@media(max-width:900px){.stage{grid-template-columns:1fr}.wallet,.detailbox,.mapbox{grid-column:1;grid-row:auto;position:static}}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.controls button,.chip{font:inherit;cursor:pointer;border-radius:8px;border:1.5px solid var(--blue);background:var(--card);color:var(--blue);padding:6px 14px}
+.controls button.primary{background:var(--blue);color:var(--onblue)}
+.controls button:disabled{opacity:.4;cursor:default}
+.count{font-weight:600;margin:0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{min-width:38px;padding:4px 0;text-align:center}
+.chip.loop{border-color:var(--pur);color:var(--pur)}
+.chip[aria-current=step]{background:var(--blue);color:var(--onblue)}
+.chip.loop[aria-current=step]{background:var(--pur);color:var(--card)}
+/* svg */
+.band{fill:var(--blueS)}.bandt{fill:var(--blue);font:600 12px var(--sans);text-anchor:middle}
+.lane{fill:var(--card);stroke:var(--line)}.lane.ghost{stroke-dasharray:4 3}
+.ln{font:700 12px var(--sans);fill:var(--ink);text-anchor:middle}.ls{font:9px var(--sans);fill:var(--ink2);text-anchor:middle}
+.gl{stroke:var(--line);stroke-width:1}.gl.ghost{stroke-dasharray:3 4}
+.ghost-t{opacity:.65}
+.row{cursor:pointer}.rbg{fill:transparent}.row:hover .rbg{fill:var(--blueS);opacity:.5}
+.row.current .rbg{fill:var(--cur);opacity:1}
+.row.future .ink{opacity:.28}
+.ar{stroke-width:2;stroke:var(--ink2)}.arL{stroke:var(--pur);stroke-width:2.4}.arD{stroke:var(--pur);stroke-dasharray:5 4}
+.row.current .ar{stroke-width:3}
+.mkN{fill:var(--ink2)}.mkL,.mkD{fill:var(--pur)}
+.dot{fill:var(--ink2)}
+.pill{fill:var(--blueS);stroke:var(--blue)}.pt{font:11px var(--sans);fill:var(--ink)}
+.lbl{font:600 10.5px var(--sans);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+.lbl.lp{fill:var(--pur)}
+.row.current .lbl{stroke:var(--cur)}
+.nb{fill:var(--card);stroke:var(--blue);stroke-width:2}.nb.nbl{stroke:var(--pur)}
+.row.current .nb{fill:var(--blue)}.row.current .nb.nbl{fill:var(--pur);stroke:var(--pur)}
+.nt{font:700 11px var(--sans);text-anchor:middle;fill:var(--ink)}
+.row.current .nt{fill:var(--onblue)}
+.fkc{fill:var(--card);stroke:var(--pur);stroke-dasharray:3 2}.fkt{font:700 11px var(--sans);fill:var(--pur);text-anchor:middle}
+.foot{font:11px var(--sans);fill:var(--ink2)}
+.iggy{transition:transform .6s cubic-bezier(.3,.7,.3,1)}
+.iggy.still{transition:none}
+@media(prefers-reduced-motion:reduce){.iggy{transition:none}}
+/* wallet */
+.wallet h3{font-size:1.1rem}.wallet ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.slot{border:1.5px solid var(--line);border-radius:8px;padding:6px 10px}
+.slot .sl{font-weight:600;font-size:.88rem}.slot .by{font-size:.76rem;color:var(--ink2)}
+.slot .sv{font:.85rem ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.slot.empty .sv{color:var(--ink2);font-family:var(--sans);font-style:italic}
+.slot.dashed{border-style:dashed;border-color:var(--pur)}
+.slot.new{border-color:var(--blue);background:var(--blueS);box-shadow:0 0 0 2px var(--blue)}
+.st-ok{color:var(--ok);font-weight:700}.st-warn{color:var(--warn);font-weight:700}
+/* detail */
+.detail{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--blue);border-radius:12px;padding:16px 18px}
+.detail.isloop{border-left-color:var(--pur)}
+.meta{color:var(--ink2);font-size:.9rem;margin:0 0 4px}
+.lpb{display:inline-block;margin-left:8px;color:var(--pur);border:1.5px solid var(--pur);border-radius:99px;padding:0 10px;font-weight:600;font-size:.82rem}
+.says{margin-top:10px}.says b{font-family:var(--serif)}
+.plain{background:var(--blueS);border-radius:8px;padding:10px 14px;margin-top:10px}
+.fork{border:1.5px dashed var(--pur);background:var(--purS);border-radius:10px;padding:10px 14px;margin-top:12px}
+.fork h4{font-size:1rem;color:var(--pur)}
+.fork ul{margin:8px 0;padding-left:0;list-style:none;display:grid;gap:6px}
+.tag{display:inline-block;font-size:.76rem;font-weight:600;border-radius:99px;padding:0 9px;border:1.5px solid var(--ink2);margin-right:6px}
+.cur .tag{border-color:var(--blue);color:var(--blue)}.prop .tag{border-color:var(--pur);color:var(--pur)}
+.off .ot{text-decoration:line-through;color:var(--ink2)}
+.who{margin:4px 0 0;font-size:.93rem}
+/* cards, table */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--pur);border-radius:10px;padding:14px 16px}
+.card h3{font-size:1.1rem}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{background:var(--blueS)}
+.tw{overflow-x:auto}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px}dt{font-weight:600}dd{margin:0}
+@media(max-width:600px){dl{grid-template-columns:1fr}}
+footer{padding:20px 0 40px;color:var(--ink2);font-size:.9rem;border-top:1px solid var(--line)}
+.printonly{display:none}
+@media print{
+ body{background:#fff;color:#000}.controls,.chips,#tip,.detailbox{display:none!important}
+ .stage{display:block}.wallet{position:static;margin-top:12px;break-inside:avoid}.mapbox{overflow:visible}.mapbox svg{min-width:0}
+ .row.future .ink{opacity:1}.printonly{display:block}.printonly li{margin-bottom:6px}
+ section{break-inside:avoid-page}
+}
+</style>
+</head>
+<body>
+<div id="tip" role="tooltip" hidden></div>
+<div class="wrap">
+<header class="top">
+  <h1>How a new AI agent gets its identity and access at Healthfirst</h1>
+  <p class="stamp">Working session 2026-11-05</p>
+  <p class="intro">Meet Iggy, a made-up agent from Enterprise Quality Engineering (EQE) that writes test cases. Before Iggy can do any work, it needs an identity and permission to use tools. Follow Iggy from the first request to its first tool call. Hover over any dotted term for a plain-words definition.</p>
+  <div class="oneline"><strong>In one line:</strong> the path is not a straight line. The request loops back to systems it has already visited three times, because each system needs to learn what the others did.</div>
+</header>
+
+<section id="journey" aria-labelledby="jh">
+  <h2 id="jh">Iggy’s journey</h2>
+  <p>Read the map top to bottom, one row per step. Use the buttons, the number chips or the left and right arrow keys. Purple means Iggy is returning to a system it has already visited. Dashed means undecided.</p>
+  <div class="controls">
+    <button id="back" type="button">Back</button>
+    <button id="next" type="button" class="primary">Next</button>
+    <button id="reset" type="button">Start over</button>
+    <span class="count" id="count" aria-live="polite"></span>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Jump to a step"></div>
+  <div class="stage">
+    <div class="mapbox" id="mapbox"></div>
+    <aside class="wallet" aria-label="Iggy’s wallet">
+      <h3>Iggy’s wallet</h3>
+      <p style="font-size:.88rem;color:var(--ink2)">Things Iggy collects along the way, and who issued each one.</p>
+      <ul id="wallet"></ul>
+    </aside>
+    <div class="detailbox" id="detail" aria-live="polite"></div>
+  </div>
+  <ol class="printonly" id="printsteps" aria-label="All steps"></ol>
+</section>
+
+<section aria-labelledby="lh">
+  <h2 id="lh">The path is not a straight line</h2>
+  <p>Each system keeps its own record. When one system finishes something, the others do not know until Iggy’s request goes back and tells them. That happens three times.</p>
+  <div class="cards" id="loops"></div>
+</section>
+
+<section aria-labelledby="oh">
+  <h2 id="oh">Still open</h2>
+  <p>These are forks in the road. Anything not agreed is a proposal, not a decision.</p>
+  <div class="tw"><table id="open"><thead><tr><th>Question</th><th>Current thinking</th><th>Who decides</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section aria-labelledby="gh">
+  <h2 id="gh">Words used on this page</h2>
+  <dl id="gloss"></dl>
+</section>
+
+<footer>
+  <p>Built 2026-11-18 from the session notes and the reference design. Working session 2026-11-05. Proposals are not agreed decisions. All IDs are made up for the demo. No PHI (protected health information) or real identifiers.</p>
+</footer>
+</div>
+
+<script>
+/* ============ DATA 1: lanes (columns, left to right) ============ */
+const LANES=[
+ {id:'sn',name:['ServiceNow'],sub:'requests + CMDB',tip:"ServiceNow holds requests and the CMDB. It can ask for things, but it can never approve them."},
+ {id:'reg',name:['AI Asset','Registry (?)'],sub:'proposed',ghost:1,tip:"AI Asset Registry: the Platform.AI technical record, which publishes to API Center. Its place in onboarding is proposed, not decided."},
+ {id:'sp',name:['SailPoint'],sub:'IAM approves',tip:"SailPoint: Identity and Access Management (IAM) approves here, then SailPoint tells Entra what to create or assign."},
+ {id:'en',name:['Entra ID'],sub:'identity + roles',tip:"Entra ID creates the identity from a blueprint, holds app roles and issues tokens."},
+ {id:'rt',name:['Iggy’s','runtime'],sub:'where Iggy runs',tip:"Iggy’s runtime: where the agent actually runs once it has an identity and access."},
+ {id:'gw',name:['API Gateway'],sub:'front door',tip:"API (application programming interface) Gateway: the front door. It validates the token and gives every call a correlation ID."},
+ {id:'ag',name:['AgentGateway'],sub:'checks tool calls',tip:"AgentGateway checks each tool call: right role, right tool."},
+ {id:'mcp',name:['MCP server'],sub:'Azure DevOps tools',tip:"MCP (Model Context Protocol) server: it offers the Azure DevOps tools Iggy uses."}
+];
+const PHASES={id:'Identity',acc:'Access',use:'Use'};
+
+/* ============ DATA 2: rows (one per step: map geometry) ============
+ arrows: [from,to,kind] kind: undefined=forward, 'loop'=back to a visited system, 'dash'=undecided
+ work: lane where work happens inside one system. at: where Iggy stands. */
+const ROWS=[
+ {phase:'id',label:'Request filed',at:'sn',work:'sn'},
+ {phase:'id',label:'Asks IAM',at:'sp',arrows:[['sn','sp']]},
+ {phase:'id',label:'IAM approves',at:'sp',work:'sp'},
+ {phase:'id',label:'Calls Graph',at:'en',arrows:[['sp','en']]},
+ {phase:'id',label:'Identity created',at:'en',work:'en'},
+ {phase:'id',label:'Loop 1: IDs go back',at:'sn',loop:1,arrows:[['en','sp','loop'],['sp','sn','loop'],['sp','reg','dash']]},
+ {phase:'acc',label:'Loop 2: asks for tools',at:'sp',loop:2,arrows:[['sn','sp','loop']]},
+ {phase:'acc',label:'App role assigned',at:'en',arrows:[['sp','en']]},
+ {phase:'use',label:'Loop 3: gets token',at:'rt',loop:3,arrows:[['rt','en','loop'],['en','rt','loop']]},
+ {phase:'use',label:'Calls with token',at:'gw',arrows:[['rt','gw']]},
+ {phase:'use',label:'Tool call checked',at:'ag',arrows:[['gw','ag']]},
+ {phase:'use',label:'Tool runs',at:'mcp',arrows:[['ag','mcp']]}
+];
+
+/* ============ DATA 3: steps (narrative) ============ */
+const TERMS={
+ iam:["IAM","Identity and Access Management: the team and tools that decide who gets an identity and what it can reach."],
+ cmdb:["CMDB","Configuration management database: ServiceNow’s record of what exists and whether it is in service."],
+ sponsor:["sponsor","The named person who is accountable for an agent."],
+ blueprint:["blueprint","A template in Entra. New agent identities are created from it."],
+ aid:["agent identity","An identity in Entra that belongs to an AI agent instead of a person."],
+ svcp:["service principal","The Entra object that represents software, so it can sign in and be given roles."],
+ profile:["access profile","A bundle in SailPoint that groups the entitlements for one kind of access."],
+ ent:["entitlement","One specific permission that SailPoint can grant."],
+ role:["app role","A named permission defined by an app and held by an identity in Entra. Agents must get roles directly, not through groups."],
+ agg:["aggregation","SailPoint reading the accounts and permissions that exist in Entra, so its picture stays current."],
+ token:["token","A short-lived digital pass from Entra that proves who is calling and which roles it holds."],
+ graph:["Microsoft Graph","The API (application programming interface) that other systems use to talk to Entra."],
+ corr:["correlation ID","One ID stamped on every hop, so Splunk can join the logs into one story."],
+ splunk:["Splunk","The logging tool. Every hop writes a log."],
+ mcp:["MCP","Model Context Protocol: a standard way for agents to call tools."],
+ mvp:["MVP","Minimum viable product: the smallest first version."],
+ eqe:["EQE","Enterprise Quality Engineering."],
+ apic:["API Center","Where the AI Asset Registry would publish its records."]
+};
+const TAGS={cur:'Current thinking',alt:'Alternative',off:'Set aside',prop:'Proposed, not agreed'};
+const UNSET="Not named in the session notes; to be confirmed";
+const FORKS={
+ naming:{q:"How should agents be named?",o:[["Naming style A","prop"],["Naming style B","prop"]],who:UNSET,now:"Two styles proposed. Neither is final."},
+ create:{q:"How does SailPoint create the agent identity?",o:[["A custom SailPoint workflow calls [[graph]] and uses one default [[blueprint]]","cur"],["The built-in SailPoint connector’s create-account feature","alt"],["A PowerShell script","off"]],who:UNSET,now:"Custom SailPoint workflow calling Graph with one default blueprint. The PowerShell script was set aside."},
+ perms:{q:"Do permissions sit on each agent or on the blueprint?",o:[["On each agent, directly","cur"],["On the blueprint","alt"]],who:UNSET,now:"On each agent. To be double-checked."},
+ reg:{q:"Is the AI Asset Registry an onboarding step?",o:[["Yes, as an optional listing once the identity exists. The Registry publishes to [[apic]]","prop"],["No. Onboarding ends at the CMDB and the Registry sits outside it","alt"]],who:"Not decided; to be confirmed",now:"Proposed as an optional step. Not decided."},
+ roledef:{q:"Who defines what a role allows on a resource?",o:[["The owner of the resource","cur"]],who:"The resource owner",now:"The resource owner."},
+ rule:{q:"Who creates and approves the AgentGateway rule for each agent?",o:[["Security and IAM, through a small admin group for the [[mvp]]","prop"]],who:"Not IAM alone. Suggested: security and IAM, through a small admin group for the MVP. Not agreed.",now:"Suggested: security and IAM, with a small admin group for the MVP. Not agreed."}
+};
+const STEPS=[
+ {title:"A sponsor files the request",
+  says:"Hi, I’m Iggy, an IGenerate agent from Enterprise Quality Engineering ([[eqe]]) that writes test cases. I don’t exist yet. My [[sponsor]] opens a request in ServiceNow, and the [[cmdb]] lists me as Non-Operational: known, but not allowed to work.",
+  plain:"Like a new hire’s paperwork. HR knows my name, but there is no badge yet.",
+  forks:['naming'],gain:{req:"RITM0104417",cmdb:["Non-Operational","warn"]}},
+ {title:"ServiceNow asks SailPoint",
+  says:"ServiceNow can ask, but it can never approve. So it passes my request to SailPoint, which opens its own request with its own ID.",
+  plain:"The front desk takes your form but cannot sign it. It walks the form to the person who can.",
+  gain:{spreq:"REQ-5530921-demo"}},
+ {title:"IAM approves",
+  says:"The [[iam]] team reviews me inside SailPoint. Their approval is the green light. Nothing gets built until it is there.",
+  plain:"A manager’s signature. Without it, the badge office will not start.",
+  forks:[]},
+ {title:"SailPoint tells Entra what to create",
+  says:"Once IAM approves, SailPoint calls [[graph]] and tells Entra what to create and assign for me.",
+  plain:"SailPoint is the manager phoning the badge office. Graph is the phone line.",
+  forks:['create']},
+ {title:"Entra creates my identity from a blueprint",
+  says:"Entra builds my [[aid]] from the default [[blueprint]]. Now I have an account, but nobody except Entra knows that yet.",
+  plain:"The badge office prints my badge from the standard template.",
+  forks:['perms'],gain:{acct:"agent-7e1c-demo"}},
+ {title:"My new ID goes back to SailPoint and ServiceNow",loop:"Loop 1",
+  says:"Entra’s new object ID has to travel back. SailPoint picks up the new account ([[agg]]), then ServiceNow learns about it and flips my CMDB status from Non-Operational to Operational. Maybe I also get listed in the AI Asset Registry. That dashed arrow is still undecided.",
+  plain:"The badge office tells HR and the front desk that the badge exists. Each of them updates its own list.",
+  forks:['reg'],gain:{cmdb:["Operational","ok"],aia:"AIA-0231-demo"}},
+ {title:"I ask for tool access, back in ServiceNow",loop:"Loop 2",
+  says:"An identity alone doesn’t let me do anything. My sponsor files a second request in ServiceNow for access to the Azure DevOps tools. It goes to SailPoint again, as an [[profile]] built from [[ent|entitlements]].",
+  plain:"Having a badge is not the same as having a key to the supply room. The key needs its own request.",
+  forks:['roledef'],gain:{tar:"RITM0104452"}},
+ {title:"SailPoint’s connector gives me the app role",
+  says:"After approval, SailPoint’s connector assigns an [[role]] directly on my agent identity in Entra. It goes on me, not through a group. Agents have to get roles directly.",
+  plain:"A key cut for me by name, not a spare key left in a shared drawer.",
+  gain:{role:"Test.Cases.Write-demo"}},
+ {title:"I get a token from Entra",loop:"Loop 3",
+  says:"Time to work. I go back to Entra, the third time I revisit a system, and ask for a [[token]]. Entra checks who I am and hands one over with my role inside.",
+  plain:"A day pass with my name and my permissions printed on it.",
+  gain:{tok:"eyJ…-demo (short-lived)"}},
+ {title:"I call through the API Gateway",
+  says:"I knock on the front door with my token. The API Gateway checks that the token is valid and stamps the call with a [[corr]]. Every hop will log it.",
+  plain:"The security desk checks your pass and gives you a visitor number that follows you around the building.",
+  gain:{corr:"corr-7c21-demo"}},
+ {title:"AgentGateway checks the tool call",
+  says:"The API Gateway forwards my call to AgentGateway. It checks every tool call: do I hold the right role, and is it for the right tool? There is a rule for each agent.",
+  plain:"A door guard for each room. Your pass has to match the room.",
+  forks:['rule']},
+ {title:"The MCP server runs the tool",
+  says:"The [[mcp]] server runs the Azure DevOps tool and my first test case is written. Every hop wrote a log. [[splunk]] joins them into one story using the correlation ID. That is not drawn on the map.",
+  plain:"The work gets done, and a single trail of receipts shows every door I went through."}
+];
+const LOOPS=[
+ {step:6,t:"Loop 1: the new ID goes back",x:"Entra created my identity, but SailPoint and ServiceNow only find out when the new object ID travels back. Then the CMDB flips to Operational."},
+ {step:7,t:"Loop 2: tool access, again",x:"Identity is not access. My sponsor goes back to ServiceNow and SailPoint with a second request, this time for tools. SailPoint’s connector then returns to Entra to assign the app role."},
+ {step:9,t:"Loop 3: back to Entra at runtime",x:"Entra already knows me from setup. At runtime I return to it for a token, so the gateways downstream can trust who is calling."}
+];
+const SLOTS=[
+ {id:'req',l:"ServiceNow request",by:"ServiceNow"},
+ {id:'cmdb',l:"CMDB status",by:"ServiceNow"},
+ {id:'spreq',l:"SailPoint request ID",by:"SailPoint"},
+ {id:'acct',l:"Blueprint account",by:"Entra ID"},
+ {id:'aia',l:"AI Asset ID (proposed)",by:"AI Asset Registry, if adopted",dashed:1},
+ {id:'tar',l:"Tool access request",by:"ServiceNow"},
+ {id:'role',l:"App role",by:"Entra ID, via SailPoint"},
+ {id:'tok',l:"Token",by:"Entra ID"},
+ {id:'corr',l:"Correlation ID",by:"API Gateway"}
+];
+
+/* ============ rendering code (no content below) ============ */
+const $=s=>document.querySelector(s);
+const T=s=>s.replace(/\[\[(\w+)(?:\|([^\]]+))?\]\]/g,(m,k,d)=>{const t=TERMS[k];return `<span class="term" tabindex="0" data-tip="${t[1]}">${d||t[0]}</span>`});
+const X0=92,LW=892/LANES.length,HDR=76,RH=48,N=ROWS.length;
+const lx=id=>X0+LW*(LANES.findIndex(l=>l.id===id)+.5),ry=i=>HDR+i*RH+RH/2;
+
+function buildMap(){
+ let s=`<defs>${['N','L','D'].map(k=>`<marker id="m${k}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="mk${k}" d="M0 1L9 5L0 9z"/></marker>`).join('')}</defs>`;
+ const H=HDR+N*RH+30;
+ Object.keys(PHASES).forEach(p=>{const idx=ROWS.map((r,i)=>r.phase===p?i:-1).filter(i=>i>=0);const a=idx[0],b=idx[idx.length-1];const y=HDR+a*RH,h=(b-a+1)*RH;
+  s+=`<rect class="band" x="4" y="${y+2}" width="24" height="${h-4}" rx="6"/><text class="bandt" transform="translate(19 ${y+h/2}) rotate(-90)">${PHASES[p]}</text>`;
+  if(a>0)s+=`<line class="gl" x1="30" x2="996" y1="${y}" y2="${y}"/>`});
+ LANES.forEach(l=>{const x=lx(l.id);
+  s+=`<line class="gl${l.ghost?' ghost':''}" x1="${x}" x2="${x}" y1="64" y2="${H-26}"/>`;
+  const two=l.name.length>1,w=LW-12;
+  s+=`<g tabindex="0" data-tip="${l.tip}" class="${l.ghost?'ghost-t':''}"><rect class="lane${l.ghost?' ghost':''}" x="${x-w/2}" y="6" width="${w}" height="58" rx="8"/>`+
+     l.name.map((t,k)=>`<text class="ln" x="${x}" y="${(two?22:27)+k*13}">${t}</text>`).join('')+
+     `<text class="ls" x="${x}" y="${two?54:46}">${l.sub}</text></g>`});
+ ROWS.forEach((r,i)=>{const cy=ry(i),st=STEPS[i],ar=r.arrows||[],n=ar.length;
+  s+=`<g class="row" data-i="${i}" tabindex="0" role="button" aria-label="Step ${i+1}: ${st.title}"><rect class="rbg" x="30" y="${cy-RH/2}" width="966" height="${RH}"/><g class="ink">`;
+  const touched=new Set();
+  ar.forEach((a,k)=>{const[f,t,kind]=a,y=cy+(k-(n-1)/2)*9,x1=lx(f),x2=lx(t),d=Math.sign(x2-x1),c=kind==='loop'?'L':kind==='dash'?'D':'N';
+   touched.add(f);touched.add(t);
+   s+=`<line class="ar ar${c}" x1="${x1+d*10}" y1="${y}" x2="${x2-d*22}" y2="${y}" marker-end="url(#m${c})"/>`});
+  if(n){const xs=ar.flatMap(a=>[lx(a[0]),lx(a[1])]);const mid=(Math.min(...xs)+Math.max(...xs))/2;
+   s+=`<text class="lbl${r.loop?' lp':''}" x="${mid}" y="${cy-((n-1)/2*9+6)}">${r.loop?'↺ ':''}${r.label}</text>`}
+  if(r.work){const x=lx(r.work),w=r.label.length*5.9+16,right=LANES.findIndex(l=>l.id===r.work)<5,px=right?x+24:x-24-w;
+   s+=`<rect class="pill" x="${px}" y="${cy-11}" width="${w}" height="22" rx="11"/><text class="pt" x="${px+w/2}" y="${cy+4}" text-anchor="middle">${r.label}</text>`}
+  touched.forEach(id=>s+=`<circle class="dot" cx="${lx(id)}" cy="${cy}" r="3.5"/>`);
+  s+=`</g><circle class="nb${r.loop?' nbl':''}" cx="48" cy="${cy}" r="12"/><text class="nt" x="48" y="${cy+4}">${i+1}</text>`;
+  if(st.forks&&st.forks.length)s+=`<g data-tip="This step has a fork in the road. Open it to see the options and who decides."><circle class="fkc" cx="73" cy="${cy}" r="8"/><text class="fkt" x="73" y="${cy+4}">?</text></g>`;
+  s+=`</g>`});
+ s+=`<text class="foot" x="${X0}" y="${H-8}">Not drawn: every hop also logs to Splunk.</text>`;
+ s+=`<g class="iggy still" id="iggy"><line x1="0" y1="-13" x2="0" y2="-21" stroke="var(--blue)" stroke-width="2"/><circle cx="0" cy="-24" r="3.5" fill="var(--card)" stroke="var(--blue)" stroke-width="2"/><circle r="15" fill="var(--blue)"/><circle cx="-5.5" cy="-2" r="3.8" fill="var(--onblue)"/><circle cx="5.5" cy="-2" r="3.8" fill="var(--onblue)"/><circle cx="-5.5" cy="-1.5" r="1.6" fill="var(--blue)"/><circle cx="5.5" cy="-1.5" r="1.6" fill="var(--blue)"/><path d="M-6 5Q0 11 6 5" fill="none" stroke="var(--onblue)" stroke-width="2" stroke-linecap="round"/></g>`;
+ $('#mapbox').innerHTML=`<svg viewBox="0 0 1000 ${H}" role="img" aria-label="Map of Iggy’s journey: twelve steps down the page across eight systems from ServiceNow to the MCP server. Purple arrows go back to systems already visited.">${s}</svg>`;
+}
+
+let cur=0;
+function render(){
+ document.querySelectorAll('.row').forEach(g=>{const i=+g.dataset.i;g.classList.toggle('current',i===cur);g.classList.toggle('future',i>cur);if(i===cur)g.setAttribute('aria-current','step');else g.removeAttribute('aria-current')});
+ $('#iggy').style.transform=`translate(${lx(ROWS[cur].at)}px,${ry(cur)}px)`;
+ $('#count').textContent=`Step ${cur+1} of ${N}`;
+ $('#back').disabled=cur===0;$('#next').disabled=cur===N-1;
+ document.querySelectorAll('.chip').forEach((c,i)=>{if(i===cur)c.setAttribute('aria-current','step');else c.removeAttribute('aria-current')});
+ const st=STEPS[cur],r=ROWS[cur];
+ $('#detail').innerHTML=`<article class="detail${st.loop?' isloop':''}"><p class="meta"><strong>${PHASES[r.phase]}</strong> phase, step ${cur+1} of ${N}${st.loop?`<span class="lpb">${st.loop}: back to a system already visited</span>`:''}</p>
+ <h3>${st.title}</h3><p class="says"><b>Iggy says:</b> ${T(st.says)}</p><div class="plain"><b>In plain words:</b> ${T(st.plain)}</div>
+ ${(st.forks||[]).map(k=>{const f=FORKS[k];return `<section class="fork"><h4>Fork in the road: ${f.q}</h4><ul>${f.o.map(o=>`<li class="${o[1]}"><span class="tag">${TAGS[o[1]]}</span><span class="ot">${T(o[0])}</span></li>`).join('')}</ul><p class="who"><strong>Who decides:</strong> ${T(f.who)}</p></section>`}).join('')}</article>`;
+ $('#wallet').innerHTML=SLOTS.map(sl=>{let v=null,isNew=false;STEPS.forEach((s,i)=>{if(i<=cur&&s.gain&&s.gain[sl.id]){v=s.gain[sl.id];isNew=(i===cur)}});
+  let val=v?(Array.isArray(v)?`<span class="st-${v[1]}">${v[0]}</span>`:v):'not yet';
+  return `<li class="slot${v?'':' empty'}${sl.dashed?' dashed':''}${isNew?' new':''}"><div class="sl">${sl.l}</div><div class="sv">${val}</div><div class="by">Issued by ${sl.by}</div></li>`}).join('');
+ history.replaceState(null,'','#step'+(cur+1));
+}
+function go(i){cur=Math.max(0,Math.min(N-1,i));render()}
+
+function init(){
+ buildMap();
+ $('#chips').innerHTML=ROWS.map((r,i)=>`<button type="button" class="chip${r.loop?' loop':''}" aria-label="Step ${i+1}${r.loop?', a loop step':''}">${i+1}</button>`).join('');
+ $('#chips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)go([...$('#chips').children].indexOf(b))});
+ $('#mapbox').addEventListener('click',e=>{const g=e.target.closest('.row');if(g)go(+g.dataset.i)});
+ $('#mapbox').addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('.row');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go(+g.dataset.i)}});
+ $('#back').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);$('#reset').onclick=()=>go(0);
+ document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight')go(cur+1);else if(e.key==='ArrowLeft')go(cur-1);else if(e.key==='Escape')hideTip()});
+ $('#loops').innerHTML=LOOPS.map(l=>`<div class="card"><h3>${l.t}</h3><p>${l.x}</p><p><button type="button" class="chip loop" style="padding:2px 12px" data-go="${l.step-1}">Show step ${l.step}</button></p></div>`).join('');
+ $('#loops').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){go(+b.dataset.go);$('#journey').scrollIntoView({behavior:'smooth'})}});
+ $('#open tbody').innerHTML=Object.values(FORKS).map(f=>`<tr><td>${f.q}</td><td>${T(f.now)}</td><td>${T(f.who)}</td></tr>`).join('');
+ $('#gloss').innerHTML=Object.values(TERMS).map(t=>`<dt>${t[0]}</dt><dd>${t[1]}</dd>`).join('');
+ $('#printsteps').innerHTML=STEPS.map(s=>`<li><strong>${s.title}.</strong> ${T(s.says)}</li>`).join('');
+ const m=location.hash.match(/^#step(\d+)$/);cur=m?Math.max(0,Math.min(N-1,+m[1]-1)):0;
+ render();requestAnimationFrame(()=>requestAnimationFrame(()=>$('#iggy').classList.remove('still')));
+ window.addEventListener('hashchange',()=>{const m=location.hash.match(/^#step(\d+)$/);if(m&&+m[1]-1!==cur)go(+m[1]-1)});
+}
+/* tooltip */
+const tip=$('#tip');
+function showTip(el){tip.textContent=el.dataset.tip;tip.hidden=false;const r=el.getBoundingClientRect(),w=tip.offsetWidth;
+ const x=Math.min(Math.max(8,r.left+r.width/2-w/2),innerWidth-w-8);let y=r.top-tip.offsetHeight-8;if(y<8)y=r.bottom+8;tip.style.left=x+'px';tip.style.top=y+'px'}
+function hideTip(){tip.hidden=true}
+document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');el?showTip(el):hideTip()});
+document.addEventListener('focusin',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');el?showTip(el):hideTip()});
+document.addEventListener('focusout',hideTip);
+init();
+</script>
+</body>
+</html>
