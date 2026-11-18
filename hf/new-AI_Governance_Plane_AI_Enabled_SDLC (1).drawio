@@ -1,0 +1,407 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" type="device" version="24.7.17">
+  <diagram name="1 - Reference Architecture" id="p1">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1510" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="AI GOVERNANCE PLANE | AI-enabled SDLC" style="text;html=0;align=left;verticalAlign=middle;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1700" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Proposed vendor-neutral target state: augment existing DevSecOps; govern agents that build software, not only AI features shipped in software." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="1700" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="ACCOUNTABILITY &amp; ENTERPRISE OVERSIGHT" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="130" width="1740" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Executive risk / AI governance council&#10;Risk appetite; prohibited uses; exception authority; periodic review" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="180" width="400" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="Accountable product / service owner&#10;Owns use case, business impact, agent inventory and residual risk" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="470" y="180" width="400" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Security + privacy + legal + procurement&#10;Threat model; data/IP terms; vendor assurance; regulatory applicability" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="180" width="420" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Platform engineering + development teams&#10;Implement guardrails; maintain adapters; evidence and operational SLAs" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="180" width="420" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="GOVERNANCE CONTROL PLANE | policy authoring, decisions, assurance, evidence" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="320" width="1740" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="Agent / vendor inventory &amp; onboarding&#10;Owner; purpose; stage; autonomy; model/tool versions; data classes; vendor terms" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="370" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="Risk &amp; policy lifecycle&#10;Risk tier; policy-as-code; versioned controls; exceptions with owner and expiry" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="475" y="370" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="Identity &amp; delegated authority&#10;Agent/workload identity; user delegation; short-lived scoped credentials; separation of duties" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="370" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="Model / prompt / tool catalog&#10;Approved providers; pinned configurations; prompt versions; tool manifests; change approval" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="370" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="Evaluation &amp; assurance service&#10;Task quality; injection / exfiltration tests; tool misuse; regression thresholds; red teaming" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="510" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="Decision &amp; approval service (PDP)&#10;Allow / deny / require approval; environment + identity + data + action + risk context" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="475" y="510" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="Evidence &amp; lineage store&#10;Run-to-commit-to-release trace; decisions; approvals; redacted traces; retention / access controls" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="510" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="Monitoring &amp; response&#10;Risk and cost budgets; anomaly detection; revocation; suspend / kill; incident workflow" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="510" width="405" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="DISTRIBUTED ENFORCEMENT | controls sit on the actual action and data paths; the control plane need not proxy every request" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="690" width="1740" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="IDE / agent runtime PEP&#10;Managed plugin; sandbox; allowed tools" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="740" width="405" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="Model / data gateway PEP&#10;Egress allowlist; DLP; provider routing" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="475" y="740" width="405" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="Tool / API broker PEP&#10;Authorize each action; approvals; quotas" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="740" width="405" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="CI/CD &amp; platform PEP&#10;Branch rules; signed artifacts; admission" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="740" width="405" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="Versioned policy / decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#9673a6;dashed=1;" edge="1" parent="1" source="15" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="EXECUTION PLANE | traditional SDLC retained; AI agent assistance introduced per stage" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="890" width="1740" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="PLAN&#10;Requirements / stories" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="DESIGN&#10;Architecture / threats" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="333" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="CODE&#10;IDE / coding agents" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="616" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="VERIFY&#10;Test / security agents" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="899" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="RELEASE&#10;Change / deploy agents" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1182" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="OPERATE&#10;SRE / incident agents" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1465" y="950" width="263" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="25" target="26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="26" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="27" target="28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="28" target="29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="29" target="30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="Existing DevSecOps system of record: backlog + architecture repo + source / PRs + CI + SAST / SCA / secrets / IaC scans + test + artifact registry + CD + observability" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1050" width="1680" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="Runtime enforcement" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="19" target="27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="Pipeline gates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="22" target="29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="RESOURCE &amp; TRUST BOUNDARIES" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1190" width="1740" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="Enterprise tools &amp; knowledge&#10;SCM; backlog; CI runners; docs / retrieval; secrets vault; cloud APIs&#10;Enforce source ACLs, per-action scopes and network isolation." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1240" width="540" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="41" value="Internal agent execution&#10;Ephemeral sandboxes; isolated workspaces; bounded memory&#10;No standing production write access; credential revocation." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1240" width="540" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="External agents / model vendors (untrusted boundary)&#10;Approved endpoints and contracts; retention / training / residency terms&#10;Direct SaaS actions require vendor-native controls and exported audit." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="1240" width="540" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="43" value="Legend: purple = governance | orange = enforcement | blue = agent-assisted workflow | green = retained DevSecOps | red = external trust boundary&#10;PEP = policy enforcement point; PDP = policy decision point. Solid arrows = workflow; dashed arrows = governance/enforcement relationships (selected links only)." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1390" width="1710" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2 - Runtime Enforcement &amp; Trust" id="p2">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1530" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="RUNTIME ENFORCEMENT | policy before consequential actions" style="text;html=0;align=left;verticalAlign=middle;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1700" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Logical flow for mediated agents. Independently protect SCM, cloud and production so a bypassed runtime cannot bypass resource authorization." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="75" width="1690" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="1. Human / CI trigger&#10;Authenticated requester; approved task; project / environment; delegated purpose" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="310" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="2. Agent runtime / orchestrator&#10;Internal agent or approved vendor connector&#10;Run ID; agent identity; sandbox; loop / token / spend limits" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="170" width="370" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="3. Action PEP / tool broker&#10;Normalize tool + arguments + target&#10;Authenticate identity; bind context&#10;Treat model output as untrusted" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="170" width="380" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="4. Policy decision service (PDP)&#10;Identity + delegation + task + data class&#10;Resource / environment + risk + budget&#10;ALLOW / DENY / APPROVAL" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="170" width="440" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Task" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="4" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Proposed action" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="5" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="Decision request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="6" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="5. Human approval workflow&#10;Independent approver for high-impact actions&#10;Bind approval to exact target + arguments + artifact digest&#10;Short expiry; no agent self-approval" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="370" width="440" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="6. Enforce authorized action&#10;Deny by default; re-check approved payload&#10;Short-lived scoped credential from vault&#10;Idempotency + retry / timeout limits" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="840" y="370" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="7. Enterprise resource&#10;SCM / PR; ticket; build; test; deploy; cloud&#10;Resource-native IAM + branch / env protection&#10;Production mutations through approved CD" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="410" y="370" width="370" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="APPROVAL" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="7" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="ALLOW" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="7" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="Exact-action grant" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="11" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="Execute once authorized" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="12" target="13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="DENY: block + explain + audit&#10;PDP / mandatory control unavailable: fail closed for protected actions. Break-glass is separately authorized, time-limited and audited." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="550" width="440" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="Model access PEP / gateway&#10;Approved model / version; context minimization&#10;Redact secrets / sensitive data; output checks&#10;Provider-specific retention / region controls" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="740" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="Approved model endpoint&#10;Internal hosting or external provider&#10;Contract and technical configuration jointly reviewed" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="940" width="380" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="Retrieval / memory PEP&#10;Enforce caller + project ACLs at retrieval&#10;Classify / segregate memory; TTL and deletion&#10;Untrusted documents cannot grant authority" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="480" y="740" width="380" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="Enterprise knowledge / agent memory&#10;Approved sources; provenance; access labels&#10;Read/write separated; no cross-tenant context" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="480" y="940" width="380" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="Evidence pipeline (asynchronous, protected)&#10;Run / trace IDs; agent + user; tool arguments hash&#10;Policy and model/prompt/tool versions; decision&#10;Approval; commit / artifact; result; cost&#10;Redact / minimize; restricted access; retention&#10;Tamper-evident records; no raw secrets or hidden reasoning" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="920" y="740" width="390" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="Detection, containment &amp; recovery&#10;Tool misuse / leakage / anomaly / cost alerts&#10;Revoke tokens; stop run; disable agent / vendor&#10;Block egress; rollback using normal CD&#10;Notify SOC + owner; preserve evidence" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1370" y="740" width="370" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="Inference request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="5" target="19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="Approved egress" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="19" target="20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="Context request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="5" target="21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="ACL-filtered access" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=0;" edge="1" parent="1" source="21" target="22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="Action + result" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="12" target="23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="Signals" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="23" target="24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="OUT-OF-PROCESS VENDOR AGENTS / SaaS CODING BOTS" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1120" width="1740" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="Preferred: brokered integration&#10;Vendor invokes approved connector / API broker. Use project-scoped app install, webhook validation, minimal scopes and no shared user credentials." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1180" width="535" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="When the vendor acts directly&#10;Enforce at resource boundaries: repository rules, required reviews, cloud IAM, environment protection and egress. Require vendor audit export, disable switches and evidence API." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="1180" width="535" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="Admission constraint&#10;If required interception, identity, data restrictions, evidence or revocation are unavailable: restrict to read-only / sandbox use, or reject onboarding. A model gateway alone cannot govern tool actions." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="1180" width="535" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="Security invariant: retrieved content, generated plans and vendor callbacks are untrusted inputs. Authority comes from authenticated context and policy—not the model.&#10;Approval protects the exact action; changes to target, arguments or artifact require a new decision / approval. Emergency stop must revoke access outside the agent runtime too." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1390" width="1700" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="3 - Lifecycle Gates &amp; Adoption" id="p3">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1610" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="LIFECYCLE CONTROL MATRIX | accountable, evidence-driven gates" style="text;html=0;align=left;verticalAlign=middle;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1710" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Illustrative enterprise baseline. Tailor risk tiers, thresholds, approval authorities, retention and legal obligations to your company; these are proposed controls, not a compliance certification." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="75" width="1690" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Stage / accountable owner" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="240" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="AI-specific controls" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="160" width="570" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="Gate / decision authority" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="160" width="350" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Evidence added to existing SDLC" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="160" width="480" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="ONBOARD&#10;Service owner + procurement" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="220" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Inventory agent, vendor, models, tools, data and autonomy; assess vendor security, IP, training, retention, subprocessors, residency and exit capability." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="220" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="G0: approve use case / risk tier&#10;Security + privacy + legal as required" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="220" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="Named owner; approved scope; vendor review; risk assessment; control profile; time-bound exceptions" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="220" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="PLAN / DESIGN&#10;Product owner + architect" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="Classify data; map trust boundaries and abuse cases; set task quality and risk thresholds; decide permitted actions and mandatory human approvals." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="380" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="G1: approve design + threat model&#10;Architecture / security; owner accepts residual risk" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="380" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="Architecture decision; data flow; threat model; evaluation plan; approval / rollback strategy" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="380" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="CODE&#10;Engineering lead" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="Managed IDE / agent identity; sandbox; secrets / DLP controls; scoped repo access; treat generated code as untrusted; required human PR review." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="540" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="G2: merge only through protected PR&#10;Independent code owner / reviewer" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="540" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="Agent run linked to commit and PR; model/prompt/tool versions; review; scans; license / provenance results" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="540" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="BUILD / VERIFY&#10;QA + security leads" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="700" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="Retain SAST/SCA/secrets/IaC checks; test output behavior; injection, exfiltration, privilege and tool abuse tests; enforce regression / cost thresholds." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="700" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="G3: quality + security + AI checks pass&#10;CI policy gates; authorized exception process" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="700" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="Test/evaluation reports; dependency SBOM; AI component manifest; artifact digest; signed provenance" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="700" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="RELEASE / DEPLOY&#10;Release / change owner" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="860" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="Verify evidence against exact artifact; environment policy; separation of duties; human approval for high-impact release; canary and rollback readiness." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="860" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="G4: production authorization&#10;Existing CD/change authority; no self-approval" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="860" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="Release attestation; artifact signature; exact-action approval; policy version; deployment / rollback record" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="860" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="OPERATE / CHANGE / RETIRE&#10;Service owner + SRE / SOC" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1020" width="240" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="Monitor quality, tool behavior, incidents and spend; revoke and contain; reassess material model/prompt/tool/vendor changes; retire data, identities and integrations." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="290" y="1020" width="570" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="G5: continue / restrict / suspend&#10;Owner + risk authority; repeat affected gates" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="870" y="1020" width="350" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="Runtime evidence; incident / review record; recertification; change impact; retention / deletion and decommission proof" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1230" y="1020" width="480" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="AUTONOMY PROFILES | action- and environment-specific, not a blanket agent permission" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1200" width="1740" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="A0 - Assist&#10;Draft / explain only. Human performs changes. Still apply data and provider controls." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1250" width="405" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="A1 - Bounded read&#10;Read approved resources with caller ACLs; no mutations. Restrict context and egress." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="475" y="1250" width="405" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="A2 - Controlled write&#10;Sandbox / branch / test changes within scoped policy; protected merges and releases." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="1250" width="405" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="A3 - High-impact action&#10;Production, security, identity or destructive actions require explicit approval and protected execution." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="1250" width="405" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="IMPLEMENTATION WAVES (sequence, not a fixed timeline)" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="1390" width="1740" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="1. Establish: inventory + owners + approved vendor/model catalog + identity + data rules + protected PR/CD + minimum evidence.&#10;2. Enforce: policy-as-code + tool broker + gateway + sandbox + evaluations + exact-action approvals + stop/revoke drills.&#10;3. Scale: federated adapters + automated evidence/recertification + vendor controls + continuous evaluation + risk/cost dashboards. Extend autonomy only after measured control effectiveness." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1430" width="1680" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="Design basis: NIST AI RMF / GenAI Profile (governance integrated with existing software governance); OWASP AI Agent Security Cheat Sheet (scoped tools, untrusted inputs, isolation and oversight)." style="text;html=0;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1540" width="1710" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="4 - Decisions &amp; Source Notes" id="p4">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1130" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="IMPLEMENTATION CONTRACT | assumptions, ownership and source notes" style="text;html=0;align=left;verticalAlign=middle;fontSize=25;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1710" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="ARCHITECTURAL DECISIONS" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="120" width="1740" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Scope&#10;This is governance of AI used to perform SDLC work. If you also ship AI-enabled products, add product-specific model/data evaluation, user safety, runtime monitoring and lifecycle controls.&#10;&#10;Federated enforcement&#10;Centralize policy, inventory and assurance. Enforce in IDEs, agent runtimes, gateways, tool brokers, CI/CD and resource platforms. Reuse enterprise IAM, vault, SIEM, GRC and ITSM rather than duplicate them." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="175" width="810" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="Decision ownership&#10;Governance council sets risk appetite; service owner owns risk; security/privacy/legal define controls; platform team operates the plane; independent reviewers approve consequential actions. Agents cannot accept risk or approve themselves.&#10;&#10;Availability and evidence&#10;Use versioned signed policy bundles / bounded caches where justified. Deny protected actions on missing identity, policy or required approval. Define audit buffering and stop behavior for outages; test recovery and revocation." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="900" y="175" width="830" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="PARAMETERS TO RESOLVE BEFORE IMPLEMENTATION" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="520" width="1740" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="Enterprise decisions&#10;Data classification and permitted providers / regions&#10;Action risk tiers; autonomy limits; approval thresholds&#10;Risk acceptance and exception expiry rules&#10;Legal / sector obligations; retention; employee privacy" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="570" width="525" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Integration decisions&#10;IDE / SCM / CI/CD / cloud / ITSM stack&#10;Agent hosting and SaaS vendor capabilities&#10;Identity federation / delegation and vault pattern&#10;Tool broker, gateway and policy-engine ownership" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="625" y="570" width="525" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Operational acceptance&#10;Control availability / latency targets&#10;Evaluation datasets and pass/fail thresholds&#10;Audit delivery guarantees and access controls&#10;Kill-switch, incident and rollback drill results" style="rounded=1;whiteSpace=wrap;html=0;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="570" width="525" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="SOURCES &amp; INTERPRETATION" style="swimlane;html=0;startSize=32;horizontal=1;rounded=1;fillColor=#f5f5f5;swimlaneFillColor=#ffffff;strokeColor=#999999;fontSize=16;fontStyle=1;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="780" width="1740" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="NIST AI RMF: https://www.nist.gov/itl/ai-risk-management-framework&#10;NIST Generative AI Profile: https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence&#10;OWASP AI Agent Security Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html&#10;&#10;The architecture, component grouping, autonomy profiles A0-A3 and gate labels G0-G5 are a proposed enterprise design synthesized for this request. They are not official NIST/OWASP categories, an exhaustive control mapping, or a statement of regulatory compliance. Vendor and technology choices are intentionally left open." style="rounded=1;whiteSpace=wrap;html=0;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;align=left;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="835" width="1680" height="180" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
